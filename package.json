@@ -1,0 +1,21 @@
+{
+	"name": "blog",
+	"version": "0.0.0",
+	"private": true,
+	"author": "David Evans",
+	"license": "UNLICENSED",
+	"scripts": {
+		"format": "prettier --write .",
+		"start": "web-listener -c web/live-config.json --no-cache",
+		"build": "./web/build.sh && cd build && zip -8Xr -n .png - * > ../web-bundle.zip"
+	},
+	"devDependencies": {
+		"highlight.js": "11.x",
+		"marked": "18.x",
+		"marked-footnote": "1.x",
+		"marked-highlight": "2.x",
+		"prettier": "3.9.6",
+		"web-listener": "1.5.x",
+		"yaml": "2.9.x"
+	}
+}

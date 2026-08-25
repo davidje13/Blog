@@ -1,0 +1,380 @@
+import { readFile } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { parse as parseYAML } from 'yaml';
+import { discoverAllPaths } from './discover.mjs';
+import { metadata } from './metadata.mjs';
+import { makeMarkdownRenderer } from './markdown.mjs';
+
+const DATE_FORMATTER = new Intl.DateTimeFormat(undefined, {
+	year: 'numeric',
+	month: 'long',
+	day: 'numeric',
+});
+
+const DATETIME_FORMATTER = new Intl.DateTimeFormat(undefined, {
+	weekday: 'long',
+	year: 'numeric',
+	month: 'long',
+	day: 'numeric',
+	hour: '2-digit',
+	minute: '2-digit',
+	second: '2-digit',
+});
+
+export async function renderPage(env, path, allPaths = null) {
+	if (path.length === 1) {
+		switch (path[0]) {
+			case 'index.html':
+				return htmlFrame(
+					await renderRoot(env, allPaths ?? (await discoverAllPaths())),
+				);
+			case 'robots.txt':
+				return renderRobots(env);
+			case 'feed.rss':
+				return renderRSS(env, allPaths ?? (await discoverAllPaths()));
+			case 'sitemap.xml':
+				return renderSiteMap(env, allPaths ?? (await discoverAllPaths()));
+		}
+	}
+
+	if (path.length === 2 && path[1] === 'index.html') {
+		const page = await renderPost(env, path[0], allPaths);
+		if (page) {
+			return htmlFrame(page);
+		}
+	}
+
+	if (path.length === 3 && path[0] === 'tagged' && path[2] === 'index.html') {
+		const page = await renderTag(
+			env,
+			path[1],
+			allPaths ?? (await discoverAllPaths()),
+		);
+		if (page) {
+			return htmlFrame(page);
+		}
+	}
+
+	return null;
+}
+
+function renderRobots(env) {
+	return `Sitemap: ${env.host}/sitemap.xml\n`;
+}
+
+async function renderSiteMap(env, allPaths) {
+	let r =
+		'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+	for (const p of allPaths) {
+		if (p.type === 'meta') {
+			continue;
+		}
+		const pathString = `${env.host}${toPath(p.path)}`;
+		const priority =
+			p.type === 'post' ? '1.0' : p.type === 'tag' ? '0.4' : '0.3';
+		const parts = [
+			`<loc>${escapeHTML(pathString)}</loc>`,
+			`<priority>${escapeHTML(priority)}</priority>`,
+		];
+		await loadMetadata(p);
+		if (p.metadata?.modified) {
+			parts.push(
+				`<lastmod>${escapeHTML(new Date(p.metadata.modified).toISOString())}</lastmod>`,
+			);
+		}
+		r += `<url>${parts.join('')}</url>`;
+	}
+	r += '</urlset>';
+	return r;
+}
+
+async function renderRSS(env, allPaths) {
+	const posts = allPaths.filter((p) => p.type === 'post');
+	for (const p of posts) {
+		await loadMetadata(p);
+	}
+	posts.sort(postOrder);
+	const latestChange = posts[0].metadata.modified;
+	const now = new Date();
+	let r = [
+		'<?xml version="1.0" encoding="UTF-8" ?>',
+		'<rss version="2.0">',
+		'<channel>',
+		`<title>${escapeHTML(metadata.title)}</title>`,
+		`<description>${escapeHTML(metadata.description)}</description>`,
+		`<link>${escapeHTML(`${env.host}/feed.rss`)}</link>`,
+		`<language>${escapeHTML(metadata.language)}</language>`,
+		`<copyright>${escapeHTML(metadata.copyright)}</copyright>`,
+		`<lastBuildDate>${escapeHTML(new Date(latestChange).toUTCString())}</lastBuildDate>`,
+		`<pubDate>${escapeHTML(now.toUTCString())}</pubDate>`,
+		'<ttl>86400</ttl>',
+	].join('');
+	for (const p of posts) {
+		const pathString = `${env.host}${toPath(p.path)}`;
+		const rendered = await renderPost(env, p.path[0], allPaths, {
+			absolutePaths: true,
+		});
+		r += [
+			'<item>',
+			`<title>${escapeHTML(p.metadata.title)}</title>`,
+			`<link>${escapeHTML(pathString)}</link>`,
+			`<description>${escapeHTML(`<link rel="stylesheet" href="${escapeHTML(`${env.host}/style.css`)}" crossorigin="anonymous" />` + rendered.html)}</description>`,
+			`<guid>${escapeHTML(pathString)}</guid>`,
+			`<pubDate>${escapeHTML(new Date(p.metadata.created).toUTCString())}</pubDate>`,
+			'</item>',
+		].join('');
+		if (r.length > 16 * 1024 * 1024) {
+			break;
+		}
+	}
+	r += '</channel></rss>';
+	return r;
+}
+
+function renderLinkItem(post, { skipTag = null } = {}) {
+	const pathString = toPath(post.path);
+	let tags = [...post.metadata.tags].sort();
+	if (skipTag) {
+		tags = tags.filter((t) => t !== skipTag);
+	}
+	return [
+		'<li>',
+		`<a href="${escapeHTML(pathString)}">`,
+		printDate(post.metadata.created),
+		' ',
+		`<span class="post-title">${post.metadata.title}</span>`,
+		'</a>',
+		'<div class="tags">',
+		...tags.map(
+			(t) =>
+				`<a class="tag" href="${escapeHTML(`/tagged/${encodeURIComponent(t)}`)}">${escapeHTML(t)}</a>`,
+		),
+		'</div>',
+		'</li>',
+	].join('');
+}
+
+async function renderRoot(env, allPaths) {
+	const posts = allPaths.filter((p) => p.type === 'post');
+	for (const p of posts) {
+		await loadMetadata(p);
+	}
+	posts.sort(postOrder);
+	let html = `<header><h1>${escapeHTML(metadata.title)}</h1></header><ul class="posts">`;
+	for (const p of posts) {
+		html += renderLinkItem(p);
+	}
+	html += '</ul>';
+	html +=
+		'<p><a href="/feed.rss" rel="alternate" target="_blank" class="feed">RSS Feed</a></p>';
+	return { title: metadata.title, html };
+}
+
+async function renderTag(env, name, allPaths) {
+	const tag = allPaths?.find((p) => p.type === 'tag' && p.path[1] === name);
+	if (!tag) {
+		throw new Error(`unknown tag ${name}`);
+	}
+	await loadMetadata(tag);
+
+	const posts = allPaths.filter((p) => p.type === 'post');
+	for (const p of posts) {
+		await loadMetadata(p);
+	}
+	const taggedPosts = posts.filter((p) => p.metadata.tags.has(name));
+	posts.sort(postOrder);
+	let html = `<h1>${escapeHTML(`Tagged ${name}`)}</h1>`;
+	html += await makeMarkdownRenderer().parse(
+		(await getMarkdownContent(tag.metadata.fsPath)).md,
+		{ async: true },
+	);
+	html += '<section><ul class="posts">';
+	for (const p of taggedPosts) {
+		html += renderLinkItem(p, { skipTag: name });
+	}
+	html += '</ul></section>';
+	return { title: `Tagged ${name} \u2014 ${metadata.title}`, html };
+}
+
+async function renderPost(
+	env,
+	name,
+	allPaths = null,
+	{ absolutePaths = false } = {},
+) {
+	const post = allPaths?.find(
+		(p) => p.type === 'post' && p.path[0] === name,
+	) ?? {
+		path: [name, 'index.html'],
+		type: 'post',
+	};
+	await loadMetadata(post);
+
+	const renderer = makeMarkdownRenderer({
+		absolutePathsBase: absolutePaths
+			? URL.parse(`/${encodeURIComponent(name)}/`, env.host)
+			: null,
+	});
+
+	let html = await renderer.parse(
+		(await getMarkdownContent(post.metadata.fsPath)).md,
+		{ async: true },
+	);
+
+	let headerData = '';
+	if (post.metadata.author) {
+		headerData += `Written by ${escapeHTML(post.metadata.author)}, `;
+	}
+	headerData += `first published ${printDate(post.metadata.created)}`;
+	if (post.metadata.modified > post.metadata.created) {
+		headerData += ` (last updated ${printDate(post.metadata.modified)})`;
+	}
+	headerData += [
+		'<div class="tags">',
+		...[...post.metadata.tags]
+			.sort()
+			.map(
+				(t) =>
+					`<a class="tag" href="${escapeHTML(`/tagged/${encodeURIComponent(t)}`)}">${escapeHTML(t)}</a>`,
+			),
+		'<a class="tag" href="/">all posts</a>',
+		'</div>',
+	].join('');
+
+	const title = /<h1[^>]*>.*?<\/h1>/.exec(html);
+	if (title) {
+		html =
+			html.substring(0, title.index) +
+			`<header>${title[0]}<p>${headerData}</p></header>` +
+			html.substring(title.index + title[0].length);
+	} else {
+		html =
+			`<header><h1>${escapeHTML(post.metadata.title)}</h1><p>${headerData}</p></header>` +
+			html;
+	}
+
+	return { title: `${post.metadata.title} \u2014 ${metadata.title}`, html };
+}
+
+const SOURCE_DIR = dirname(fileURLToPath(import.meta.url));
+
+async function getMarkdownContent(path) {
+	const content = await readFile(path, { encoding: 'utf-8' });
+	const yamlFinder = /^(?:\s*\n)?---+\n(.*?\n)?---+(?:$|\n)/gs;
+	const rawYaml = yamlFinder.exec(content);
+	return rawYaml
+		? {
+				yaml: parseYAML(rawYaml[1] || '{}', { strict: true }),
+				md: content.substring(yamlFinder.lastIndex),
+			}
+		: { yaml: {}, md: content };
+}
+
+async function loadMetadata(p) {
+	if (p.metadata) {
+		return true;
+	}
+	let fsPath;
+	let name;
+	if (p.type === 'post') {
+		name = p.path[0];
+		fsPath = join(SOURCE_DIR, 'posts', name, 'content.md');
+	} else if (p.type === 'tag') {
+		name = p.path[1];
+		fsPath = join(SOURCE_DIR, 'tags', name, 'content.md');
+	} else {
+		return false;
+	}
+	p.metadata = {
+		title: name,
+		author: '',
+		created: 0,
+		modified: 0,
+		tags: new Set(),
+		fsPath,
+	};
+	const { yaml } = await getMarkdownContent(fsPath);
+	if (typeof yaml.title === 'string') {
+		p.metadata.title = yaml.title;
+	}
+	if (typeof yaml.author === 'string') {
+		p.metadata.author = yaml.author;
+	}
+	if (typeof yaml.created === 'string') {
+		p.metadata.created = parseDateFlexible(yaml.created);
+	}
+	if (typeof yaml.modified === 'string') {
+		p.metadata.modified = parseDateFlexible(yaml.modified);
+	} else {
+		p.metadata.modified = p.metadata.created;
+	}
+	if (Array.isArray(yaml.tags)) {
+		for (const tag of yaml.tags) {
+			if (typeof tag === 'string') {
+				p.metadata.tags.add(tag);
+			}
+		}
+	}
+	return true;
+}
+
+const postOrder = (a, b) =>
+	b.metadata.modified - a.metadata.modified ||
+	(a.metadata.title > b.metadata.title ? 1 : -1);
+
+function printDate(timestamp) {
+	const date = new Date(timestamp);
+	return `<time datetime="${escapeHTML(date.toISOString().split('T')[0])}">${DATE_FORMATTER.format(date)}</time>`;
+}
+
+function printDatetime(timestamp) {
+	const date = new Date(timestamp);
+	return `<time datetime="${escapeHTML(date.toISOString())}">${DATETIME_FORMATTER.format(date)}</time>`;
+}
+
+function htmlFrame({ title, html }) {
+	return [
+		'<!DOCTYPE html>',
+		'<html lang="en">',
+		'<head>',
+		'<meta charset="utf-8" />',
+		`<title>${escapeHTML(title)}</title>`,
+		'<link rel="stylesheet" href="/style.css" />',
+		'<link rel="icon" href="/favicon.ico" />',
+		'<link rel="alternate" type="application/rss+xml" href="/feed.rss" />',
+		'</head>',
+		'<body>',
+		'<main>',
+		html,
+		'</main>',
+		'</body>',
+		'</html>',
+	].join('');
+}
+
+function parseDateFlexible(d) {
+	if (d.includes('T')) {
+		return Date.parse(d);
+	}
+	return Date.parse(d + 'T00:00:00Z');
+}
+
+const toPath = (p) =>
+	p.at(-1) === 'index.html'
+		? p.length === 1
+			? '/'
+			: '/' +
+				p
+					.slice(0, p.length - 1)
+					.map(encodeURIComponent)
+					.join('/') +
+				'/'
+		: '/' + p.map(encodeURIComponent).join('/');
+
+const escapeHTML = (c) =>
+	c
+		.replaceAll('&', '&amp;')
+		.replaceAll('<', '&lt;')
+		.replaceAll('>', '&gt;')
+		.replaceAll('"', '&quot;');

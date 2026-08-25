@@ -1,0 +1,22 @@
+{
+	"$schema": "../node_modules/web-listener/schema.json",
+	"servers": [
+		{
+			"port": 8080,
+			"mount": [
+				{
+					"type": "delegate",
+					"path": "/",
+					"config": { "file": "./config.json", "serverPort": 8080 }
+				},
+				{ "type": "custom", "path": "/", "import": "./live-handler.mjs" },
+				{
+					"type": "files",
+					"path": "/",
+					"dir": "./posts",
+					"options": { "hide": ["content.md"] }
+				}
+			]
+		}
+	]
+}
