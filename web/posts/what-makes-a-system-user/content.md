@@ -5,7 +5,7 @@ description:
   'A brief explainer on the differences between regular and "system" users in
   Debian-based Linux distributions, and how to convert existing users between
   the two.'
-created: 2025-08-25
+created: 2026-08-25
 tags:
   - security
   - unix

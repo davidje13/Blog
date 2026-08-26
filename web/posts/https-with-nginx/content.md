@@ -5,7 +5,7 @@ description:
   'A guide for setting up nginx to serve multiple sites with separate HTTPS
   certificates, block requests for unknown hosts, and still support TLS Session
   Resumption.'
-created: 2025-08-25
+created: 2026-08-25
 tags:
   - security
   - web

@@ -296,7 +296,7 @@ async function renderPost(
 			new Date(post.metadata.created).getUTCFullYear(),
 			new Date(post.metadata.modified).getUTCFullYear(),
 		);
-		html += `<footer>Article &copy;${escapeHTML(`${range} ${post.metadata.author}`)}. Code samples available under the <a href="https://opensource.org/license/mit" target="_blank" rel="external noopener">MIT license</a>.</footer>`;
+		html += `<footer>Article and images &copy;${escapeHTML(`${range} ${post.metadata.author}`)}, all rights reserved.<br />Code samples available under the <a href="https://opensource.org/license/mit" target="_blank" rel="external noopener">MIT license</a>.</footer>`;
 	}
 
 	return {
