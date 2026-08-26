@@ -80,7 +80,6 @@ section {
 
 body {
 	margin: 0;
-	padding: 0;
 	padding: 10px 20px 80vh;
 	font: 1.2em sans-serif;
 	line-height: 1.8;
@@ -101,21 +100,46 @@ h5,
 h6 {
 	margin: 3em 0 0.9em;
 	font-weight: bolder;
+	line-height: 1.4;
+	text-rendering: optimizeLegibility;
 }
 
 header {
 	margin: 2em 0 3em;
+	display: grid;
+	grid-template-columns: 1fr auto;
+	grid-template-rows: auto auto auto;
 
 	h1 {
+		grid-column: 1 / 2;
 		margin: 0;
 	}
 
+	.qr {
+		grid-area: 1 / 2 / 5 / 3;
+		width: 6em;
+		height: 6em;
+		margin: -8px -8px 0 8px;
+
+		img {
+			display: block;
+			width: 100%;
+			filter: invert(0.2);
+
+			@media (prefers-color-scheme: dark) {
+				filter: invert(0.95);
+			}
+		}
+	}
+
 	p {
+		grid-column: 1 / 2;
 		margin: 0 16px;
 		font-size: 0.8em;
 	}
 
 	& .tags {
+		grid-column: 1 / 2;
 		margin: 0 16px;
 		font-size: 0.7em;
 	}
@@ -137,6 +161,20 @@ h3 {
 p {
 	margin: 20px 0 0;
 	text-align: justify;
+}
+
+sup {
+	/* use custom vertical alignment to avoid changing the line height */
+	vertical-align: baseline;
+	position: relative;
+	top: -0.5em;
+}
+
+sub {
+	/* use custom vertical alignment to avoid changing the line height */
+	vertical-align: baseline;
+	position: relative;
+	top: 0.5em;
 }
 
 hr {
@@ -175,6 +213,10 @@ a:visited {
 a:active,
 a:hover {
 	color: var(--col-link-hover);
+	text-decoration: none;
+}
+
+a.qr {
 	text-decoration: none;
 }
 
@@ -331,7 +373,12 @@ blockquote {
 
 @media print {
 	body {
+		--col-page: transparent;
+		--col-back: white;
+		--col-text: black;
+		--col-link: black;
 		font-size: 1em;
+		padding: 0;
 	}
 
 	header p,

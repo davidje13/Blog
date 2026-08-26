@@ -8,7 +8,7 @@
 					"type": "headers",
 					"headers": {
 						"cache-control": "public, max-age=600, stale-while-revalidate=31536000, stale-if-error=31536000",
-						"content-security-policy": "base-uri 'self'; default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; frame-ancestors 'self'; form-action 'none'",
+						"content-security-policy": "base-uri 'self'; default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; frame-ancestors 'self'; form-action 'none'",
 						"cross-origin-opener-policy": "same-origin",
 						"cross-origin-embedder-policy": "require-corp",
 						"x-content-type-options": "nosniff",

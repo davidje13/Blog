@@ -1,6 +1,8 @@
 import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { generate } from 'lean-qr';
+import { toSvgSource } from 'lean-qr/extras/svg';
 import { parse as parseYAML } from 'yaml';
 import { discoverAllPaths } from './discover.mjs';
 import { metadata } from './metadata.mjs';
@@ -211,7 +213,7 @@ async function renderTag(env, name, allPaths) {
 	}
 	const taggedPosts = posts.filter((p) => p.metadata.tags.has(name));
 	posts.sort(postOrder);
-	let html = `<h1>${escapeHTML(`Tagged: ${name}`)}</h1>`;
+	let html = `<header><h1>${escapeHTML(`Tagged: ${name}`)}</h1></header>`;
 	html += await makeMarkdownRenderer().parse(
 		(await getMarkdownContent(tag.metadata.fsPath)).md,
 		{ async: true },
@@ -269,26 +271,39 @@ async function renderPost(
 		headerData += ` (last updated ${printDate(post.metadata.modified)})`;
 	}
 	const tags = [...post.metadata.tags].sort();
-	headerData += [
-		'<div class="tags">',
-		...tags.map(
-			(t) =>
-				`<a class="tag" href="${escapeHTML(`/tagged/${encodeURIComponent(t)}`)}">${escapeHTML(t)}</a>`,
-		),
-		'<a class="tag" href="/">all posts</a>',
-		'</div>',
-	].join('');
 
-	const title = /<h1[^>]*>.*?<\/h1>/.exec(html);
+	const title = /<h1([^>]*)>(.*?)<\/h1>/.exec(html);
+	const h1HTML = title?.[2] ?? escapeHTML(post.metadata.title);
+	let headerContent = '';
+	if (header) {
+		const qrLink = toSvgSource(generate(pageURL.toString()), {
+			xmlDeclaration: true,
+			scale: 5,
+		});
+		headerContent = [
+			'<header>',
+			`<h1${title?.[1] ?? ''}>${h1HTML}</h1>`,
+			`<a href="${escapeHTML(pageURL.toString())}" rel="self" title="Link to this page" class="qr">`,
+			`<img src="${escapeHTML(`data:image/svg+xml;base64,${btoa(qrLink)}`)}" alt="QR Code linking to this page" />`,
+			'</a>',
+			`<p>${headerData}</p>`,
+			'<div class="tags">',
+			...tags.map(
+				(t) =>
+					`<a class="tag" href="${escapeHTML(`/tagged/${encodeURIComponent(t)}`)}">${escapeHTML(t)}</a>`,
+			),
+			'<a class="tag" href="/">all posts</a>',
+			'</div>',
+			'</header>',
+		].join('');
+	}
 	if (title) {
 		html =
 			html.substring(0, title.index) +
-			(header ? `<header>${title[0]}<p>${headerData}</p></header>` : '') +
+			headerContent +
 			html.substring(title.index + title[0].length);
-	} else if (header) {
-		html =
-			`<header><h1>${escapeHTML(post.metadata.title)}</h1><p>${headerData}</p></header>` +
-			html;
+	} else {
+		html = headerContent + html;
 	}
 
 	if (footer && post.metadata.author) {
