@@ -99,29 +99,43 @@ async function renderRSS(env, allPaths) {
 	const now = new Date();
 	let r = [
 		'<?xml version="1.0" encoding="UTF-8" ?>',
-		'<rss version="2.0">',
+		'<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
 		'<channel>',
 		`<title>${escapeHTML(metadata.title)}</title>`,
 		`<description>${escapeHTML(metadata.description)}</description>`,
-		`<link>${escapeHTML(`${env.host}/feed.rss`)}</link>`,
+		`<link>${escapeHTML(env.host)}</link>`,
+		`<atom:link rel="self" href="${escapeHTML(`${env.host}/feed.rss`)}" type="application/rss+xml" />`,
+		'<image>',
+		`<url>${escapeHTML(`${env.host}/feed-icon.png`)}</url>`,
+		`<title>${escapeHTML(metadata.title)}</title>`,
+		`<link>${escapeHTML(env.host)}</link>`,
+		'<width>64</width>',
+		'<height>64</height>',
+		'</image>',
 		`<language>${escapeHTML(metadata.language)}</language>`,
 		`<copyright>${escapeHTML(metadata.copyright)}</copyright>`,
 		`<lastBuildDate>${escapeHTML(new Date(latestChange).toUTCString())}</lastBuildDate>`,
 		`<pubDate>${escapeHTML(now.toUTCString())}</pubDate>`,
 		'<ttl>86400</ttl>',
 	].join('');
-	for (const p of posts) {
-		const pathString = `${env.host}${toPath(p.path)}`;
-		const rendered = await renderPost(env, p.path[0], allPaths, {
+	for (const post of posts) {
+		const pathString = `${env.host}${toPath(post.path)}`;
+		const rendered = await renderPost(env, post.path[0], allPaths, {
 			absolutePaths: true,
+			header: false,
 		});
+		const tags = [...post.metadata.tags].sort();
 		r += [
 			'<item>',
-			`<title>${escapeHTML(p.metadata.title)}</title>`,
+			`<title>${escapeHTML(post.metadata.title)}</title>`,
 			`<link>${escapeHTML(pathString)}</link>`,
-			`<description>${escapeHTML(`<link rel="stylesheet" href="${escapeHTML(`${env.host}/style.css`)}" crossorigin="anonymous" />` + rendered.html)}</description>`,
+			`<description>${escapeHTML(rendered.html)}</description>`,
 			`<guid>${escapeHTML(pathString)}</guid>`,
-			`<pubDate>${escapeHTML(new Date(p.metadata.created).toUTCString())}</pubDate>`,
+			post.metadata.author
+				? `<author>${escapeHTML(post.metadata.author)}</author>`
+				: '',
+			`<pubDate>${escapeHTML(new Date(post.metadata.created).toUTCString())}</pubDate>`,
+			...tags.map((t) => `<category>${escapeHTML(t)}</category>`),
 			'</item>',
 		].join('');
 		if (r.length > 16 * 1024 * 1024) {
@@ -201,7 +215,7 @@ async function renderPost(
 	env,
 	name,
 	allPaths = null,
-	{ absolutePaths = false } = {},
+	{ absolutePaths = false, header = true } = {},
 ) {
 	const post = allPaths?.find(
 		(p) => p.type === 'post' && p.path[0] === name,
@@ -246,9 +260,9 @@ async function renderPost(
 	if (title) {
 		html =
 			html.substring(0, title.index) +
-			`<header>${title[0]}<p>${headerData}</p></header>` +
+			(header ? `<header>${title[0]}<p>${headerData}</p></header>` : '') +
 			html.substring(title.index + title[0].length);
-	} else {
+	} else if (header) {
 		html =
 			`<header><h1>${escapeHTML(post.metadata.title)}</h1><p>${headerData}</p></header>` +
 			html;
