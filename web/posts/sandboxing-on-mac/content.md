@@ -5,6 +5,7 @@ description:
   'A guide on using MacOS’ sandbox-exec command to limit the potential damage
   from NPM supply chain attacks.'
 created: 2025-08-25
+modified: 2025-08-26
 tags:
   - web
   - security
@@ -100,6 +101,37 @@ as is practical before being used, even on developer workstations, and
 credentials should be cycled if any compromise is detected, even if it appears
 to have been contained. The rest of this article shows an approach which limits
 the damage when all other precautions have failed.
+
+## How about Docker?
+
+One way to sandbox commands is to run them inside a container. With Docker, that
+looks something like this:
+
+```sh
+docker run --rm -it --mount type=bind,src=.,dst=/work -w /work node:26-alpine sh
+```
+
+(I won't go through explaining how to install Docker on Mac; that's covered
+elsewhere, so this assumes you already have it set up)
+
+The command leaves you in an interactive shell where you can run commands that
+have access to the current directory and network, but are otherwise isolated. It
+works as a decent sandbox, with some limitations (most notably: since the
+project's hidden `.git` directory is accessible, it's possible for a motivated
+attacker to escape the sandbox by adding a
+[Git Hook](https://git-scm.com/book/ms/v2/Customizing-Git-Git-Hooks) which will
+run outside the container when you perform any Git actions).
+
+Besides the limited protection, the main disadvantage is that this is quite
+"heavy": behind the scenes, Docker runs a Linux Virtual Machine, then uses
+Linux' layered filesystem to implement the container. This occupies a chunk of
+RAM and adds some overhead to all filesystem operations (though it has improved
+significantly over recent years and the bind mount mostly alleviates filesystem
+delays for project files). It also needs Docker Desktop (which requires a paid
+license if used in a large enough company, regardless of the number of employees
+actually using it).
+
+So can we do better?
 
 ## `sandbox-exec`
 
@@ -574,6 +606,15 @@ contain secrets), so if you're relying on your global `.npmrc` file to set the
 `--ignore-scripts` flag or other security features, you'll need to switch to
 putting that in per-project files (recommended), or adding it explicitly when
 you run the command.
+
+With this setup, I've got into the habit of running:
+
+```sh
+sb-net npm install
+sb npm test
+sb npm start
+# etc
+```
 
 ## Limitations
 
