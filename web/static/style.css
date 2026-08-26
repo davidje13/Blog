@@ -99,7 +99,6 @@ h4,
 h5,
 h6 {
 	margin: 3em 0 0.9em;
-	font-weight: bolder;
 	line-height: 1.4;
 	text-rendering: optimizeLegibility;
 }
@@ -134,13 +133,14 @@ header {
 
 	p {
 		grid-column: 1 / 2;
-		margin: 0 16px;
+		margin: 16px 0 0;
 		font-size: 0.8em;
+		text-align: left;
 	}
 
 	& .tags {
 		grid-column: 1 / 2;
-		margin: 0 16px;
+		margin: 4px 0 0;
 		font-size: 0.7em;
 	}
 }
@@ -155,7 +155,12 @@ h2 {
 
 h3 {
 	margin-bottom: 1em;
-	font-size: 1.2em;
+	font-size: 1.3em;
+}
+
+h4 {
+	margin-bottom: 1em;
+	font-size: 1.15em;
 }
 
 p {

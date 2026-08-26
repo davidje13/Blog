@@ -124,7 +124,7 @@ run outside the container when you perform any Git actions).
 
 Besides the limited protection, the main disadvantage is that this is quite
 "heavy": behind the scenes, Docker runs a Linux Virtual Machine, then uses
-Linux' layered filesystem to implement the container. This occupies a chunk of
+Linux's layered filesystem to implement the container. This occupies a chunk of
 RAM and adds some overhead to all filesystem operations (though it has improved
 significantly over recent years and the bind mount mostly alleviates filesystem
 delays for project files). It also needs Docker Desktop (which requires a paid
@@ -138,7 +138,7 @@ So can we do better?
 MacOS contains a comprehensive sandboxing tool which can be used to achieve a
 good level of isolation, but it takes a bit of configuration.
 
-The tool is `sandbox-exec`, and it's used by various system daemons to limit the
+The tool is `sandbox-exec`, and it's used by various system dæmons to limit the
 impact if a system utility is compromised. Officially the tool is deprecated and
 undocumented, but the
 [recommended alternative](https://developer.apple.com/documentation/xcode/configuring-the-macos-app-sandbox)
@@ -621,7 +621,7 @@ sb npm start
 Once a process is inside a sandbox, it cannot get out by any means. This is a
 good thing for security, but means you cannot perform activities like launching
 a browser (e.g. for tests). With the necessary permissions, it is possible to
-communicate with existing processes (such as a docker daemon), which may provide
+communicate with existing processes (such as a docker dæmon), which may provide
 a suitable escape-hatch without compromising security too much (the exact
 balance will depend on your situation).
 
