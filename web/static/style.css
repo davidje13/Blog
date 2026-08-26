@@ -1,3 +1,66 @@
+html {
+	--col-page: #fbfbf9;
+	--col-back: #ffffff;
+	--col-text: #444444;
+	--col-link: #4466aa;
+	--col-link-hover: #6699bb;
+	--col-outline: #000000;
+	--col-border: #cccccc;
+	--col-border-hover: #888888;
+
+	--col-h-comment: #999988;
+	--col-h-error: #a61717;
+	--col-h-error-back: transparent;
+	--col-h-builtin: #000099;
+	--col-h-number: #009999;
+	--col-h-string: #dd1144;
+	--col-h-name: #445588;
+	--col-h-variable: #008080;
+	--col-h-property: #800080;
+
+	@media (prefers-color-scheme: dark) {
+		--col-page: #111111;
+		--col-back: #000000;
+		--col-text: #eeeeee;
+		--col-link: #4499ee;
+		--col-link-hover: #aaccee;
+		--col-outline: #f8f8f8;
+		--col-border: #555555;
+		--col-border-hover: #aaaaaa;
+
+		--col-h-comment: #bbbbaa;
+		--col-h-error: #ff0000;
+		--col-h-error-back: transparent;
+		--col-h-builtin: #88bbee;
+		--col-h-number: #22cccc;
+		--col-h-string: #dd8899;
+		--col-h-name: #aaaacc;
+		--col-h-variable: #77aaaa;
+		--col-h-property: #dd88dd;
+	}
+
+	@media (prefers-contrast: more) {
+		--col-page: Canvas;
+		--col-back: Canvas;
+		--col-text: CanvasText;
+		--col-link: LinkText;
+		--col-link-hover: LinkText;
+		--col-outline: CanvasText;
+		--col-border: ButtonBorder;
+		--col-border-hover: ButtonBorder;
+
+		--col-h-comment: GrayText;
+		--col-h-error: MarkText;
+		--col-h-error-back: Mark;
+		--col-h-builtin: CanvasText;
+		--col-h-number: CanvasText;
+		--col-h-string: CanvasText;
+		--col-h-name: CanvasText;
+		--col-h-variable: CanvasText;
+		--col-h-property: CanvasText;
+	}
+}
+
 html,
 h1,
 h2,
@@ -21,8 +84,8 @@ body {
 	padding: 10px 20px 50%;
 	font: 1.2em sans-serif;
 	line-height: 1.8;
-	color: #444444;
-	background: #fbfbf9;
+	color: var(--col-text);
+	background: var(--col-page);
 }
 
 main {
@@ -80,7 +143,7 @@ hr {
 	margin: 20px 0 30px;
 	padding: 0;
 	border: none;
-	border-bottom: 1px solid #aaaaaa;
+	border-bottom: 1px solid var(--col-border);
 }
 
 del {
@@ -106,12 +169,12 @@ footer {
 
 a:link,
 a:visited {
-	color: #4466aa;
+	color: var(--col-link);
 	text-decoration: underline;
 }
 a:active,
 a:hover {
-	color: #6699bb;
+	color: var(--col-link-hover);
 	text-decoration: none;
 }
 
@@ -124,15 +187,15 @@ a:hover {
 a.tag {
 	pointer-events: all;
 	display: inline-block;
-	border: 1px solid #cccccc;
-	background: #ffffff;
+	border: 1px solid var(--col-border);
+	background: var(--col-back);
 	padding: 0 1em;
 	border-radius: 100px;
 	text-decoration: none;
 }
 a.tag:active,
 a.tag:hover {
-	border-color: #888888;
+	border-color: var(--col-border-hover);
 }
 
 p:has(img:first-child) {
@@ -144,9 +207,10 @@ p:has(img:first-child) {
 	font-style: italic;
 
 	img {
-		box-shadow: 0 0 0 1px #000000;
+		border: 1px solid var(--col-outline);
 		border-radius: 4px;
 		align-self: center;
+		box-sizing: border-box;
 		max-width: 100%;
 	}
 }
@@ -163,10 +227,10 @@ code {
 pre {
 	margin: 16px 0;
 	padding: 16px 20px;
-	background: #ffffff;
+	background: var(--col-back);
 	overflow: auto;
 	tab-size: 4;
-	box-shadow: 0 0 0 1px #000000;
+	border: 1px solid var(--col-outline);
 	border-radius: 4px;
 
 	code {
@@ -175,7 +239,7 @@ pre {
 }
 
 blockquote {
-	border-left: 2px solid #cccccc;
+	border-left: 2px solid var(--col-border);
 	padding-left: 16px;
 	margin: 16px 0 16px 16px;
 }
@@ -193,13 +257,14 @@ blockquote {
 			display: block;
 			position: relative;
 			padding: 24px 16px;
-			background: #ffffff;
-			border: 1px solid #cccccc;
+			background: var(--col-back);
+			border: 1px solid var(--col-border);
 			border-radius: 4px;
+			text-decoration: none;
 
 			&:active,
 			&:hover {
-				border-color: #888888;
+				border-color: var(--col-border-hover);
 			}
 		}
 
@@ -227,12 +292,12 @@ blockquote {
 
 .highlight .comment,
 .highlight .meta {
-	color: #999988;
+	color: var(--col-h-comment);
 	font-style: italic;
 }
 .highlight .error {
-	color: #a61717;
-	background-color: #e3d2d2;
+	color: var(--col-h-error);
+	background: var(--col-h-error-back);
 }
 .highlight .keyword {
 	font-weight: bold;
@@ -242,28 +307,26 @@ blockquote {
 }
 .highlight .built_in,
 .highlight .title {
-	color: #000099;
+	color: var(--col-h-builtin);
 }
 .highlight .number {
-	color: #009999;
+	color: var(--col-h-number);
 }
 .highlight .string {
-	color: #d14;
+	color: var(--col-h-string);
 }
 .highlight .name {
-	color: #445588;
+	color: var(--col-h-name);
 	font-weight: bold;
 }
 .highlight .variable {
-	color: #008080;
+	color: var(--col-h-variable);
 }
 .highlight .property,
-.highlight .literal {
-	color: #800080;
-}
+.highlight .literal,
 .highlight .attribute,
 .highlight .attr {
-	color: #800080;
+	color: var(--col-h-property);
 }
 
 @media print {
@@ -288,6 +351,6 @@ blockquote {
 	a.tag {
 		border: none;
 		padding: 0 8px 0 0;
-		background: #ffffff;
+		background: var(--col-back);
 	}
 }
