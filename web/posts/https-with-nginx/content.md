@@ -24,8 +24,8 @@ First, the basics. To set up nginx with HTTPS there are a few simple initial
 steps:
 
 1. Generate private parameters for
-   [Diffie–Hellman key exchanges](https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange).
-   Using Diffie–Hellman for the initial key exchange means that the
+   [Diffie-Hellman key exchanges](https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange).
+   Using Diffie-Hellman for the initial key exchange means that the
    per-connection encryption keys will remain secret, even if an attacker
    compromises the certificate's private key (this is called Perfect Forward
    Secrecy):

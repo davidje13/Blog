@@ -81,7 +81,7 @@ section {
 body {
 	margin: 0;
 	padding: 0;
-	padding: 10px 20px 50%;
+	padding: 10px 20px 80vh;
 	font: 1.2em sans-serif;
 	line-height: 1.8;
 	color: var(--col-text);

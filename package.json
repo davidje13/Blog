@@ -12,7 +12,6 @@
 	"devDependencies": {
 		"highlight.js": "11.x",
 		"marked": "18.x",
-		"marked-footnote": "1.x",
 		"marked-highlight": "2.x",
 		"prettier": "3.9.6",
 		"web-listener": "1.5.x",
