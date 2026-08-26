@@ -1,6 +1,9 @@
 ---
 title: 'Sandboxing Node.js on Mac'
 author: David Evans
+description:
+  'A guide on using MacOS’ sandbox-exec command to limit the potential damage
+  from NPM supply chain attacks.'
 created: 2025-08-25
 tags:
   - web

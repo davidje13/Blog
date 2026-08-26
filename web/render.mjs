@@ -39,7 +39,10 @@ export async function renderPage(env, path, allPaths = null) {
 	}
 
 	if (path.length === 2 && path[1] === 'index.html') {
-		const page = await renderPost(env, path[0], allPaths);
+		const page = await renderPost(env, path[0], allPaths, {
+			header: true,
+			footer: true,
+		});
 		if (page) {
 			return htmlFrame(page);
 		}
@@ -122,7 +125,6 @@ async function renderRSS(env, allPaths) {
 		const pathString = `${env.host}${toPath(post.path)}`;
 		const rendered = await renderPost(env, post.path[0], allPaths, {
 			absolutePaths: true,
-			header: false,
 		});
 		const tags = [...post.metadata.tags].sort();
 		r += [
@@ -182,7 +184,18 @@ async function renderRoot(env, allPaths) {
 	html += '</ul>';
 	html +=
 		'<p><a href="/feed.rss" rel="alternate" target="_blank" class="feed">RSS Feed</a></p>';
-	return { title: metadata.title, html };
+	return {
+		title: metadata.title,
+		html,
+		headContent: [
+			`<meta property="og:title" content="${escapeHTML(metadata.title)}" />`,
+			`<meta property="og:type" content="website" />`,
+			`<meta property="og:image" content="${escapeHTML(`${env.host}/banner.png`)}" />`,
+			`<meta property="og:url" content="${escapeHTML(env.host)}" />`,
+			`<meta property="og:locale" content="${escapeHTML(metadata.language.replaceAll('-', '_'))}" />`,
+			`<meta name="description" property="og:description" content="${escapeHTML(metadata.description)}" />`,
+		],
+	};
 }
 
 async function renderTag(env, name, allPaths) {
@@ -198,7 +211,7 @@ async function renderTag(env, name, allPaths) {
 	}
 	const taggedPosts = posts.filter((p) => p.metadata.tags.has(name));
 	posts.sort(postOrder);
-	let html = `<h1>${escapeHTML(`Tagged ${name}`)}</h1>`;
+	let html = `<h1>${escapeHTML(`Tagged: ${name}`)}</h1>`;
 	html += await makeMarkdownRenderer().parse(
 		(await getMarkdownContent(tag.metadata.fsPath)).md,
 		{ async: true },
@@ -208,14 +221,26 @@ async function renderTag(env, name, allPaths) {
 		html += renderLinkItem(p, { skipTag: name });
 	}
 	html += '</ul></section>';
-	return { title: `Tagged ${name} \u2014 ${metadata.title}`, html };
+	return {
+		title: `Tagged: ${name} \u2014 ${metadata.title}`,
+		html,
+		headContent: [
+			`<meta property="og:title" content="${escapeHTML(`Tagged ${name}`)}" />`,
+			`<meta property="og:type" content="website" />`,
+			`<meta property="og:image" content="${escapeHTML(`${env.host}/banner.png`)}" />`,
+			`<meta property="og:url" content="${escapeHTML(`${env.host}/tagged/${encodeURIComponent(name)}/`)}" />`,
+			`<meta property="og:locale" content="${escapeHTML(metadata.language.replaceAll('-', '_'))}" />`,
+			`<meta name="description" property="og:description" content="${escapeHTML(`Posts tagged as: ${name}`)}" />`,
+			`<meta property="og:site_name" content="${escapeHTML(metadata.title)}" />`,
+		],
+	};
 }
 
 async function renderPost(
 	env,
 	name,
 	allPaths = null,
-	{ absolutePaths = false, header = true } = {},
+	{ absolutePaths = false, header = false, footer = false } = {},
 ) {
 	const post = allPaths?.find(
 		(p) => p.type === 'post' && p.path[0] === name,
@@ -225,10 +250,9 @@ async function renderPost(
 	};
 	await loadMetadata(post);
 
+	const pageURL = URL.parse(`/${encodeURIComponent(name)}/`, env.host);
 	const renderer = makeMarkdownRenderer({
-		absolutePathsBase: absolutePaths
-			? URL.parse(`/${encodeURIComponent(name)}/`, env.host)
-			: null,
+		absolutePathsBase: absolutePaths ? pageURL : null,
 	});
 
 	let html = await renderer.parse(
@@ -244,14 +268,13 @@ async function renderPost(
 	if (post.metadata.modified > post.metadata.created) {
 		headerData += ` (last updated ${printDate(post.metadata.modified)})`;
 	}
+	const tags = [...post.metadata.tags].sort();
 	headerData += [
 		'<div class="tags">',
-		...[...post.metadata.tags]
-			.sort()
-			.map(
-				(t) =>
-					`<a class="tag" href="${escapeHTML(`/tagged/${encodeURIComponent(t)}`)}">${escapeHTML(t)}</a>`,
-			),
+		...tags.map(
+			(t) =>
+				`<a class="tag" href="${escapeHTML(`/tagged/${encodeURIComponent(t)}`)}">${escapeHTML(t)}</a>`,
+		),
 		'<a class="tag" href="/">all posts</a>',
 		'</div>',
 	].join('');
@@ -268,7 +291,46 @@ async function renderPost(
 			html;
 	}
 
-	return { title: `${post.metadata.title} \u2014 ${metadata.title}`, html };
+	if (footer && post.metadata.author) {
+		const range = yearRange(
+			new Date(post.metadata.created).getUTCFullYear(),
+			new Date(post.metadata.modified).getUTCFullYear(),
+		);
+		html += `<footer>Article &copy;${escapeHTML(`${range} ${post.metadata.author}`)}. Code samples available under the <a href="https://opensource.org/license/mit" target="_blank" rel="external noopener">MIT license</a>.</footer>`;
+	}
+
+	return {
+		title: `${post.metadata.title} \u2014 ${metadata.title}`,
+		html,
+		headContent: [
+			`<meta property="og:title" content="${escapeHTML(post.metadata.title)}" />`,
+			`<meta property="og:type" content="article" />`,
+			`<meta property="og:image" content="${escapeHTML(post.metadata.bannerImage ? `${pageURL}/${post.metadata.bannerImage}` : `${env.host}/banner.png`)}" />`,
+			post.metadata.bannerDescription
+				? `<meta property="og:image:alt" content="${escapeHTML(post.metadata.bannerDescription)}" />`
+				: '',
+			`<meta property="og:url" content="${escapeHTML(pageURL.toString())}" />`,
+			`<meta property="og:locale" content="${escapeHTML(metadata.language.replaceAll('-', '_'))}" />`,
+			post.metadata.description
+				? `<meta name="description" property="og:description" content="${escapeHTML(post.metadata.description)}" />`
+				: '',
+			`<meta property="og:published_time" content="${escapeHTML(new Date(post.metadata.created).toISOString())}" />`,
+			post.metadata.modified > post.metadata.created
+				? `<meta property="og:modified_time" content="${escapeHTML(new Date(post.metadata.modified).toISOString())}" />`
+				: '',
+			post.metadata.author
+				? `<meta name="author" property="og:author" content="${escapeHTML(post.metadata.author)}" />`
+				: '',
+			...tags.map(
+				(t) => `<meta property="og:tag" content="${escapeHTML(t)}" />`,
+			),
+			`<meta property="og:site_name" content="${escapeHTML(metadata.title)}" />`,
+		],
+	};
+}
+
+function yearRange(a, b) {
+	return a === b ? String(a) : `${a}\u2013${b}`;
 }
 
 const SOURCE_DIR = dirname(fileURLToPath(import.meta.url));
@@ -303,17 +365,25 @@ async function loadMetadata(p) {
 	p.metadata = {
 		title: name,
 		author: '',
+		description: '',
+		bannerImage: '',
+		bannerDescription: '',
 		created: 0,
 		modified: 0,
 		tags: new Set(),
 		fsPath,
 	};
 	const { yaml } = await getMarkdownContent(fsPath);
-	if (typeof yaml.title === 'string') {
-		p.metadata.title = yaml.title;
-	}
-	if (typeof yaml.author === 'string') {
-		p.metadata.author = yaml.author;
+	for (const prop of [
+		'title',
+		'author',
+		'description',
+		'bannerImage',
+		'bannerDescription',
+	]) {
+		if (typeof yaml[prop] === 'string') {
+			p.metadata[prop] = yaml[prop];
+		}
 	}
 	if (typeof yaml.created === 'string') {
 		p.metadata.created = parseDateFlexible(yaml.created);
@@ -347,16 +417,17 @@ function printDatetime(timestamp) {
 	return `<time datetime="${escapeHTML(date.toISOString())}">${DATETIME_FORMATTER.format(date)}</time>`;
 }
 
-function htmlFrame({ title, html }) {
+function htmlFrame({ title, html, headContent }) {
 	return [
 		'<!DOCTYPE html>',
 		'<html lang="en">',
-		'<head>',
+		'<head prefix="og: https://ogp.me/ns#">',
 		'<meta charset="utf-8" />',
 		`<title>${escapeHTML(title)}</title>`,
 		'<link rel="stylesheet" href="/style.css" />',
 		'<link rel="icon" href="/favicon.ico" />',
 		'<link rel="alternate" type="application/rss+xml" href="/feed.rss" />',
+		...headContent,
 		'</head>',
 		'<body>',
 		'<main>',

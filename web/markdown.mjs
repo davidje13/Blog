@@ -53,7 +53,7 @@ const EXTERNAL_LINK = {
 			if (node.href.startsWith('#')) {
 				return link;
 			}
-			return link.replace(/^<a/, '<a target="_blank" rel="noopener"');
+			return link.replace(/^<a/, '<a target="_blank" rel="external noopener"');
 		},
 	},
 };

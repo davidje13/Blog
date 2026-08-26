@@ -98,6 +98,12 @@ h6 {
 	}
 }
 
+footer {
+	margin-top: 128px;
+	font-size: 0.9em;
+	text-align: end;
+}
+
 a:link,
 a:visited {
 	color: #4466aa;
@@ -159,7 +165,6 @@ pre {
 	padding: 16px 20px;
 	background: #ffffff;
 	overflow: auto;
-	max-height: 40em;
 	tab-size: 4;
 	box-shadow: 0 0 0 1px #000000;
 	border-radius: 4px;
@@ -259,4 +264,30 @@ blockquote {
 .highlight .attribute,
 .highlight .attr {
 	color: #800080;
+}
+
+@media print {
+	body {
+		font-size: 1em;
+	}
+
+	header p,
+	header .tags {
+		margin: 0;
+	}
+
+	pre {
+		padding: 4px 8px;
+		font-size: 0.8em;
+
+		code {
+			white-space: pre-wrap;
+		}
+	}
+
+	a.tag {
+		border: none;
+		padding: 0 8px 0 0;
+		background: #ffffff;
+	}
 }

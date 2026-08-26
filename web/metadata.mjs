@@ -1,6 +1,6 @@
 export const metadata = {
 	title: 'David\u2019s Blog',
-	description: 'Tech-themed posts',
+	description: 'Articles about various tech-related themes',
 	copyright: `${yearRange(2025, new Date().getUTCFullYear())} David Evans`,
 	language: 'en-GB',
 };
