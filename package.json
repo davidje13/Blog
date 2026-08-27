@@ -10,6 +10,7 @@
 		"build": "./web/build.sh && cd build && zip -8Xr -n .png - * > ../web-bundle.zip"
 	},
 	"devDependencies": {
+		"@webc.site/math": "0.1.34",
 		"highlight.js": "11.x",
 		"lean-qr": "2.x",
 		"marked": "18.x",

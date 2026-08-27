@@ -7,15 +7,19 @@ import { MARKED_HEADING_IDS } from './markdown-plugins/headingIds.mjs';
 import { MARKED_SUP } from './markdown-plugins/sup.mjs';
 import { MARKED_ABSOLUTE_PATHS } from './markdown-plugins/absolutePaths.mjs';
 import { MARKED_ABBR } from './markdown-plugins/abbr.mjs';
+import { MARKED_QR } from './markdown-plugins/qr.mjs';
+import { MARKED_MATH } from './markdown-plugins/math.mjs';
 
 export const makeMarkdownRenderer = ({ absolutePathsBase = null } = {}) =>
 	new Marked(
 		MARKED_HIGHLIGHT,
 		MARKED_EXTERNAL_LINK,
+		MARKED_MATH,
 		MARKED_FOOTNOTE(absolutePathsBase),
 		MARKED_ABBR(),
 		MARKED_SMART_QUOTES,
 		MARKED_HEADING_IDS,
 		MARKED_SUP,
+		MARKED_QR,
 		absolutePathsBase ? MARKED_ABSOLUTE_PATHS(absolutePathsBase) : {},
 	);
