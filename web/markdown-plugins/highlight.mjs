@@ -39,6 +39,9 @@ export const MARKED_HIGHLIGHT = markedHighlight({
 	emptyLangClass: 'highlight',
 	langPrefix: 'highlight lang-',
 	highlight(code, lang) {
+		if (lang === 'sequence-diagram') {
+			return code;
+		}
 		const language = highlightjs.getLanguage(lang) ? lang : 'plaintext';
 		return highlightjs.highlight(code, { language }).value;
 	},

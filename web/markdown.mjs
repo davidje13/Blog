@@ -9,9 +9,11 @@ import { MARKED_ABSOLUTE_PATHS } from './markdown-plugins/absolutePaths.mjs';
 import { MARKED_ABBR } from './markdown-plugins/abbr.mjs';
 import { MARKED_QR } from './markdown-plugins/qr.mjs';
 import { MARKED_MATH } from './markdown-plugins/math.mjs';
+import { MARKED_SEQUENCE_DIAGRAM } from './markdown-plugins/sequenceDiagram.mjs';
 
 export const makeMarkdownRenderer = ({ absolutePathsBase = null } = {}) =>
 	new Marked(
+		MARKED_SEQUENCE_DIAGRAM,
 		MARKED_HIGHLIGHT,
 		MARKED_EXTERNAL_LINK,
 		MARKED_MATH,

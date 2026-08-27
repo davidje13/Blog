@@ -245,6 +245,11 @@ a.tag:hover {
 	border-color: var(--col-border-hover);
 }
 
+img {
+	box-sizing: border-box;
+	max-width: 100%;
+}
+
 p:has(img:first-child) {
 	display: flex;
 	flex-direction: column;
@@ -253,12 +258,19 @@ p:has(img:first-child) {
 	text-align: center;
 	font-style: italic;
 
-	img {
+	img:not(.sequence-diagram) {
 		border: 1px solid var(--col-outline);
 		border-radius: 4px;
 		align-self: center;
-		box-sizing: border-box;
-		max-width: 100%;
+	}
+}
+
+img.sequence-diagram {
+	align-self: center;
+	min-width: min(40ch, calc(100vw - 40px));
+
+	@media (prefers-color-scheme: dark) {
+		filter: hue-rotate(180deg) invert(0.95) saturate(3);
 	}
 }
 

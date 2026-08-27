@@ -16,6 +16,7 @@
 		"marked": "18.x",
 		"marked-highlight": "2.x",
 		"prettier": "3.9.6",
+		"svg-sequence-diagram": "1.x",
 		"web-listener": "1.5.x",
 		"yaml": "2.9.x"
 	}
