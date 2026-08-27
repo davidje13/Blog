@@ -5,7 +5,7 @@ description:
   'A guide on using MacOS’ sandbox-exec command to limit the potential damage
   from NPM supply chain attacks.'
 created: 2026-08-25
-modified: 2026-08-26
+modified: 2026-08-27
 tags:
   - web
   - security
@@ -155,7 +155,7 @@ see how to set up a policy from scratch.
 Setting up a `sandbox-exec` policy for an existing process requires a bit of
 trial-and-error: begin with a very restrictive policy, run the program, then
 check the sandbox logs to see what got blocked. Repeat until the program is able
-to do everything it needs to do.
+to do everything it needs to do. It's best explained by example:
 
 ### Worked example for `curl`
 
@@ -218,9 +218,9 @@ existing processes, rather then built-up alongside them), for example:
 > [...] (Sandbox) Sandbox: findmybeaconingd(507) deny(1) mach-lookup com.apple.timed.xpc
 > ```
 
-So it's best to filter the output further with `grep` to highlight the relevant
-errors. I currently use this command to filter out some of the noisier system
-services:
+So it's useful to filter the output further with `grep` to highlight the
+relevant errors. I currently use this command to filter out some of the noisier
+system services:
 
 ```sh
 log stream --style compact --predicate 'sender=="Sandbox" && messageType=="error"' --color always | grep -ve ' \(searchpartyuseragent\|spotlightknowledged\|imagent\|findmydeviced\|findmybeaconingd\|locationd\|triald\|adprivacyd\|duetexpertd\|parsec-fbf\|MessagesBlastDoorService\)('
