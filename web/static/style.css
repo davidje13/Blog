@@ -267,7 +267,7 @@ p:has(img:first-child) {
 
 img.sequence-diagram {
 	align-self: center;
-	min-width: min(40ch, calc(100vw - 40px));
+	min-width: min(70ch, calc(100vw - 40px));
 
 	@media (prefers-color-scheme: dark) {
 		filter: hue-rotate(180deg) invert(0.95) saturate(3);

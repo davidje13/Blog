@@ -6,6 +6,7 @@ description:
   certificates, block requests for unknown hosts, and still support TLS Session
   Resumption.'
 created: 2026-08-25
+modified: 2026-08-27
 tags:
   - security
   - web
@@ -38,8 +39,9 @@ steps:
    ```
 
 2. Configure nginx (in the `http` block, _not_ inside individual `server`
-   blocks) with a set of secure ciphers and the generated parameters. This is
-   typically done by adding a new file to `/etc/nginx/conf.d/`:
+   blocks; we'll see why below) with a set of secure ciphers and the generated
+   parameters. This is typically done by adding a new file to
+   `/etc/nginx/conf.d/`:
 
    ```nginxconf
    ssl_protocols TLSv1.2 TLSv1.3;
@@ -122,6 +124,60 @@ resulting setup, since it can flag insecure cipher choices as well as many other
 configuration issues.
 
 ## TLS Session Resumption
+
+Our current setup requires clients to negotiate a new encrypted channel every
+time they connect. The process looks like this:
+
+```sequence-diagram
+title HTTPS Connections
+
+begin TLS 1.2 Client as C2
+begin Server as S2
+begin TLS 1.3 Client as C3
+begin "Server " as S3
+
+# TLS 1.2
+C2 -> +S2: SYN
+-S2 -> +C2: ACK + SYN
+-C2 -> +S2: "ACK + Client Hello\n+ Domain name"
+-S2 -> +C2: "Server Hello\n+ Certificate"
+state over C2: Check certificate
+-C2 -> +S2: "Premaster Secret\n+ Finished"
+& note right of S2: "Premaster Secret is encrypted\nusing the Server's public key."
+-S2 -> C2: Finished
+
+simultaneously:
+
+# TLS 1.3
+C3 -> +S3: SYN
+-S3 -> +C3: ACK + SYN
+-C3 -> +S3: "ACK + Client Hello\n+ Domain name"
+-S3 -> +C3: "Server Hello + Certificate\n+ Signature + Finished"
+state over C3: Check certificate & signature
+-C3 -> S3: "Client DH Parameter\n+ Finished"
+
+divider line: Encrypted channel established
+
+C2 -> +S2: Request
+-S2 --> C2: Response
+
+C2 -> +S2: Request
+-S2 --> C2: Response
+
+text right of C2: etc.
+
+simultaneously:
+
+C3 -> +S3: Request
+-S3 --> C3: Response
+
+C3 -> +S3: Request
+-S3 --> C3: Response
+
+text right of C3: etc.
+
+terminators fade
+```
 
 TLS Session Resumption saves some round-trips and processing time when clients
 reconnect to download new content. Without Session Resumption, the client would
