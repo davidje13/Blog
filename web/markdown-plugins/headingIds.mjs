@@ -1,3 +1,5 @@
+import { escapeHTML } from './common.mjs';
+
 export const MARKED_HEADING_IDS = {
 	renderer: {
 		heading({ tokens, depth }) {
@@ -10,10 +12,3 @@ export const MARKED_HEADING_IDS = {
 		},
 	},
 };
-
-const escapeHTML = (c) =>
-	c
-		.replaceAll('&', '&amp;')
-		.replaceAll('<', '&lt;')
-		.replaceAll('>', '&gt;')
-		.replaceAll('"', '&quot;');

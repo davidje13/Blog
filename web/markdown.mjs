@@ -10,6 +10,7 @@ import { MARKED_ABBR } from './markdown-plugins/abbr.mjs';
 import { MARKED_QR } from './markdown-plugins/qr.mjs';
 import { MARKED_MATH } from './markdown-plugins/math.mjs';
 import { MARKED_SEQUENCE_DIAGRAM } from './markdown-plugins/sequenceDiagram.mjs';
+import { MARKED_IMAGE_CLASS } from './markdown-plugins/imageClass.mjs';
 
 export const makeMarkdownRenderer = ({ absolutePathsBase = null } = {}) =>
 	new Marked(
@@ -23,5 +24,6 @@ export const makeMarkdownRenderer = ({ absolutePathsBase = null } = {}) =>
 		MARKED_HEADING_IDS,
 		MARKED_SUP,
 		MARKED_QR,
+		MARKED_IMAGE_CLASS,
 		absolutePathsBase ? MARKED_ABSOLUTE_PATHS(absolutePathsBase) : {},
 	);

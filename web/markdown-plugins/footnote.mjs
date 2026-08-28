@@ -25,6 +25,8 @@
  * THE SOFTWARE.
  */
 
+import { escapeHTML } from './common.mjs';
+
 export const MARKED_FOOTNOTE = (baseURL = null) => {
 	// note: due to the use of global state, this is not safe to use concurrently with async parsing.
 	// make a new instance for each parser if async processing is used.
@@ -162,10 +164,3 @@ export const MARKED_FOOTNOTE = (baseURL = null) => {
 		},
 	};
 };
-
-const escapeHTML = (c) =>
-	c
-		.replaceAll('&', '&amp;')
-		.replaceAll('<', '&lt;')
-		.replaceAll('>', '&gt;')
-		.replaceAll('"', '&quot;');

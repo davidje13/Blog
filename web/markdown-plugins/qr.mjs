@@ -13,6 +13,7 @@ export const MARKED_QR = {
 			});
 			token.href = `data:image/svg+xml;base64,${btoa(qrLink)}`;
 			token.title ??= content;
+			token.className = 'qr';
 		}
 	},
 };

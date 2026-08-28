@@ -114,11 +114,12 @@ header {
 		margin: 0;
 	}
 
-	.qr {
+	a.qr {
 		grid-area: 1 / 2 / 5 / 3;
 		width: 6em;
 		height: 6em;
 		margin: -8px -8px 0 8px;
+		text-decoration: none;
 
 		img {
 			display: block;
@@ -218,10 +219,6 @@ a:visited {
 a:active,
 a:hover {
 	color: var(--col-link-hover);
-	text-decoration: none;
-}
-
-a.qr {
 	text-decoration: none;
 }
 

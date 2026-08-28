@@ -6,6 +6,7 @@
 		{
 			"files": "*.md",
 			"options": {
+				"useTabs": false,
 				"proseWrap": "always",
 				"quoteProps": "preserve"
 			}

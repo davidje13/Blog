@@ -355,16 +355,16 @@ Resumption requests:
 
 ```nginxconf
 server {
-	listen 80 default_server;
-	listen [::]:80 default_server;
-	listen 443 ssl default_server;
-	listen [::]:443 ssl default_server;
+  listen 80 default_server;
+  listen [::]:80 default_server;
+  listen 443 ssl default_server;
+  listen [::]:443 ssl default_server;
 
-	ssl_reject_handshake on;
+  ssl_reject_handshake on;
 
-	access_log off;
-	lingering_close off;
-	return 444; # nginx special code: close without response
+  access_log off;
+  lingering_close off;
+  return 444; # nginx special code: close without response
 }
 ```
 
