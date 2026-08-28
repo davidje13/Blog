@@ -35,6 +35,33 @@ highlightjs.registerLanguage('text', (hljs) => ({
 	contains: [{ scope: 'comment', begin: /\[\.\.\./, end: /\]/ }],
 }));
 
+const originalBash = highlightjs.getLanguage('bash');
+highlightjs.registerLanguage('bash', () => ({
+	...originalBash,
+	contains: [
+		...originalBash.contains,
+		{
+			scope: 'function',
+			match: /(?<=^[ \t]*)[a-zA-Z_][a-zA-Z0-9_\-]*(?=[ \t]*\()/,
+		},
+		{
+			scope: 'variable',
+			match:
+				/(?<=^[ \t]*(local[ \t]+)?([a-zA-Z_][a-zA-Z0-9_]*=([^ "'\\\n]|\\.|"([^"$`\\\n]|\\.|\$[^"(\n])*")*[ \t]+)*)[a-zA-Z_][a-zA-Z0-9_]*(?==)/,
+		},
+		{
+			scope: 'string',
+			match:
+				/(?<=^[ \t]*(local[ \t]+)?([a-zA-Z_][a-zA-Z0-9_]*=([^ "'\\\n]|\\.|"([^"$`\\\n]|\\.|\$[^"(\n])*")*[ \t]+)*[a-zA-Z_][a-zA-Z0-9_]*=)([^\\ "'$`\n]|\\.)*/,
+		},
+		{
+			scope: 'title',
+			match:
+				/(?<=^[ \t]*([a-zA-Z_][a-zA-Z0-9_]*=([^ "'\\\n]|\\.|"([^"$`\\\n]|\\.|\$[^"(\n])*")*[ \t]+)*)(?!(while|for|if|elif|else|done|local)\b)[a-zA-Z_][a-zA-Z0-9_\-]*(?=\s|$)/,
+		},
+	],
+}));
+
 export const MARKED_HIGHLIGHT = markedHighlight({
 	emptyLangClass: 'highlight',
 	langPrefix: 'highlight lang-',
