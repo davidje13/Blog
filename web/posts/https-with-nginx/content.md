@@ -129,8 +129,6 @@ Our current setup requires clients to negotiate a new encrypted channel every
 time they connect. The process looks like this:
 
 ```sequence-diagram
-title HTTPS Connections
-
 begin TLS 1.2 Client as C2
 begin Server as S2
 begin TLS 1.3 Client as C3
