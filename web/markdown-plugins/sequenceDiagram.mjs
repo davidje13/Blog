@@ -12,7 +12,7 @@ export const MARKED_SEQUENCE_DIAGRAM = {
 							'data:image/svg+xml;base64,' +
 							btoa(
 								VirtualSequenceDiagram.render(token.text, {
-									size: { zoom: 3 },
+									size: { zoom: 2 },
 								}),
 							),
 						text: token.text.trim().replaceAll(/\n+/g, '; '),

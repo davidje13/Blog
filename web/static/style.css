@@ -277,6 +277,11 @@ a.feed {
 
 code {
 	white-space: nowrap;
+	margin: -2px 0;
+	padding: 2px 3px;
+	box-shadow: 0 0 0 1px var(--col-border);
+	background: var(--col-back);
+	border-radius: 4px;
 }
 
 pre {
@@ -290,6 +295,11 @@ pre {
 
 	code {
 		white-space: pre;
+		margin: 0;
+		padding: 0;
+		box-shadow: none;
+		background: none;
+		border-radius: 0;
 	}
 }
 

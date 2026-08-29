@@ -6,7 +6,7 @@ description:
   certificates, block requests for unknown hosts, and still support TLS Session
   Resumption.'
 created: 2026-08-25
-modified: 2026-08-27
+modified: 2026-08-29
 tags:
   - security
   - web
@@ -38,10 +38,9 @@ steps:
    sudo chown root:root /etc/nginx/dhparam.pem;
    ```
 
-2. Configure nginx (in the `http` block, _not_ inside individual `server`
-   blocks; we'll see why below) with a set of secure ciphers and the generated
-   parameters. This is typically done by adding a new file to
-   `/etc/nginx/conf.d/`:
+2. Configure nginx with a set of secure ciphers and the generated parameters (in
+   the `http` block, _not_ inside individual `server` blocks; we'll see why
+   below). This is typically done by adding a new file to `/etc/nginx/conf.d/`:
 
    ```nginxconf
    ssl_protocols TLSv1.2 TLSv1.3;
@@ -62,7 +61,7 @@ steps:
 
    ```nginxconf
    server {
-     listen 80; # or use a non-privileged port and map it using iptables or nftables
+     listen 80;
      listen [::]:80;
      root /var/www/http;
 
@@ -98,7 +97,7 @@ steps:
 
    ```nginxconf
    server {
-     listen 443 ssl; # or use a non-privileged port and map it using iptables or nftables
+     listen 443 ssl;
      listen [::]:443 ssl;
 
      ssl_certificate /etc/letsencrypt/live/my-cert/fullchain.pem;
@@ -325,8 +324,8 @@ When working with multiple sites served by a single nginx instance, it's often
 desirable to _block_ access to the raw IP address (by default, nginx will serve
 whichever site was defined first).
 
-But when doing this it's useful to understand how requests get routed to the
-correct site (confusingly called a `server` in the nginx config).
+For this it's useful to understand how requests get routed to the correct site
+(confusingly called a `server` in the nginx config).
 
 Classically (in HTTP), the `Host` header is used to decide which site should
 respond to a request. However with HTTPS the `Host` header (along with all other
@@ -373,14 +372,14 @@ the `http` block, not a `server` block), as described above. If they are defined
 only at the `server` level, TLS Session Resumption will fail. The
 `ssl_certificate` and `ssl_certificate_key` config lines can (and should)
 continue to be defined at the `server` level, allowing you to specify different
-certificates for each site (and they do not need to be specified for this new
-fallback site).
+certificates for each site.
 
 With this configuration, requests for unknown domains and requests which do not
-specify a domain at all will be rejected immediately, with no SSL handshake and
-no response (this avoids the need for a "stub" self-signed certificate, used by
-some approaches). But requests to resume an existing session will succeed, then
-get re-assigned to the correct site.
+specify a domain at all will be rejected immediately, with no SSL handshake
+(`ssl_reject_handshake on`) and no response (`return 444`). Rejecting
+connections like this avoids the need for a "stub" self-signed certificate, used
+by some other approaches. Requests to resume an existing session will succeed,
+then get re-assigned to the correct site.
 
 ## Bonus HTTPS configuration
 
