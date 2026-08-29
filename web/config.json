@@ -23,6 +23,12 @@
 					}
 				},
 				{
+					"type": "redirect",
+					"path": "/feed.rss",
+					"target": "/posts.rss",
+					"status": 301
+				},
+				{
 					"type": "files",
 					"path": "/",
 					"dir": "./static",
