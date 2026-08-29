@@ -18,8 +18,11 @@ export async function discoverAllPaths() {
 	})) {
 		if (!item.isDirectory()) {
 			console.warn(`unexpected file: ${item.name}`);
-		} else if (!VALID_SLUG.test(item.name) || item.name === 'tagged') {
-			console.warn(`invalid name: ${item.name}`);
+		} else if (
+			!VALID_SLUG.test(item.name) ||
+			['tagged', 'inline'].includes(item.name)
+		) {
+			throw new Error(`invalid post name: ${item.name}`);
 		} else {
 			allPaths.push({ path: [item.name, 'index.html'], type: 'post' });
 		}
@@ -31,7 +34,7 @@ export async function discoverAllPaths() {
 		if (!item.isDirectory()) {
 			console.warn(`unexpected file: ${item.name}`);
 		} else if (!VALID_SLUG.test(item.name)) {
-			console.warn(`invalid name: ${item.name}`);
+			throw new Error(`invalid tag name: ${item.name}`);
 		} else {
 			allPaths.push({ path: ['tagged', item.name, 'index.html'], type: 'tag' });
 		}

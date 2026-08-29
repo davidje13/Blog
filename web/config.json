@@ -16,6 +16,13 @@
 					}
 				},
 				{
+					"type": "headers",
+					"path": "/inline",
+					"headers": {
+						"cache-control": "public, max-age=31536000, stale-if-error=31536000, immutable"
+					}
+				},
+				{
 					"type": "files",
 					"path": "/",
 					"dir": "./static",

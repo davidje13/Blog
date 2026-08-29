@@ -4,10 +4,16 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { renderPage } from './render.mjs';
 import { discoverAllPaths } from './discover.mjs';
+import { AssetStorage } from './AssetStorage.mjs';
 
 const SOURCE_DIR = dirname(fileURLToPath(import.meta.url));
 const BUILD_DIR = join(SOURCE_DIR, '..', 'build');
-const env = { host: process.env['HOST'] };
+
+const assets = new AssetStorage('/inline');
+const env = {
+	host: process.env['HOST'],
+	inlineAssetStorage: assets.add.bind(assets),
+};
 
 const allPaths = await discoverAllPaths();
 for (const { path } of allPaths) {
@@ -22,4 +28,11 @@ for (const { path } of allPaths) {
 		recursive: true,
 	});
 	await writeFile(join(...fullPath), content, { encoding: 'utf-8' });
+}
+
+if (!assets.isEmpty()) {
+	await mkdir(join(BUILD_DIR, 'static', 'inline'), { recursive: true });
+	for (const { filename, data } of assets.all()) {
+		await writeFile(join(BUILD_DIR, 'static', 'inline', filename), data);
+	}
 }

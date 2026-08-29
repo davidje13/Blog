@@ -255,6 +255,7 @@ async function renderPost(
 	const pageURL = URL.parse(`/${encodeURIComponent(name)}/`, env.host);
 	const renderer = makeMarkdownRenderer({
 		absolutePathsBase: absolutePaths ? pageURL : null,
+		inlineAssetStorage: env.inlineAssetStorage,
 	});
 
 	let html = await renderer.parse(

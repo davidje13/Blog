@@ -3,6 +3,11 @@ set -e;
 
 BASE_DIR="$(cd "$(dirname "$0")/.."; pwd)";
 
+if [ -z "$HOST" ]; then
+	echo "Must specify target HOST when building (e.g. HOST='http://localhost:8080' npm run build)" >&2;
+	exit 1;
+fi;
+
 echo "Cleaning build...";
 rm -r "$BASE_DIR/build" 2>/dev/null || true;
 

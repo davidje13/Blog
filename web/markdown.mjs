@@ -11,9 +11,15 @@ import { MARKED_QR } from './markdown-plugins/qr.mjs';
 import { MARKED_MATH } from './markdown-plugins/math.mjs';
 import { MARKED_SEQUENCE_DIAGRAM } from './markdown-plugins/sequenceDiagram.mjs';
 import { MARKED_IMAGE_CLASS } from './markdown-plugins/imageClass.mjs';
+import { MARKED_INLINE_ASSET_STORAGE } from './markdown-plugins/inlineAssetStorage.mjs';
 
-export const makeMarkdownRenderer = ({ absolutePathsBase = null } = {}) =>
+export const makeMarkdownRenderer = ({
+	absolutePathsBase = null,
+	inlineAssetStorage = null,
+} = {}) =>
 	new Marked(
+		absolutePathsBase ? MARKED_ABSOLUTE_PATHS(absolutePathsBase) : {},
+		inlineAssetStorage ? MARKED_INLINE_ASSET_STORAGE(inlineAssetStorage) : {},
 		MARKED_SEQUENCE_DIAGRAM,
 		MARKED_HIGHLIGHT,
 		MARKED_EXTERNAL_LINK,
@@ -25,5 +31,4 @@ export const makeMarkdownRenderer = ({ absolutePathsBase = null } = {}) =>
 		MARKED_SUP,
 		MARKED_QR,
 		MARKED_IMAGE_CLASS,
-		absolutePathsBase ? MARKED_ABSOLUTE_PATHS(absolutePathsBase) : {},
 	);
