@@ -9,7 +9,7 @@ export async function discoverAllPaths() {
 	const allPaths = [
 		{ path: ['index.html'], type: 'page' },
 		{ path: ['robots.txt'], type: 'meta' },
-		{ path: ['feed.rss'], type: 'meta' },
+		{ path: ['posts.rss'], type: 'meta' },
 		{ path: ['sitemap.xml'], type: 'meta' },
 	];
 

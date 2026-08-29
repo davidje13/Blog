@@ -33,7 +33,7 @@ export async function renderPage(env, path, allPaths = null) {
 				);
 			case 'robots.txt':
 				return renderRobots(env);
-			case 'feed.rss':
+			case 'posts.rss':
 				return renderRSS(env, allPaths ?? (await discoverAllPaths()));
 			case 'sitemap.xml':
 				return renderSiteMap(env, allPaths ?? (await discoverAllPaths()));
@@ -109,7 +109,7 @@ async function renderRSS(env, allPaths) {
 		`<title>${escapeHTML(metadata.title)}</title>`,
 		`<description>${escapeHTML(metadata.description)}</description>`,
 		`<link>${escapeHTML(env.host)}</link>`,
-		`<atom:link rel="self" href="${escapeHTML(`${env.host}/feed.rss`)}" type="application/rss+xml" />`,
+		`<atom:link rel="self" href="${escapeHTML(`${env.host}/posts.rss`)}" type="application/rss+xml" />`,
 		'<image>',
 		`<url>${escapeHTML(`${env.host}/feed-icon.png`)}</url>`,
 		`<title>${escapeHTML(metadata.title)}</title>`,
@@ -185,7 +185,7 @@ async function renderRoot(env, allPaths) {
 	}
 	html += '</ul>';
 	html +=
-		'<p><a href="/feed.rss" rel="alternate" target="_blank" class="feed">RSS Feed</a></p>';
+		'<p><a href="/posts.rss" rel="alternate" target="_blank" class="feed">RSS Feed</a></p>';
 	return {
 		title: metadata.title,
 		html,
@@ -443,7 +443,7 @@ function htmlFrame({ title, html, headContent }) {
 		'<link rel="stylesheet" href="/style.css" />',
 		'<link rel="icon" href="/favicon.ico" sizes="64x64 32x32 16x16" type="image/x-icon" />',
 		'<link rel="icon" href="/feed-icon.png" sizes="64x64" type="image/png" />',
-		'<link rel="alternate" type="application/rss+xml" href="/feed.rss" />',
+		'<link rel="alternate" type="application/rss+xml" href="/posts.rss" />',
 		...headContent,
 		'</head>',
 		'<body>',
