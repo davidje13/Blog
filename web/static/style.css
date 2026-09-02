@@ -306,11 +306,10 @@ pre {
 	}
 }
 
-figure table {
-	margin: 0 max(-200px, calc((100vw - 100%) / -2 + 16px));
+table {
+	margin: 20px 0 40px;
 	border-collapse: collapse;
 	font-size: 0.9em;
-	overflow-x: auto;
 
 	th {
 		font-weight: normal;

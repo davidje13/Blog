@@ -5,6 +5,10 @@ export const MARKED_FIGURE = {
 		paragraph(node) {
 			if (node.tokens[0]?.type === 'image') {
 				const [image, ...caption] = node.tokens;
+				if (!caption.length && image.title) {
+					caption.push({ type: 'text', text: image.title });
+					image.title = undefined;
+				}
 				let r = `<figure>${this.parser.parseInline([image])}`;
 				if (caption.length) {
 					r += `<figcaption>${this.parser.parseInline(caption)}</figcaption>`;

@@ -83,6 +83,9 @@ async function renderSiteMap(env, allPaths) {
 			`<priority>${escapeHTML(priority)}</priority>`,
 		];
 		await loadMetadata(p);
+		if (p.metadata?.hidden) {
+			continue;
+		}
 		if (p.metadata?.modified) {
 			parts.push(
 				`<lastmod>${escapeHTML(new Date(p.metadata.modified).toISOString())}</lastmod>`,
@@ -94,12 +97,18 @@ async function renderSiteMap(env, allPaths) {
 	return r;
 }
 
-async function renderRSS(env, allPaths) {
-	const posts = allPaths.filter((p) => p.type === 'post');
+async function getPostsAndMetadata(allPaths) {
+	let posts = allPaths.filter((p) => p.type === 'post');
 	for (const p of posts) {
 		await loadMetadata(p);
 	}
+	posts = posts.filter((p) => !p.metadata.hidden);
 	posts.sort(postOrder);
+	return posts;
+}
+
+async function renderRSS(env, allPaths) {
+	const posts = await getPostsAndMetadata(allPaths);
 	const latestChange = posts[0].metadata.modified;
 	const now = new Date();
 	let r = [
@@ -174,11 +183,7 @@ function renderLinkItem(post, { skipTag = null } = {}) {
 }
 
 async function renderRoot(env, allPaths) {
-	const posts = allPaths.filter((p) => p.type === 'post');
-	for (const p of posts) {
-		await loadMetadata(p);
-	}
-	posts.sort(postOrder);
+	const posts = await getPostsAndMetadata(allPaths);
 	let html = `<header><h1>${escapeHTML(metadata.title)}</h1></header><ul class="posts">`;
 	for (const p of posts) {
 		html += renderLinkItem(p);
@@ -207,10 +212,7 @@ async function renderTag(env, name, allPaths) {
 	}
 	await loadMetadata(tag);
 
-	const posts = allPaths.filter((p) => p.type === 'post');
-	for (const p of posts) {
-		await loadMetadata(p);
-	}
+	const posts = await getPostsAndMetadata(allPaths);
 	const taggedPosts = posts.filter((p) => p.metadata.tags.has(name));
 	posts.sort(postOrder);
 	let html = `<header><h1>${escapeHTML(`Tagged: ${name}`)}</h1></header>`;
@@ -380,6 +382,7 @@ async function loadMetadata(p) {
 	}
 	p.metadata = {
 		title: name,
+		hidden: false,
 		author: '',
 		description: '',
 		bannerImage: '',
@@ -390,6 +393,9 @@ async function loadMetadata(p) {
 		fsPath,
 	};
 	const { yaml } = await getMarkdownContent(fsPath);
+	if (yaml.hidden === true) {
+		p.metadata.hidden = true;
+	}
 	for (const prop of [
 		'title',
 		'author',
