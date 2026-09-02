@@ -12,6 +12,8 @@ import { MARKED_MATH } from './markdown-plugins/math.mjs';
 import { MARKED_SEQUENCE_DIAGRAM } from './markdown-plugins/sequenceDiagram.mjs';
 import { MARKED_IMAGE_CLASS } from './markdown-plugins/imageClass.mjs';
 import { MARKED_INLINE_ASSET_STORAGE } from './markdown-plugins/inlineAssetStorage.mjs';
+import { MARKED_FANCY } from './markdown-plugins/fancy.mjs';
+import { MARKED_FIGURE } from './markdown-plugins/figure.mjs';
 
 export const makeMarkdownRenderer = ({
 	absolutePathsBase = null,
@@ -26,9 +28,12 @@ export const makeMarkdownRenderer = ({
 		MARKED_MATH,
 		MARKED_FOOTNOTE(absolutePathsBase),
 		MARKED_ABBR(),
-		MARKED_SMART_QUOTES,
+		MARKED_SMART_QUOTES(),
 		MARKED_HEADING_IDS,
 		MARKED_SUP,
+		MARKED_FANCY,
 		MARKED_QR,
 		MARKED_IMAGE_CLASS,
+		MARKED_FIGURE,
+		{ tokenizer: { url() {} } }, // disable auto-links
 	);

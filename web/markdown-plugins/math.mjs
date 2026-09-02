@@ -11,7 +11,12 @@ export const MARKED_MATH = {
 					return undefined;
 				}
 				const [raw, content] = match;
-				return { type: 'math-block', raw: raw, text: content.trim() };
+				return {
+					type: 'math-block',
+					isBlock: true,
+					raw: raw,
+					text: content.trim(),
+				};
 			},
 			renderer: (token) => renderMath(token.text, true) + '\n',
 		},

@@ -247,25 +247,28 @@ img {
 	max-width: 100%;
 }
 
-p:has(img:first-child) {
+figure {
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
 	margin: 40px max(-200px, calc((100vw - 100%) / -2 + 16px));
+	padding: 0;
 	text-align: center;
-	font-style: italic;
+	align-items: center;
 
 	img:not(.sequence-diagram) {
 		border: 1px solid var(--col-outline);
 		border-radius: 4px;
-		align-self: center;
+	}
+
+	figcaption {
+		font-size: 0.9em;
+		max-width: 75ch;
 	}
 }
 
-img.sequence-diagram {
-	align-self: center;
-
-	@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) {
+	img.sequence-diagram {
 		filter: hue-rotate(180deg) invert(0.95) saturate(3);
 	}
 }
@@ -303,10 +306,57 @@ pre {
 	}
 }
 
+figure table {
+	margin: 0 max(-200px, calc((100vw - 100%) / -2 + 16px));
+	border-collapse: collapse;
+	font-size: 0.9em;
+	overflow-x: auto;
+
+	th {
+		font-weight: normal;
+		text-align: center;
+	}
+
+	td {
+		text-align: start;
+	}
+
+	th,
+	td {
+		border-top: 1px solid var(--col-border);
+		padding: 4px 8px;
+	}
+
+	thead th {
+		border-top: none;
+	}
+
+	tbody tr:first-child td {
+		border-top-color: var(--col-outline);
+	}
+
+	p:first-child {
+		margin: 0;
+	}
+
+	pre {
+		margin: 0;
+		padding: 0;
+		background: transparent;
+		box-shadow: none;
+		border: none;
+	}
+}
+
 blockquote {
 	border-left: 2px solid var(--col-border);
 	padding-left: 16px;
 	margin: 16px 0 16px 16px;
+}
+
+.fancy {
+	font-family: cursive;
+	font-size: 1.1em;
 }
 
 .posts {

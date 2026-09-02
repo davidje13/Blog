@@ -64,6 +64,7 @@ export const MARKED_FOOTNOTE = (baseURL = null) => {
 
 					const token = {
 						type: 'footnote-def',
+						isBlock: true,
 						raw,
 						name: null, // populated once we know the display order
 						id: `footnote-def-${label}`,

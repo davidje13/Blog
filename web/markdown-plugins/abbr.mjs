@@ -35,7 +35,7 @@ export const MARKED_ABBR = () => {
 
 					const [raw, term, definition] = match;
 
-					abbreviations.set(term, definition);
+					abbreviations.set(term, definition.trim());
 					return { type: 'abbr-definition', raw };
 				},
 				renderer: () => '',
@@ -56,10 +56,16 @@ export const MARKED_ABBR = () => {
 						return undefined;
 					}
 
-					return { type: 'abbr-term', raw, definition };
+					return {
+						type: 'abbr-term',
+						raw,
+						tokens: [{ type: 'text', raw, text: raw }],
+						definition,
+					};
 				},
-				renderer: ({ raw, definition }) =>
-					`<abbr title="${escapeHTML(definition)}">${escapeHTML(raw)}</abbr>`,
+				renderer({ tokens, definition }) {
+					return `<abbr title="${escapeHTML(definition)}">${this.parser.parseInline(tokens)}</abbr>`;
+				},
 			},
 		],
 		walkTokens() {
