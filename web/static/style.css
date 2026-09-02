@@ -80,7 +80,7 @@ section {
 
 body {
 	margin: 0;
-	padding: 10px 20px 80vh;
+	padding: 8px 16px 80vh;
 	font: 1.2em sans-serif;
 	line-height: 1.8;
 	color: var(--col-text);
@@ -165,7 +165,7 @@ h4 {
 }
 
 p {
-	margin: 20px 0 0;
+	margin: 16px 0 0;
 	text-align: justify;
 }
 
@@ -184,7 +184,7 @@ sub {
 }
 
 hr {
-	margin: 20px 0 30px;
+	margin: 16px 0 32px;
 	padding: 0;
 	border: none;
 	border-bottom: 1px solid var(--col-border);
@@ -251,7 +251,7 @@ figure {
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
-	margin: 40px max(-200px, calc((100vw - 100%) / -2 + 16px));
+	margin: 32px max(-200px, calc((100vw - 100%) / -2 + 16px));
 	padding: 0;
 	text-align: center;
 	align-items: center;
@@ -264,6 +264,25 @@ figure {
 	figcaption {
 		font-size: 0.9em;
 		max-width: 75ch;
+	}
+}
+
+.table-scroll {
+	margin: 16px max(-200px, calc((100vw - 100%) / -2));
+	padding: 8px 16px 16px;
+	overflow-x: auto;
+
+	& .table-outline {
+		width: max-content;
+		margin: 0 auto;
+		padding: 8px;
+		border: 1px solid var(--col-outline);
+		border-radius: 4px;
+		background: var(--col-back);
+
+		& table {
+			margin: 0;
+		}
 	}
 }
 
@@ -307,7 +326,7 @@ pre {
 }
 
 table {
-	margin: 20px 0 40px;
+	margin: 24px 0;
 	border-collapse: collapse;
 	font-size: 0.9em;
 
@@ -323,7 +342,12 @@ table {
 	th,
 	td {
 		border-top: 1px solid var(--col-border);
-		padding: 4px 8px;
+		border-left: 1px solid var(--col-border);
+		padding: 4px 16px;
+
+		&:first-child {
+			border-left: none;
+		}
 	}
 
 	thead th {
@@ -356,6 +380,30 @@ blockquote {
 .fancy {
 	font-family: cursive;
 	font-size: 1.1em;
+}
+
+ul,
+ol {
+	margin: 16px 0;
+	padding: 0 0 0 40px;
+
+	li {
+		margin: 8px 0;
+	}
+}
+
+.footnote-list li {
+	list-style: none;
+	position: relative;
+
+	&:before {
+		content: attr(data-symbol);
+		position: absolute;
+		right: 100%;
+		margin-right: 12px;
+		font-size: 0.8em;
+		vertical-align: super;
+	}
 }
 
 .posts {

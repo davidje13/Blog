@@ -17,7 +17,18 @@ A table
 | one  | two  | three |
 | four | five | six   |
 
-A footnote[^hmm]
+Wide tables
+
+| a very long title that makes the cell quite large | bar                    | another long title which pushes things wide | woo     |
+| ------------------------------------------------- | ---------------------- | ------------------------------------------- | ------- |
+| value 1                                           | long value 2 goes here | value 3                                     | value 4 |
+
+| foo                                                      | bar                                           | baz     |
+| -------------------------------------------------------- | --------------------------------------------- | ------- |
+| `unwrappable long value that forces the cell very large` | `another long value which pushes things wide` | value 3 |
+
+Footnotes with: number[^note] more[^another-note], asterisk[^*] more[^**]
+more[^***], dagger[^dagger] more[^dagger2], and section[^section].
 
 Text with ^^superscript^^.
 
@@ -84,4 +95,18 @@ Foo -> +Bar: Hello
 
 *[WYSIWYG]: What You See Is What You Get
 
-[^hmm]: Some footnote content
+[^note]: Numbered footnote content
+
+[^another-note]: Another numbered footnote content
+
+[^*]: Asterisk footnote content
+
+[^**]: 2-Asterisk footnote content
+
+[^***]: 3-Asterisk footnote content
+
+[^dagger]: Dagger footnote content
+
+[^dagger2]: Double-dagger footnote content
+
+[^section]: Section footnote content

@@ -43,6 +43,7 @@ export const MARKED_FOOTNOTE = (baseURL = null) => {
 					globalState ??= {
 						unusedEntries: new Map(),
 						orderedEntries: new Map(),
+						n: 0,
 						tokens: this.lexer.tokens,
 					};
 
@@ -66,7 +67,7 @@ export const MARKED_FOOTNOTE = (baseURL = null) => {
 						type: 'footnote-def',
 						isBlock: true,
 						raw,
-						name: null, // populated once we know the display order
+						name: KNOWN_LABELS.get(label), // if unknown, this is populated once we know the display order
 						id: `footnote-def-${label}`,
 						refs: [],
 						content: this.lexer.blockTokens(content),
@@ -92,7 +93,7 @@ export const MARKED_FOOTNOTE = (baseURL = null) => {
 						if (!footnote) {
 							return;
 						}
-						footnote.name = String(globalState.orderedEntries.size + 1);
+						footnote.name ??= String((globalState.n += 1));
 						globalState.unusedEntries.delete(label);
 						globalState.orderedEntries.set(label, footnote);
 					}
@@ -111,7 +112,12 @@ export const MARKED_FOOTNOTE = (baseURL = null) => {
 					if (baseURL) {
 						link = URL.parse(link, baseURL).toString();
 					}
-					const title = `Go to footnote #${target.name}`;
+					let title;
+					if (String(Number.parseInt(target.name)) === target.name) {
+						title = `Go to footnote #${target.name}`;
+					} else {
+						title = `Go to ${target.name} footnote`;
+					}
 
 					return `<sup><a id="${escapeHTML(id)}" title="${escapeHTML(title)}" href="${escapeHTML(link)}" aria-label="${escapeHTML(title)}">${escapeHTML(target.name)}</a></sup>`;
 				},
@@ -119,34 +125,18 @@ export const MARKED_FOOTNOTE = (baseURL = null) => {
 			{
 				name: 'footnote-section',
 				renderer({ entries }) {
-					let html = `<section><h2>Footnotes</h2><ol>`;
-					for (const { id, content, refs } of entries) {
-						const parsedContent = this.parser.parse(content).trim();
-
-						html += `<li id="${encodeURIComponent(id)}">`;
-						if (baseURL) {
-							html += parsedContent;
-						} else {
-							let returnLinks = '';
-							for (let i = 0; i < refs.length; ++i) {
-								let text = '\u21A9\uFE0E';
-								let title = 'Back to reference';
-								if (refs.length > 1) {
-									text += `<sup>${i + 1}</sup>`;
-									title += ` #${i + 1}`;
-								}
-								const link = `#${encodeURIComponent(refs[i].id)}`;
-								returnLinks += ` <a href="${escapeHTML(link)}" title="${escapeHTML(title)}" aria-label="${escapeHTML(title)}">${text}</a>`;
-							}
-
-							html += parsedContent.replace(
-								/(?=(?:<\/p>)?$)/i,
-								() => returnLinks,
-							);
+					let html = `<section><h2>Footnotes</h2><ul class="footnote-list">`;
+					for (const id of KNOWN_LABELS.keys()) {
+						const entry = entries.get(id);
+						if (entry) {
+							entries.delete(id);
+							html += `<li data-symbol="${escapeHTML(entry.name)}" id="${escapeHTML(encodeURIComponent(entry.id))}">${renderEntry(entry, this.parser, !baseURL)}</li>`;
 						}
-						html += '</li>';
 					}
-					html += '</ol></section>';
+					for (const entry of entries.values()) {
+						html += `<li data-symbol="${escapeHTML(entry.name)}" id="${escapeHTML(encodeURIComponent(entry.id))}">${renderEntry(entry, this.parser, !baseURL)}</li>`;
+					}
+					html += '</ul></section>';
 					return html;
 				},
 			},
@@ -157,7 +147,7 @@ export const MARKED_FOOTNOTE = (baseURL = null) => {
 					globalState.tokens.push({
 						type: 'footnote-section',
 						raw: '',
-						entries: [...globalState.orderedEntries.values()],
+						entries: globalState.orderedEntries,
 					});
 				}
 				globalState = null;
@@ -165,3 +155,38 @@ export const MARKED_FOOTNOTE = (baseURL = null) => {
 		},
 	};
 };
+
+const renderEntry = ({ content, refs }, parser, includeReturns) => {
+	const parsedContent = parser.parse(content).trim();
+	if (!includeReturns) {
+		return parsedContent;
+	}
+	let returnLinks = '';
+	for (let i = 0; i < refs.length; ++i) {
+		let text = '\u21A9\uFE0E';
+		let title = 'Back to reference';
+		if (refs.length > 1) {
+			text += `<sup>${i + 1}</sup>`;
+			title += ` #${i + 1}`;
+		}
+		const link = `#${encodeURIComponent(refs[i].id)}`;
+		returnLinks += ` <a href="${escapeHTML(link)}" title="${escapeHTML(title)}" aria-label="${escapeHTML(title)}">${text}</a>`;
+	}
+
+	return parsedContent.replace(/(?=(?:<\/p>)?$)/i, () => returnLinks);
+};
+
+const KNOWN_LABELS = new Map([
+	['*', '\u2217'],
+	['**', '\u2051'],
+	['***', '\u2042'],
+	['dagger', '\u2020'],
+	['dagger2', '\u2021'],
+	['section', '§'],
+	['doublebar', '\u2016'],
+	['pilcrow', '\u00B6'],
+	['hash', '#'],
+	['delta', '\u0394'],
+	['lozenge', '\u25CA'],
+	['manicule', '\u261E'],
+]);

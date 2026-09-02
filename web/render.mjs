@@ -137,6 +137,9 @@ async function renderRSS(env, allPaths) {
 		const rendered = await renderPost(env, post.path[0], allPaths, {
 			absolutePaths: true,
 		});
+		if (!rendered) {
+			continue;
+		}
 		const tags = [...post.metadata.tags].sort();
 		r += [
 			'<item>',
@@ -253,6 +256,9 @@ async function renderPost(
 		type: 'post',
 	};
 	await loadMetadata(post);
+	if (env.publish && post.metadata.hidden) {
+		return null;
+	}
 
 	const pageURL = URL.parse(`/${encodeURIComponent(name)}/`, env.host);
 	const renderer = makeMarkdownRenderer({

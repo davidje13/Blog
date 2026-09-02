@@ -18,7 +18,7 @@ export default requestHandler(async (req, res) => {
 		path.push('index.html');
 	}
 	const content = await renderPage(
-		{ host: `http://${req.headers['host']}` },
+		{ host: `http://${req.headers['host']}`, publish: false },
 		path,
 	);
 	if (!content) {

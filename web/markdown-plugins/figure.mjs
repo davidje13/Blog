@@ -18,5 +18,9 @@ export const MARKED_FIGURE = {
 			}
 			return marked.Renderer.prototype.paragraph.call(this, node);
 		},
+		table(node) {
+			const base = marked.Renderer.prototype.table.call(this, node);
+			return `<div class="table-scroll"><div class="table-outline">${base}</div></div>`;
+		},
 	},
 };

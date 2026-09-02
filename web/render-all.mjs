@@ -13,6 +13,7 @@ const assets = new AssetStorage('/inline');
 const env = {
 	host: process.env['HOST'],
 	inlineAssetStorage: assets.add.bind(assets),
+	publish: true,
 };
 
 const allPaths = await discoverAllPaths();
