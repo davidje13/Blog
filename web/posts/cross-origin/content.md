@@ -3,6 +3,7 @@ title: 'CORS, CORP, COEP, COOP, and COnfusion'
 author: David Evans
 description: 'An explanation of the various cross-origin headers.'
 created: 2026-09-03
+modified: 2026-09-03
 tags:
   - security
   - web
@@ -374,6 +375,25 @@ MDN has a variety of guides and references on this subject:
 - [`crossorigin` attribute][`crossorigin`]
 - [`window.crossOriginIsolated`](https://developer.mozilla.org/en-US/docs/Web/API/Window/crossOriginIsolated)
 - [`Request.mode`](https://developer.mozilla.org/en-US/docs/Web/API/Request/mode)
+
+While writing this article, I verified behaviours using a cross-origin testing
+environment set up with
+[Web Listener](https://www.npmjs.com/package/web-listener). If you would like to
+recreate this, you can download [the config file](./cors-tester.json) and run:
+
+```sh
+npx web-listener -c cors-tester.json
+```
+
+Then navigate to one of:
+
+- <http://localhost:8000/>
+- <http://localhost:8000/unsafe-none>
+- <http://localhost:8000/require-corp>
+- <http://localhost:8000/credentialless>
+
+Each page sets a different COEP header and loads resources from another domain
+with a variety of request / response combinations.
 
 [^timeline]:
     For the purpose of clearly explaining the attacks and mitigations, the

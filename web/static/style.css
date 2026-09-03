@@ -391,6 +391,10 @@ ol {
 
 	li {
 		margin: 8px 0;
+
+		&::marker {
+			line-height: 1;
+		}
 	}
 }
 

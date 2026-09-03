@@ -1,0 +1,77 @@
+{
+	"$schema": "https://davidje13.com/schema/web-listener.1.5.3.json",
+	"servers": [
+		{
+			"port": 8000,
+			"mount": [
+				{ "type": "headers", "headers": { "cache-control": "no-store" } },
+				{
+					"type": "fixture",
+					"path": "/style.css",
+					"headers": { "content-type": "text/css; charset=utf-8" },
+					"body": "body{white-space:pre}img{width:100px;height:100px}"
+				},
+				{
+					"type": "fixture",
+					"path": "/test.js",
+					"headers": { "content-type": "text/javascript; charset=utf-8" },
+					"body": "const cos=[null,'use-credentials','anonymous'],modes=[{},{acao:'*'},{acao:'*',acac:true},{acao:origin},{acao:origin,acac:true},{acao:'http://other.test'},{corp:'same-origin'},{acao:'*',corp:'same-origin'},{acao:'*',acac:true,corp:'same-origin'},{acao:origin,corp:'same-origin'},{acao:origin,acac:true,corp:'same-origin'},{acao:'http://other.test',corp:'same-origin'},{corp:'cross-origin'},{acao:'*',corp:'cross-origin'},{acao:'*',acac:true,corp:'cross-origin'},{acao:origin,corp:'cross-origin'},{acao:origin,acac:true,corp:'cross-origin'},{acao:'http://other.test',corp:'cross-origin'}];document.body.append(crossOriginIsolated?'Page is cross origin isolated (high performance APIs available)\\n':'Page is not cross origin isolated\\n');document.body.append('\\nsame origin\\n');for(const mode of modes){appendImg('/proxy/resource.svg?'+new URLSearchParams(mode))}for(const co of cos){document.body.append('\\ncrossorigin='+co+'\\n');for(const mode of modes){appendImg('http://127.0.0.1:8001/resource.svg?'+new URLSearchParams(mode),co)}};function appendImg(src,co){const img=document.createElement('img');if(co){img.setAttribute('crossorigin',co);}img.src=src;document.body.append(img);img.addEventListener('load',()=>{const c=document.createElement('canvas');const ctx=c.getContext('2d');try{ctx.drawImage(img,0,0);try{ctx.getImageData(0,0,1,1);img.style.border='2px solid green'}catch{img.style.border='2px dashed orange'}}catch{img.style.border='2px dotted red'}});img.addEventListener('error',()=>img.style.border='2px dotted red')}document.body.append('\\n\\nsolid/green border = allowed; dashed/yellow border = tainted; dotted/red border = blocked')"
+				},
+				{
+					"type": "fixture",
+					"path": "/",
+					"headers": { "content-type": "text/html; charset=utf-8" },
+					"body": "<!DOCTYPE html><html lang='en'><head><script type='module' src='/test.js'></script><link rel='stylesheet' href='/style.css' /></head><body><h1>No COEP</h1></body></html>"
+				},
+				{
+					"type": "fixture",
+					"path": "/unsafe-none",
+					"headers": {
+						"content-type": "text/html; charset=utf-8",
+						"cross-origin-embedder-policy": "unsafe-none"
+					},
+					"body": "<!DOCTYPE html><html lang='en'><head><script type='module' src='/test.js'></script><link rel='stylesheet' href='/style.css' /></head><body><h1>COEP: unsafe-none</h1></body></html>"
+				},
+				{
+					"type": "fixture",
+					"path": "/require-corp",
+					"headers": {
+						"content-type": "text/html; charset=utf-8",
+						"cross-origin-opener-policy": "same-origin",
+						"cross-origin-embedder-policy": "require-corp"
+					},
+					"body": "<!DOCTYPE html><html lang='en'><head><script type='module' src='/test.js'></script><link rel='stylesheet' href='/style.css' /></head><body><h1>COEP: require-corp</h1></body></html>"
+				},
+				{
+					"type": "fixture",
+					"path": "/credentialless",
+					"headers": {
+						"content-type": "text/html; charset=utf-8",
+						"cross-origin-opener-policy": "same-origin",
+						"cross-origin-embedder-policy": "credentialless"
+					},
+					"body": "<!DOCTYPE html><html lang='en'><head><script type='module' src='/test.js'></script><link rel='stylesheet' href='/style.css' /></head><body><h1>COEP: credentialless</h1></body></html>"
+				},
+				{ "type": "proxy", "path": "/proxy", "target": "http://127.0.0.1:8001" }
+			]
+		},
+		{
+			"port": 8001,
+			"host": "127.0.0.1",
+			"mount": [
+				{ "type": "headers", "headers": { "cache-control": "no-store" } },
+				{
+					"type": "fixture",
+					"path": "/resource.svg",
+					"headers": {
+						"content-type": "image/svg+xml; charset=utf-8",
+						"access-control-allow-origin": "${?acao}",
+						"access-control-allow-credentials": "${?acac}",
+						"cross-origin-resource-policy": "${?corp}"
+					},
+					"body": "<?xml version='1.0' standalone='yes'?><svg xmlns='http://www.w3.org/2000/svg' version='1.1' viewBox='0 0 100 100' width='100' height='100' fill='#ffffff' text-anchor='middle' font-size='8' font-family='sans-serif'><circle cx='50' cy='50' r='48' fill='#000000'/><text x='50' y='42'>ACAO: ${?acao}</text><text x='50' y='52'>ACAC: ${?acac}</text><text x='50' y='62'>CORP: ${?corp}</text></svg>"
+				}
+			]
+		}
+	]
+}
