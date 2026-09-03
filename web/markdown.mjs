@@ -14,6 +14,7 @@ import { MARKED_IMAGE_CLASS } from './markdown-plugins/imageClass.mjs';
 import { MARKED_INLINE_ASSET_STORAGE } from './markdown-plugins/inlineAssetStorage.mjs';
 import { MARKED_FANCY } from './markdown-plugins/fancy.mjs';
 import { MARKED_FIGURE } from './markdown-plugins/figure.mjs';
+import { MARKED_MACRO } from './markdown-plugins/macro.mjs';
 
 export const makeMarkdownRenderer = ({
 	absolutePathsBase = null,
@@ -35,5 +36,6 @@ export const makeMarkdownRenderer = ({
 		MARKED_QR,
 		MARKED_IMAGE_CLASS,
 		MARKED_FIGURE,
+		MARKED_MACRO(),
 		{ tokenizer: { url() {} } }, // disable auto-links
 	);
