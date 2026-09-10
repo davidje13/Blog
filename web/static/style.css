@@ -291,8 +291,7 @@ a.tag:hover {
 	border-color: var(--col-border-hover);
 }
 
-img,
-.plot {
+img {
 	box-sizing: border-box;
 	max-width: 100%;
 }
@@ -322,6 +321,237 @@ figure {
 
 .plot {
 	--col: var(--col-chart-n);
+	--axis-value-gap: 4px;
+	--axis-value-min-w: 4ch;
+	--axis-value-min-h: 2.5em;
+	--axis-label-gap: 8px;
+	--notch-size: 6px;
+	--arrow-length: 10px;
+	--arrow-rad: 4px;
+	--axis-width: 2px;
+	--axis-overshoot: 6px;
+	--arrow-space: 16px;
+	display: block;
+	box-sizing: border-box;
+	max-width: 100%;
+	width: 600px;
+	font-size: 1rem;
+	line-height: 1;
+	text-align: left;
+	overflow: hidden;
+	contain: content;
+
+	&:has(.subplot.layout.h) {
+		width: 1000px;
+	}
+
+	header {
+		margin: 4px 0;
+		font-size: 1.3em;
+		text-align: center;
+	}
+
+	& .subplot.layout {
+		container: layout / inline-size;
+		contain: inline-size content;
+
+		& > div {
+			display: flex;
+			flex-direction: column;
+			gap: 64px;
+			align-content: center;
+			justify-content: center;
+
+			& > section {
+				width: 100%;
+			}
+		}
+
+		&.h > div {
+			flex-flow: row;
+
+			@container layout (width < 600px) {
+				flex-flow: column;
+			}
+		}
+	}
+
+	& .subplot.cartesian {
+		display: grid;
+		padding: var(--arrow-space) var(--arrow-space) 0 0;
+		grid-template-columns: max-content 1fr;
+		grid-template-rows: 1fr max-content;
+		overflow: hidden;
+		contain: inline-size content;
+
+		& .axis {
+			position: relative;
+			display: flex;
+
+			& .line {
+				position: absolute;
+				background: var(--col-text);
+
+				&::after {
+					content: '';
+					position: absolute;
+					border: 0 solid transparent;
+				}
+			}
+
+			& .label {
+				text-align: center;
+			}
+
+			& .values {
+				display: flex;
+				position: relative;
+				container: axis / inline-size;
+				contain: inline-size content;
+
+				& > div {
+					--sn: var(--n3);
+					position: relative;
+					font-size: 0.6em;
+					opacity: 0.7;
+					overflow: hidden;
+
+					&.l0 {
+						--sn: var(--n0);
+						font-size: 0.9em;
+						opacity: 1;
+					}
+
+					&.l1 {
+						--sn: var(--n1);
+						font-size: 0.8em;
+						opacity: 0.9;
+					}
+
+					&.l2 {
+						--sn: var(--n2);
+						font-size: 0.7em;
+						opacity: 0.8;
+					}
+
+					&::before {
+						content: '';
+						position: absolute;
+						background: var(--col-text);
+					}
+				}
+			}
+		}
+
+		& .axis.x {
+			grid-area: 2 / 2 / 3 / 3;
+			flex-direction: column-reverse;
+			min-height: var(--arrow-space);
+
+			& .line {
+				top: calc(var(--axis-width) * -0.5);
+				left: calc(var(--axis-width) * -0.5);
+				width: calc(var(--axis-width) + 100% + var(--axis-overshoot));
+				height: var(--axis-width);
+
+				&::after {
+					top: calc(var(--axis-width) * 0.5 - var(--arrow-rad));
+					left: 100%;
+					border-width: var(--arrow-rad) 0 var(--arrow-rad) var(--arrow-length);
+					border-left-color: var(--col-text);
+				}
+			}
+
+			& .label {
+				padding-top: var(--axis-label-gap);
+			}
+
+			& .values {
+				& > div {
+					--size: calc(100cqw / var(--sn));
+					--vissize: calc(
+						sign(sign(calc(var(--size) - var(--axis-value-min-w))) + 1) *
+							var(--size)
+					);
+					width: var(--vissize);
+					margin-inline: calc(var(--vissize) * -0.5);
+					left: calc(var(--pos) * 100%);
+					padding-top: calc(var(--axis-value-gap) + var(--notch-size));
+					text-align: center;
+					pointer-events: none;
+
+					& span {
+						pointer-events: all;
+					}
+
+					&::before {
+						left: calc(50% - 0.5px);
+						top: 0;
+						width: 1px;
+						height: var(--notch-size);
+					}
+				}
+			}
+		}
+
+		& .axis.y {
+			grid-area: 1 / 1 / 2 / 2;
+			writing-mode: sideways-lr;
+			flex-direction: column;
+			min-width: var(--arrow-space);
+
+			& .line {
+				bottom: 0;
+				right: calc(var(--axis-width) * -0.5);
+				width: var(--axis-width);
+				height: calc(100% + var(--axis-overshoot));
+
+				&::after {
+					bottom: 100%;
+					left: calc(var(--axis-width) * 0.5 - var(--arrow-rad));
+					border-width: 0 var(--arrow-rad) var(--arrow-length);
+					border-bottom-color: var(--col-text);
+				}
+			}
+
+			& .label {
+				padding-right: var(--axis-label-gap);
+			}
+
+			& .values {
+				flex-direction: row;
+
+				& > div {
+					--vissize: calc(
+						sign(sign(calc(100cqh / var(--sn) - var(--axis-value-min-h))) + 1) *
+							1em
+					);
+					height: var(--vissize);
+					margin-inline: calc(var(--vissize) * -0.5);
+					bottom: calc(var(--pos) * 100%);
+					padding-right: calc(var(--axis-value-gap) + var(--notch-size));
+					display: grid;
+					align-items: end;
+
+					& span {
+						writing-mode: initial;
+						text-align: right;
+					}
+
+					&::before {
+						top: calc(50% - 0.5px);
+						right: 0;
+						height: 1px;
+						width: var(--notch-size);
+					}
+				}
+			}
+		}
+
+		& .view {
+			grid-area: 1 / 2 / 2 / 3;
+		}
+	}
 
 	& .n1 {
 		--col: var(--col-chart-1);
@@ -371,7 +601,7 @@ figure {
 		opacity: 0.1;
 
 		&.l0 {
-			opacity: 0.7;
+			opacity: 1;
 		}
 		&.l1 {
 			opacity: 0.4;

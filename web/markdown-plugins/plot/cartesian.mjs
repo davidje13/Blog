@@ -1,78 +1,39 @@
-import { line2SVG, penTool } from 'curve-ops';
+import { penTool } from 'curve-ops';
 import { escapeHTML } from '../common.mjs';
 import { compileEq } from './equation.mjs';
 import { marchingSquares } from './marchingSquares.mjs';
 
 export function renderCartesian(context, { axes: [xAxis, yAxis], elements }) {
-	const svgTextH = (region, anchor, size, pad, content) => {
-		const textL = content.length * size * 0.55;
-		return `<svg viewBox="${textL * ({ right: -1, left: 0 }[anchor.x] ?? -0.5) - pad.x} ${(size * 0.5 + pad.y) * ({ bottom: 1, top: -1 }[anchor.y] ?? 0)} ${textL + pad.x * 2} ${size + pad.y * 2}" x="${region.x}" y="${region.y}" width="${region.w}" height="${100 * ((size + pad.y * 2) / context.fullH)}%" preserveAspectRatio="${{ right: 'xMax', left: 'xMin' }[anchor.x] ?? 'xMid'}YMin meet" overflow="visible"><text y="${size * 0.25}" fill="#000000" font-family="sans-serif" font-size="${size}" text-anchor="${{ right: 'end', left: 'start' }[anchor.x] ?? 'middle'}">${escapeHTML(content)}</text></svg>`;
-	};
-
-	const svgTextV = (region, anchor, size, pad, content) => {
-		const textL = content.length * size * 0.55;
-		return `<svg viewBox="${(size * 0.5 + pad.x) * ({ left: -1, right: 1 }[anchor.x] ?? 0)} ${textL * ({ top: 0, bottom: -1 }[anchor.y] ?? -0.5) - pad.y} ${size + pad.x * 2} ${textL + pad.y * 2}" x="${region.x}" y="${region.y}" width="${100 * ((size + pad.x * 2) / context.fullW)}%" height="${region.h}" preserveAspectRatio="xMin${{ bottom: 'YMax', top: 'YMin' }[anchor.y] ?? 'YMid'} meet" overflow="visible"><text y="${size * 0.25}" fill="#000000" font-family="sans-serif" font-size="${size}" text-anchor="${{ top: 'end', bottom: 'start' }[anchor.y] ?? 'middle'}" transform="rotate(-90)">${escapeHTML(content)}</text></svg>`;
-	};
-
-	let svg = '';
-	const labelSize = 16;
-	const labelPadBlock = 8;
-	const labelPadInline = 12;
-	svg += svgTextH(
-		{ x: '0%', y: '100%', w: '100%' },
-		{ x: 'right', y: 'bottom' },
-		labelSize,
-		{ x: labelPadInline, y: labelPadBlock },
-		xAxis.label,
-	);
-	svg += svgTextV(
-		{ x: '0%', y: '0%', h: '100%' },
-		{ x: 'left', y: 'top' },
-		labelSize,
-		{ x: labelPadBlock, y: labelPadInline },
-		yAxis.label,
-	);
-
-	// TODO: axis tick marks, value labels
-
-	const x0 = labelSize + labelPadBlock * 2;
-	const y0 = context.fullH - labelSize - labelPadBlock * 2;
-
 	const rx0 = xAxis.range[0];
 	const ry0 = yAxis.range[0];
 	const rx1 = xAxis.range[1];
 	const ry1 = yAxis.range[1];
 
 	let grids = [];
-	const drawGridlines = (i, l0, l1, masked, step, genLine) => {
+	xAxis.grid?.forEach((step, i) => {
+		const dp = countDP(step);
 		grids[i] ??= [];
-		if (step <= 0 || (l1 - l0) / step > 1000) {
-			return;
+		for (const v of identifyGridlines(rx0, rx1, xAxis.grid.slice(0, i), step)) {
+			grids[i].push({
+				line: `M${ptSVGFloating({ x: v, y: -ry0 }, 4)}V${toLimited(-ry1, 4)}`,
+				pos: (v - rx0) / (rx1 - rx0),
+				axis: 'x',
+				label: v.toFixed(dp),
+			});
 		}
-		for (let p = Math.floor(l0 / step) * step; p <= l1; p += step) {
-			if (
-				masked.some(
-					(v) => Math.abs(posmod(p / v + 0.5, 1) - 0.5) < step * 0.001,
-				)
-			) {
-				continue;
-			}
-			const line = genLine(p);
-			grids[i].push(line2SVG(line));
+	});
+	yAxis.grid?.forEach((step, i) => {
+		const dp = countDP(step);
+		grids[i] ??= [];
+		for (const v of identifyGridlines(ry0, ry1, yAxis.grid.slice(0, i), step)) {
+			grids[i].push({
+				line: `M${ptSVGFloating({ x: rx0, y: -v }, 4)}H${toLimited(rx1, 4)}`,
+				pos: (v - ry0) / (ry1 - ry0),
+				axis: 'y',
+				label: v.toFixed(dp),
+			});
 		}
-	};
-	xAxis.grid?.forEach((step, i) =>
-		drawGridlines(i, rx0, rx1, xAxis.grid.slice(0, i), step, (v) => ({
-			p0: { x: v, y: -ry0 },
-			p1: { x: v, y: -ry1 },
-		})),
-	);
-	yAxis.grid?.forEach((step, i) =>
-		drawGridlines(i, ry0, ry1, yAxis.grid.slice(0, i), step, (v) => ({
-			p0: { x: rx0, y: -v },
-			p1: { x: rx1, y: -v },
-		})),
-	);
+	});
 
 	let lines = '';
 	let fills = '';
@@ -170,8 +131,9 @@ export function renderCartesian(context, { axes: [xAxis, yAxis], elements }) {
 
 				if (compiled.ineq && fillParts.length) {
 					const patternSize = 10;
-					const patternW = (patternSize * (rx1 - rx0)) / context.fullW;
-					const patternH = (patternSize * (ry1 - ry0)) / context.fullH;
+					// TODO: can we make these pattern sizes scale invariant? (i.e. define them in screen coordinates)
+					const patternW = (patternSize * (rx1 - rx0)) / 400;
+					const patternH = (patternSize * (rx1 - rx0)) / 400;
 					const patternT = 0.2;
 					const patternShift =
 						[0, 0.5, 0.25, 0.75][elementNum] ?? elementNum * patternT;
@@ -189,16 +151,66 @@ export function renderCartesian(context, { axes: [xAxis, yAxis], elements }) {
 		}
 	}
 
-	const arrowID = context.nextID();
+	// Safari does not currently support CSS' attr(data-* type(<number>)) syntax, so we have
+	// to pass CSS variables in using inline style="--var:value".
+	// This requires 'unsafe-inline' in the CSP's style-src, but is the only thing we do that needs it.
+	// TODO: once Safari catches up, switch to usng data-* attributes and remove 'unsafe-inline'
 
-	svg += `<svg viewBox="${rx0} ${-ry1} ${rx1 - rx0} ${ry1 - ry0}" x="${x0}" y="0" width="${100 * ((context.fullW - x0) / context.fullW)}%" height="${100 * (y0 / context.fullH)}%" preserveAspectRatio="none">${grids
-		.map((g, l) => `<path d="${g.join('')}" class="grid l${l}" />`)
-		.reverse()
-		.join('')}${fills}${lines}</svg>`;
-	svg += `<defs><marker id="${arrowID}" viewBox="-1 -1 2 2" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M1 0L-1 1V-1Z" fill="#000000" /></marker></defs>`;
-	svg += `<line x1="${x0}" y1="${100 * (y0 / context.fullH)}%" x2="${x0}" y2="5" marker-end="url(#${arrowID})" stroke="#000000" stroke-width="2" stroke-linecap="square" />`;
-	svg += `<line x1="${x0}" y1="${100 * (y0 / context.fullH)}%" x2="100%" y2="${100 * (y0 / context.fullH)}%" marker-end="url(#${arrowID})" stroke="#000000" stroke-width="2" stroke-linecap="square" />`;
-	return svg;
+	const xLabels = [];
+	const yLabels = [];
+	for (let i = 0; i < grids.length; ++i) {
+		for (const { pos, axis, label } of grids[i]) {
+			const target = axis === 'x' ? xLabels : yLabels;
+			target.push({
+				pos,
+				html: `<div class="l${i}" style="--pos:${pos}"><span>${escapeHTML(label)}</span></div>`,
+			});
+		}
+	}
+	xLabels.sort((a, b) => a.pos - b.pos);
+	yLabels.sort((a, b) => a.pos - b.pos);
+
+	return [
+		'<div class="subplot cartesian">',
+		`<div class="axis x" aria-label="horizontal axis from ${rx0} to ${rx1}">`,
+		'<div class="line"></div>',
+		xAxis.label ? `<div class="label">${escapeHTML(xAxis.label)}</div>` : '',
+		xLabels.length
+			? `<div class="values" style="${xAxis.grid.map((v, i) => `--n${i}:${(rx1 - rx0) / v}`).join(';')}">${xLabels.map((l) => l.html).join('')}</div>`
+			: '',
+		'</div>',
+		`<div class="axis y" aria-label="vertical axis from ${ry0} to ${ry1}">`,
+		'<div class="line"></div>',
+		yAxis.label ? `<div class="label">${escapeHTML(yAxis.label)}</div>` : '',
+		yLabels.length
+			? `<div class="values" style="${yAxis.grid.map((v, i) => `--n${i}:${(ry1 - ry0) / v}`).join(';')}">${yLabels.map((l) => l.html).join('')}</div>`
+			: '',
+		'</div>',
+		`<svg xmlns="http://www.w3.org/2000/svg" version="1.1" fill="none" viewBox="${rx0} ${-ry1} ${rx1 - rx0} ${ry1 - ry0}" width="100%" preserveAspectRatio="none" class="view">`,
+		...grids
+			.map(
+				(g, l) =>
+					`<path d="${g.map((o) => o.line).join('')}" class="grid l${l}" />`,
+			)
+			.reverse(),
+		fills,
+		lines,
+		'</svg>',
+		'</div>',
+	].join('');
+}
+
+function* identifyGridlines(l0, l1, masked, step) {
+	if (step <= 0 || (l1 - l0) / step > 1000) {
+		return;
+	}
+	for (let p = Math.ceil(l0 / step) * step; p <= l1; p += step) {
+		if (
+			!masked.some((v) => Math.abs(posmod(p / v + 0.5, 1) - 0.5) < step * 0.001)
+		) {
+			yield p;
+		}
+	}
 }
 
 const clamp = (v, l, h) => (v > l ? (v < h ? v : h) : l);
@@ -209,6 +221,9 @@ const toLimited = (v, sf) =>
 
 const ptSVGFloating = (pt, precision) =>
 	`${toLimited(pt.x, precision)} ${toLimited(pt.y, precision)}`;
+
+const countDP = (v) =>
+	v.toFixed(10).split('.')[1]?.replace(/0*$/, '').length ?? 0;
 
 function simplifiedSVGPath(points, error, precision) {
 	if (!error) {

@@ -1,26 +1,26 @@
+import { escapeHTML } from '../common.mjs';
 import { renderCartesian } from './cartesian.mjs';
 
-export function drawPlot(definition, idPrefix = '') {
-	// TODO: switch to regular DOM entities where possible & use CSS for better control over scaling
-	const w = definition.width ?? 800;
-	const h =
-		definition.height ?? (definition.aspect ? w / definition.aspect : 600);
-	let svg = `<svg class="plot" xmlns="http://www.w3.org/2000/svg" version="1.1" width="${w}" height="${h}" fill="none">`;
+const PLOT_RENDERERS = new Map([
+	['cartesian', renderCartesian],
+	['layout', renderLayout],
+]);
+
+export function drawPlot(definition, idPrefix = 'plot-') {
 	let defID = 0;
-	const context = { nextID: () => `${idPrefix}${defID++}`, fullW: w, fullH: h };
+	const context = { nextID: () => `${idPrefix}${defID++}` };
 
-	const renderSubplot = (d) => {
-		switch (d.type) {
-			case 'cartesian': {
-				svg += renderCartesian(context, d);
-				break;
-			}
-			default:
-				throw new Error(`unknown plot type: ${d.type}`);
-		}
-	};
-	renderSubplot(definition);
-	svg += `</svg>`;
+	return `<section class="plot">${renderSubplot(context, definition)}</section>`;
+}
 
-	return svg;
+function renderSubplot(context, d) {
+	const renderer = PLOT_RENDERERS.get(d.type);
+	if (!renderer) {
+		throw new Error(`unknown plot type: ${d.type}`);
+	}
+	return renderer(context, d);
+}
+
+function renderLayout(context, { direction, parts }) {
+	return `<div class="subplot layout ${direction === 'vertical' ? 'v' : 'h'}"><div>${parts.map((part) => `<section>${part.title ? `<header>${escapeHTML(part.title)}</header>` : ''}${renderSubplot(context, part)}</section>`).join('')}</div></div>`;
 }
