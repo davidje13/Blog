@@ -15,6 +15,7 @@ import { MARKED_INLINE_ASSET_STORAGE } from './markdown-plugins/inlineAssetStora
 import { MARKED_FANCY } from './markdown-plugins/fancy.mjs';
 import { MARKED_FIGURE } from './markdown-plugins/figure.mjs';
 import { MARKED_MACRO } from './markdown-plugins/macro.mjs';
+import { MARKED_PLOT } from './markdown-plugins/plot.mjs';
 
 export const makeMarkdownRenderer = ({
 	absolutePathsBase = null,
@@ -23,8 +24,9 @@ export const makeMarkdownRenderer = ({
 	new Marked(
 		absolutePathsBase ? MARKED_ABSOLUTE_PATHS(absolutePathsBase) : {},
 		inlineAssetStorage ? MARKED_INLINE_ASSET_STORAGE(inlineAssetStorage) : {},
-		MARKED_SEQUENCE_DIAGRAM,
 		MARKED_HIGHLIGHT,
+		MARKED_SEQUENCE_DIAGRAM,
+		MARKED_PLOT(),
 		MARKED_EXTERNAL_LINK,
 		MARKED_MATH,
 		MARKED_FOOTNOTE(absolutePathsBase),

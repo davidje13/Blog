@@ -1,5 +1,18 @@
 import renderMath from '@webc.site/math';
 
+function wrappedMath(content, block) {
+	const html = renderMath(content, block);
+	return html
+		.replaceAll(
+			'<mtd style="text-align:left;padding-left:0"',
+			'<mtd class="math-l"',
+		)
+		.replaceAll(
+			'<mtd style="text-align:right;padding-right:0"',
+			'<mtd class="math-r"',
+		);
+}
+
 export const MARKED_MATH = {
 	extensions: [
 		{
@@ -18,7 +31,8 @@ export const MARKED_MATH = {
 					text: content.trim(),
 				};
 			},
-			renderer: (token) => renderMath(token.text, true) + '\n',
+			renderer: (token) =>
+				'<div class="hscroll">' + wrappedMath(token.text, true) + '</div>\n',
 		},
 		{
 			name: 'math-inline',
@@ -32,7 +46,7 @@ export const MARKED_MATH = {
 				const [raw, content] = match;
 				return { type: 'math-inline', raw: raw, text: content.trim() };
 			},
-			renderer: (token) => renderMath(token.text, false),
+			renderer: (token) => wrappedMath(token.text, false),
 		},
 	],
 };

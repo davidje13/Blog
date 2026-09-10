@@ -18,10 +18,22 @@ html {
 	--col-h-variable: #008080;
 	--col-h-property: #800080;
 
+	--col-chart-1: #002288;
+	--col-chart-2: #880022;
+	--col-chart-3: #228800;
+	--col-chart-4: #bbaa00;
+	--col-chart-5: #00bbaa;
+	--col-chart-6: #aa00bb;
+	--col-chart-7: #444444;
+	--col-chart-8: #7722bb;
+	--col-chart-9: #bb7722;
+	--col-chart-10: #22bb77;
+	--col-chart-n: #444444;
+
 	@media (prefers-color-scheme: dark) {
 		--col-page: #111111;
 		--col-back: #000000;
-		--col-text: #eeeeee;
+		--col-text: #dddddd;
 		--col-link: #4499ee;
 		--col-link-hover: #aaccee;
 		--col-outline: #f8f8f8;
@@ -33,10 +45,22 @@ html {
 		--col-h-error-back: transparent;
 		--col-h-builtin: #88bbee;
 		--col-h-number: #22cccc;
-		--col-h-string: #dd8899;
+		--col-h-string: #dd99aa;
 		--col-h-name: #aaaacc;
 		--col-h-variable: #77aaaa;
 		--col-h-property: #dd88dd;
+
+		--col-chart-1: #6699dd;
+		--col-chart-2: #dd6699;
+		--col-chart-3: #99dd66;
+		--col-chart-4: #ffdd66;
+		--col-chart-5: #66ffdd;
+		--col-chart-6: #dd66ff;
+		--col-chart-7: #dddddd;
+		--col-chart-8: #8866ff;
+		--col-chart-9: #ff8866;
+		--col-chart-10: #66ff88;
+		--col-chart-n: #dddddd;
 	}
 
 	@media (prefers-contrast: more) {
@@ -58,6 +82,31 @@ html {
 		--col-h-name: CanvasText;
 		--col-h-variable: CanvasText;
 		--col-h-property: CanvasText;
+
+		--col-chart-1: #000088;
+		--col-chart-2: #880000;
+		--col-chart-3: #008800;
+		--col-chart-4: #888800;
+		--col-chart-5: #008888;
+		--col-chart-6: #880088;
+		--col-chart-7: #444444;
+		--col-chart-8: #6600bb;
+		--col-chart-9: #bb6600;
+		--col-chart-10: #00bb66;
+		--col-chart-n: CanvasText;
+
+		@media (prefers-color-scheme: dark) {
+			--col-chart-1: #8888ff;
+			--col-chart-2: #ff8888;
+			--col-chart-3: #88ff88;
+			--col-chart-4: #ffff88;
+			--col-chart-5: #88ffff;
+			--col-chart-6: #ff88ff;
+			--col-chart-7: #cccccc;
+			--col-chart-8: #cc88ff;
+			--col-chart-9: #ffcc88;
+			--col-chart-10: #88ffcc;
+		}
 	}
 }
 
@@ -127,7 +176,7 @@ header {
 			filter: invert(0.2);
 
 			@media (prefers-color-scheme: dark) {
-				filter: invert(0.95);
+				filter: invert(0.9);
 			}
 		}
 	}
@@ -242,7 +291,8 @@ a.tag:hover {
 	border-color: var(--col-border-hover);
 }
 
-img {
+img,
+.plot {
 	box-sizing: border-box;
 	max-width: 100%;
 }
@@ -256,9 +306,12 @@ figure {
 	text-align: center;
 	align-items: center;
 
-	img:not(.sequence-diagram) {
+	img:not(.sequence-diagram),
+	.plot {
 		border: 1px solid var(--col-outline);
 		border-radius: 4px;
+		background: var(--col-back);
+		padding: 8px;
 	}
 
 	figcaption {
@@ -267,22 +320,120 @@ figure {
 	}
 }
 
-.table-scroll {
+.plot {
+	--col: var(--col-chart-n);
+
+	& .n1 {
+		--col: var(--col-chart-1);
+	}
+	& .n2 {
+		--col: var(--col-chart-2);
+	}
+	& .n3 {
+		--col: var(--col-chart-3);
+	}
+	& .n4 {
+		--col: var(--col-chart-4);
+	}
+	& .n5 {
+		--col: var(--col-chart-5);
+	}
+	& .n6 {
+		--col: var(--col-chart-6);
+	}
+	& .n7 {
+		--col: var(--col-chart-7);
+	}
+	& .n8 {
+		--col: var(--col-chart-8);
+	}
+	& .n9 {
+		--col: var(--col-chart-9);
+	}
+	& .n10 {
+		--col: var(--col-chart-10);
+	}
+
+	& pattern {
+		&.n2,
+		&.n4,
+		&.n6,
+		&.n8,
+		&.n10 {
+			transform: rotate(90deg);
+		}
+	}
+
+	& .grid {
+		stroke: var(--col-border);
+		stroke-width: 1;
+		vector-effect: non-scaling-stroke;
+		opacity: 0.1;
+
+		&.l0 {
+			opacity: 0.7;
+		}
+		&.l1 {
+			opacity: 0.4;
+		}
+		&.l2 {
+			opacity: 0.2;
+		}
+	}
+
+	& .area {
+		opacity: 0.2;
+		fill-rule: nonzero;
+	}
+
+	& .area-pattern path {
+		fill: var(--col);
+	}
+
+	& .edge {
+		stroke: var(--col);
+		stroke-width: 2px;
+		vector-effect: non-scaling-stroke;
+		stroke-linejoin: round;
+		stroke-linecap: round;
+
+		&.exclusive {
+			stroke-dasharray: 6px 10px;
+		}
+	}
+}
+
+.hscroll {
 	margin: 16px max(-200px, calc((100vw - 100%) / -2));
 	padding: 8px 16px 16px;
 	overflow-x: auto;
 
-	& .table-outline {
-		width: max-content;
+	& > math {
+		width: fit-content;
 		margin: 0 auto;
-		padding: 8px;
-		border: 1px solid var(--col-outline);
-		border-radius: 4px;
-		background: var(--col-back);
+	}
+}
 
-		& table {
-			margin: 0;
-		}
+.math-l {
+	justify-items: start;
+	padding-inline-start: 0;
+}
+
+.math-r {
+	justify-items: end;
+	padding-inline-end: 0;
+}
+
+.table-outline {
+	width: max-content;
+	margin: 0 auto;
+	padding: 8px;
+	border: 1px solid var(--col-outline);
+	border-radius: 4px;
+	background: var(--col-back);
+
+	& table {
+		margin: 0;
 	}
 }
 

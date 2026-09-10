@@ -2,25 +2,10 @@ export const MARKED_SMART_QUOTES = () => {
 	let previous = '';
 
 	return {
-		tokenizer: {
-			inlineText(src) {
-				const cap = this.rules.inline.text.exec(src);
-				if (!cap) {
-					throw new Error('rules.inline.text.exec failed');
-				}
-
-				// based on https://github.com/calculuschild/marked-smartypants-lite/blob/main/src/index.js
-				const text = cap[0]
-					.replaceAll(/(?<!-)---(?!-)/g, '\u2014') // em-dash
-					.replaceAll(/(?<!-)--(?!-)/g, '\u2013') // en-dash
-					.replaceAll(/(?<!\.)\.\.\.(?!\.)/g, '\u2026'); // ellipsis
-
-				return { type: 'text', raw: cap[0], text };
-			},
-		},
 		walkTokens(token) {
 			switch (token.type) {
 				case 'text':
+					// originally based on https://github.com/calculuschild/marked-smartypants-lite/blob/main/src/index.js
 					if (/["']/.test(token.text)) {
 						token.text = (previous + token.text)
 							.replaceAll(/(?<=^|[-\u2014/(\[{"\s])'/g, '\u2018') // opening single
@@ -30,6 +15,10 @@ export const MARKED_SMART_QUOTES = () => {
 							.substring(previous.length);
 					}
 					if (token.text) {
+						token.text = token.text
+							.replaceAll(/(?<!-)---(?!-)/g, '\u2014') // em-dash
+							.replaceAll(/(?<!-)--(?!-)/g, '\u2013') // en-dash
+							.replaceAll(/(?<!\.)\.\.\.(?!\.)/g, '\u2026'); // ellipsis;
 						previous = token.text[token.text.length - 1];
 					}
 					break;

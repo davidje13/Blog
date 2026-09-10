@@ -93,6 +93,95 @@ Foo -> +Bar: Hello
 -Bar --> Foo: Hi
 ```
 
+```json plot
+{
+  "title": "A mathematical plot with enclosed regions",
+  "width": 500,
+  "aspect": 1,
+  "type": "cartesian",
+  "axes": [
+    { "label": "x", "range": [0, 10], "grid": [10, 1] },
+    { "label": "y", "range": [0, 10], "grid": [10, 1] }
+  ],
+  "elements": [
+    { "type": "equation", "equation": "(x)^2+(y)^2<=1" },
+    { "type": "equation", "equation": "(x-5)^2+(y)^2<=1" },
+    { "type": "equation", "equation": "(x-10)^2+(y)^2<=1" },
+    { "type": "equation", "equation": "(x)^2+(y-5)^2<=1" },
+    { "type": "equation", "equation": "(x-5)^2+(y-5)^2<=1" },
+    { "type": "equation", "equation": "(x-10)^2+(y-5)^2<=1" },
+    { "type": "equation", "equation": "(x)^2+(y-10)^2<=1" },
+    { "type": "equation", "equation": "(x-5)^2+(y-10)^2<=1" },
+    { "type": "equation", "equation": "(x-10)^2+(y-10)^2<=1" }
+  ]
+}
+```
+
+```json plot
+{
+  "title": "A mathematical plot with excluded regions",
+  "width": 500,
+  "aspect": 1,
+  "type": "cartesian",
+  "axes": [
+    { "label": "x", "range": [0, 10], "grid": [10, 1] },
+    { "label": "y", "range": [0, 10], "grid": [10, 1] }
+  ],
+  "elements": [
+    {
+      "type": "equation",
+      "equation": "min((x)^2+(y)^2,(x-5)^2+(y)^2,(x-10)^2+(y)^2,(x)^2+(y-5)^2,(x-5)^2+(y-5)^2,(x-10)^2+(y-5)^2,(x)^2+(y-10)^2,(x-5)^2+(y-10)^2,(x-10)^2+(y-10)^2)>1"
+    }
+  ]
+}
+```
+
+```json plot
+{
+  "width": 500,
+  "aspect": 1,
+  "type": "cartesian",
+  "axes": [
+    { "label": "x", "range": [-3, 17], "grid": [10, 2] },
+    { "label": "y", "range": [-16, 4], "grid": [10, 2] }
+  ],
+  "elements": [{ "type": "equation", "equation": "sin(sqrt(x^2+y^2)*4)>0" }]
+}
+```
+
+```json plot
+{
+  "width": 500,
+  "height": 200,
+  "type": "cartesian",
+  "axes": [
+    { "label": "x", "range": [0, 10], "grid": [2, 1] },
+    { "label": "y", "range": [0, 2], "grid": [1, 0.2] }
+  ],
+  "elements": [
+    {
+      "type": "equation",
+      "equation": "y>=abs(sin(x*pi*0.5))",
+      "resolution": [300, 10]
+    }
+  ]
+}
+```
+
+```json plot
+{
+  "title": "Complex graph with lots of saddle points",
+  "width": 500,
+  "aspect": 1,
+  "type": "cartesian",
+  "axes": [
+    { "label": "x", "range": [0, 100] },
+    { "label": "y", "range": [0, 100] }
+  ],
+  "elements": [{ "type": "equation", "equation": "sin(x+y)+cos(x-y)=0.001" }]
+}
+```
+
 *[WYSIWYG]: What You See Is What You Get
 
 [^note]: Numbered footnote content

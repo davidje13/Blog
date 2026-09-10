@@ -3,7 +3,7 @@ import { marked } from 'marked';
 export const MARKED_FIGURE = {
 	renderer: {
 		paragraph(node) {
-			if (node.tokens[0]?.type === 'image') {
+			if (['image', 'plot'].includes(node.tokens[0]?.type)) {
 				const [image, ...caption] = node.tokens;
 				if (!caption.length && image.title) {
 					caption.push({ type: 'text', text: image.title });
@@ -20,7 +20,7 @@ export const MARKED_FIGURE = {
 		},
 		table(node) {
 			const base = marked.Renderer.prototype.table.call(this, node);
-			return `<div class="table-scroll"><div class="table-outline">${base}</div></div>`;
+			return `<div class="hscroll"><div class="table-outline">${base}</div></div>`;
 		},
 	},
 };
