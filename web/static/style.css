@@ -605,20 +605,16 @@ figure {
 		}
 
 		& > .area {
-			opacity: 0.2;
+			opacity: 0.3;
 			fill: var(--col);
 			fill-rule: nonzero;
-			mask: linear-gradient(
+			mask: repeating-linear-gradient(
 					var(--pattern-r),
 					white 0%,
 					white 11%,
 					transparent 15%,
 					transparent 46%,
-					white 50%,
-					white 61%,
-					transparent 65%,
-					transparent 96%,
-					white 100%
+					white 50%
 				)
 				calc(var(--pattern-x) * 10px) 0 / 10px 10px;
 		}

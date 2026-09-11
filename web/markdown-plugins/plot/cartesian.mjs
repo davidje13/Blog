@@ -205,6 +205,17 @@ export function renderCartesian(
 	return [
 		`<div class="subplot cartesian" role="img"${headerID ? ` aria-labelledby="${escapeHTML(headerID)}"` : ''} aria-describedby="${escapeHTML(descriptionID)}">`,
 		`<div id="${escapeHTML(descriptionID)}" hidden>${escapeHTML(description)}</div>`,
+		`<div class="view">`,
+		`<svg ${svgCommon} fill="none" class="grid">`,
+		...grids
+			.map(
+				(g, l) => `<path d="${g.map((o) => o.line).join('')}" class="l${l}" />`,
+			)
+			.reverse(),
+		'</svg>',
+		areas,
+		`<svg ${svgCommon} fill="none" class="lines">${lines}</svg>`,
+		'</div>',
 		`<div class="axis x">`,
 		'<div class="line"></div>',
 		xAxis.label ? `<div class="label">${escapeHTML(xAxis.label)}</div>` : '',
@@ -218,18 +229,6 @@ export function renderCartesian(
 		yLabels.length
 			? `<div class="values" style="${yAxis.grid.map((v, i) => `--n${i}:${(ry1 - ry0) / v}`).join(';')}">${yLabels.map((l) => l.html).join('')}</div>`
 			: '',
-		'</div>',
-		`<div class="view">`,
-		`<svg ${svgCommon} fill="none" class="grid">`,
-		...grids
-			.map(
-				(g, l) => `<path d="${g.map((o) => o.line).join('')}" class="l${l}" />`,
-			)
-			.reverse(),
-		'</svg>',
-		areas,
-		`<svg ${svgCommon} fill="none" class="lines">${lines}</svg>`,
-		'</svg>',
 		'</div>',
 		'</div>',
 	].join('');
