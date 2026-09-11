@@ -1,15 +1,23 @@
 import renderMath from '@webc.site/math';
 
 function wrappedMath(content, block) {
-	const html = renderMath(content, block);
-	return html
+	return renderMath(content, block)
+		.replaceAll(/(<(mtd|mrow)\b[^>]*?) style="/g, '$1 class="msty')
+		.replaceAll(/(?<=<[^>]+ class="msty[^"]*)text-align:left;?/g, ' l')
+		.replaceAll(/(?<=<[^>]+ class="msty[^"]*)text-align:right;?/g, ' r')
+		.replaceAll(/(?<=<[^>]+ class="msty[^"]*)padding-left:0;?/g, ' pl')
+		.replaceAll(/(?<=<[^>]+ class="msty[^"]*)padding-right:0;?/g, ' pr')
 		.replaceAll(
-			'<mtd style="text-align:left;padding-left:0"',
-			'<mtd class="math-l"',
+			/(?<=<[^>]+ class="msty[^"]*)display:inline-block;border:1px solid;padding:2px 3px/g,
+			' boxed',
 		)
 		.replaceAll(
-			'<mtd style="text-align:right;padding-right:0"',
-			'<mtd class="math-r"',
+			/(?<=<[^>]+ class="msty[^"]*)display:inline-block;background:linear-gradient\(to top right,transparent 47%,currentColor 47%,currentColor 53%,transparent 53%\)/g,
+			' cancel',
+		)
+		.replaceAll(
+			/(?<=<[^>]+ class="msty[^"]*)display:inline-block;background:linear-gradient\(transparent 47%,currentColor 47%,currentColor 53%,transparent 53%\)/g,
+			' strike',
 		);
 }
 

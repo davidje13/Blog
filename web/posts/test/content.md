@@ -42,6 +42,24 @@ $$
 e=mc^2
 $$
 
+Aligned equations:
+
+$$
+\begin{align*}
+a^2+b & = 3c^2
+\\
+c & = \sqrt{\frac{a^2+b}{3}}
+\end{align*}
+$$
+
+$$
+|x| = \begin{cases} x & x \ge 0 \\ -x & x < 0 \end{cases}
+$$
+
+$$
+\boxed{2a+b} + \sout{x - y} + \cancel{3-3}
+$$
+
 Smart "double quotes" and 'single quotes', foo's apostrophes, and -- en-dash and
 --- em-dash...
 

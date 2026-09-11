@@ -644,14 +644,49 @@ figure {
 	}
 }
 
-.math-l {
+.msty.l {
 	justify-items: start;
+}
+
+.msty.r {
+	justify-items: end;
+}
+
+.msty.pl {
 	padding-inline-start: 0;
 }
 
-.math-r {
-	justify-items: end;
+.msty.pr {
 	padding-inline-end: 0;
+}
+
+.msty.boxed {
+	display: inline-block;
+	border: 1px solid currentColor;
+	padding: 2px 3px;
+	border-radius: 2px;
+}
+
+.msty.cancel {
+	display: inline-block;
+	padding: 2px 0;
+	background: linear-gradient(
+		to top left,
+		transparent calc(50% - 1px),
+		currentColor calc(50% - 0.5px),
+		currentColor calc(50% + 0.5px),
+		transparent calc(50% + 1px)
+	);
+}
+
+.msty.strike {
+	display: inline-block;
+	background: linear-gradient(
+		transparent calc(50% - 1px),
+		currentColor calc(50% - 1px),
+		currentColor 50%,
+		transparent 50%
+	);
 }
 
 .table-outline {
