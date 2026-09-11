@@ -1,9 +1,13 @@
 import { penTool } from 'curve-ops';
 import { escapeHTML } from '../common.mjs';
-import { compileEq } from './equation.mjs';
+import { compileEq, labelEq } from './equation.mjs';
 import { marchingSquares } from './marchingSquares.mjs';
 
-export function renderCartesian(context, { axes: [xAxis, yAxis], elements }) {
+export function renderCartesian(
+	context,
+	{ axes: [xAxis, yAxis], elements },
+	headerID,
+) {
 	const rx0 = xAxis.range[0];
 	const ry0 = yAxis.range[0];
 	const rx1 = xAxis.range[1];
@@ -38,16 +42,21 @@ export function renderCartesian(context, { axes: [xAxis, yAxis], elements }) {
 	let lines = '';
 	let fills = '';
 
+	const elementDescriptions = [];
 	for (let elementNum = 0; elementNum < elements.length; ++elementNum) {
 		const element = elements[elementNum];
 		switch (element.type) {
 			case 'equation': {
 				const {
 					equation,
+					description,
 					range: [rangeX = [], rangeY = []] = [],
 					resolution: [rx = 100, ry = 100] = [],
 					parameters = {},
 				} = element;
+				elementDescriptions.push(
+					description ?? `the equation ${labelEq(equation)}`,
+				);
 				const compiled = compileEq(equation);
 				const p = new Map(Object.entries(parameters));
 				const bounds = {
@@ -170,16 +179,47 @@ export function renderCartesian(context, { axes: [xAxis, yAxis], elements }) {
 	xLabels.sort((a, b) => a.pos - b.pos);
 	yLabels.sort((a, b) => a.pos - b.pos);
 
+	let description = `Graph showing: `;
+	for (let i = 0; i < elementDescriptions.length - 1; ++i) {
+		description += elementDescriptions[i] + '; ';
+	}
+	if (elementDescriptions.length > 1) {
+		description += 'and ';
+	}
+	description += elementDescriptions.at(-1);
+
+	description += '. With ';
+	if (xAxis.label) {
+		description += `horizontal axis representing ${xAxis.label}`;
+	} else {
+		description += 'unlabelled horizontal axis';
+	}
+	if (xLabels.length) {
+		description += ` from ${rx0} to ${rx1}`;
+	}
+
+	description += ', and ';
+	if (yAxis.label) {
+		description += `vertical axis representing ${yAxis.label}`;
+	} else {
+		description += 'unlabelled vertical axis';
+	}
+	if (yLabels.length) {
+		description += ` from ${ry0} to ${ry1}`;
+	}
+	const descriptionID = context.nextID();
+
 	return [
-		'<div class="subplot cartesian">',
-		`<div class="axis x" aria-label="horizontal axis from ${rx0} to ${rx1}">`,
+		`<div class="subplot cartesian" role="img"${headerID ? ` aria-labelledby="${escapeHTML(headerID)}"` : ''} aria-describedby="${escapeHTML(descriptionID)}">`,
+		`<div id="${escapeHTML(descriptionID)}" hidden>${escapeHTML(description)}</div>`,
+		`<div class="axis x">`,
 		'<div class="line"></div>',
 		xAxis.label ? `<div class="label">${escapeHTML(xAxis.label)}</div>` : '',
 		xLabels.length
 			? `<div class="values" style="${xAxis.grid.map((v, i) => `--n${i}:${(rx1 - rx0) / v}`).join(';')}">${xLabels.map((l) => l.html).join('')}</div>`
 			: '',
 		'</div>',
-		`<div class="axis y" aria-label="vertical axis from ${ry0} to ${ry1}">`,
+		`<div class="axis y">`,
 		'<div class="line"></div>',
 		yAxis.label ? `<div class="label">${escapeHTML(yAxis.label)}</div>` : '',
 		yLabels.length

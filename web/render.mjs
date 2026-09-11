@@ -292,17 +292,17 @@ async function renderPost(
 		headerContent = [
 			'<header>',
 			`<h1${title?.[1] ?? ''}>${h1HTML}</h1>`,
-			`<a href="${escapeHTML(pageURL.toString())}" rel="self" title="Link to this page" class="qr">`,
+			`<a aria-label="QR code for this page" href="${escapeHTML(pageURL.toString())}" rel="self" title="Link to this page" class="qr">`,
 			`<img src="${escapeHTML(`data:image/svg+xml;base64,${btoa(qrLink)}`)}" alt="QR Code linking to this page" />`,
 			'</a>',
 			`<p>${headerData}</p>`,
-			'<div class="tags">',
+			'<nav class="tags">',
 			...tags.map(
 				(t) =>
 					`<a class="tag" href="${escapeHTML(`/tagged/${encodeURIComponent(t)}`)}">${escapeHTML(t)}</a>`,
 			),
 			'<a class="tag" href="/">all posts</a>',
-			'</div>',
+			'</nav>',
 			'</header>',
 		].join('');
 	}

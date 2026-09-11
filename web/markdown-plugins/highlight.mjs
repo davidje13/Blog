@@ -1,5 +1,5 @@
 import highlightjs from 'highlight.js';
-import { markedHighlight } from 'marked-highlight';
+import { escapeHTML } from './common.mjs';
 
 highlightjs.configure({ classPrefix: '' });
 
@@ -470,11 +470,26 @@ highlightjs.registerLanguage('bash', (hljs) => {
 	};
 });
 
-export const MARKED_HIGHLIGHT = markedHighlight({
-	emptyLangClass: 'highlight',
-	langPrefix: 'highlight lang-',
-	highlight(code, lang) {
+export const MARKED_HIGHLIGHT = {
+	walkTokens(token) {
+		if (token.type !== 'code') {
+			return;
+		}
+
+		const lang = (token.lang || '').match(/\S*/)[0];
+		token.primaryLanguage = lang;
+
 		const language = highlightjs.getLanguage(lang) ? lang : 'plaintext';
-		return highlightjs.highlight(code, { language }).value;
+		const code = highlightjs.highlight(token.text, { language }).value;
+		if (typeof code === 'string' && code !== token.text) {
+			token.formatted = code;
+		}
 	},
-});
+	renderer: {
+		code(token) {
+			const lang = token.primaryLanguage;
+			const code = token.formatted ?? escapeHTML(token.text);
+			return `<pre><code role="text" class="${escapeHTML('highlight' + (lang ? ` lang-${lang}` : ''))}">${code}${code.endsWith('\n') ? '' : '\n'}\n</code></pre>`;
+		},
+	},
+};

@@ -58,6 +58,49 @@ const FUNCTIONS = new Map([
 	['ceil', (v, step = 1) => Math.ceil(v / step) * step],
 ]);
 
+const MATH_TERMS = new Map([
+	['sin', ' sine-of '],
+	['cos', ' cosine-of '],
+	['tan', ' tangent-of '],
+	['asin', ' arc-sine-of '],
+	['acos', ' arc-cosine-of '],
+	['atan', ' arc-tangent-of '],
+	['exp', ' exponentiation-of '],
+	['ln', ' natural-logarithm-of '],
+	['sqrt', ' square-root-of '],
+	['min', ' minimum-of '],
+	['max', ' maximum-of '],
+	['abs', ' absolute-value-of '],
+	['round', ' round '],
+	['floor', ' floor-of '],
+	['ceil', ' ceiling-of '],
+	['>=', ' greater-or-equal '],
+	['<=', ' less-or-equal '],
+	['>', ' greater-than '],
+	['<', ' less-than '],
+	['=', ' equals '],
+	['^2', ' squared '],
+	['^3', ' cubed '],
+	['^', ' to-the-power-of '],
+	['**2', ' squared '],
+	['**3', ' cubed '],
+	['**', ' to-the-power-of '],
+	['+', ' plus '],
+	['-', ' minus '],
+	['*', ' times '],
+	['//', ' truncated-divide-by '],
+	['/', ' over '],
+	['%', ' modulo '],
+]);
+
+const MATH_TERM_SEARCH = new RegExp(
+	[...MATH_TERMS.keys()].map(RegExp.escape).join('|'),
+	'g',
+);
+
+export const labelEq = (eq) =>
+	eq.replaceAll(MATH_TERM_SEARCH, (v) => MATH_TERMS.get(v) ?? v);
+
 export function compileEq(eq) {
 	const opStack = [];
 	const normQueue = [];
