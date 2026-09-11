@@ -13,6 +13,8 @@ export function renderCartesian(
 	const rx1 = xAxis.range[1];
 	const ry1 = yAxis.range[1];
 
+	const svgCommon = `xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="${rx0} ${-ry1} ${rx1 - rx0} ${ry1 - ry0}" preserveAspectRatio="none"`;
+
 	let grids = [];
 	xAxis.grid?.forEach((step, i) => {
 		const dp = countDP(step);
@@ -40,7 +42,7 @@ export function renderCartesian(
 	});
 
 	let lines = '';
-	let fills = '';
+	let areas = '';
 
 	const elementDescriptions = [];
 	for (let elementNum = 0; elementNum < elements.length; ++elementNum) {
@@ -70,8 +72,8 @@ export function renderCartesian(
 					p.set('y', y);
 					return compiled.run(p);
 				});
-				const fillParts = [];
-				const fillEdgeParts = [];
+				const areaParts = [];
+				const areaEdgeParts = [];
 				const lineParts = [];
 				const frame = [
 					ptSVGFloating({ x: bounds.x0, y: -bounds.y0 }, 4),
@@ -80,7 +82,7 @@ export function renderCartesian(
 					ptSVGFloating({ x: bounds.x0, y: -bounds.y1 }, 4),
 				];
 				if (compiled.ineq && shape.edges) {
-					fillParts.push(`M${frame.join('L')}Z`);
+					areaParts.push(`M${frame.join('L')}Z`);
 				}
 				const cellScale = Math.min(
 					(bounds.x1 - bounds.x0) / rx,
@@ -98,9 +100,9 @@ export function renderCartesian(
 
 					if (compiled.ineq) {
 						if (path.closed) {
-							fillParts.push(d);
+							areaParts.push(d);
 						} else {
-							fillEdgeParts.push({
+							areaEdgeParts.push({
 								in: path.in,
 								out: path.out,
 								d: d.substring(1),
@@ -108,16 +110,16 @@ export function renderCartesian(
 						}
 					}
 				}
-				while (fillEdgeParts.length) {
+				while (areaEdgeParts.length) {
 					let d = '';
-					let currentLine = fillEdgeParts[0];
+					let currentLine = areaEdgeParts[0];
 					while (true) {
 						d += d ? 'L' : 'M';
 						d += currentLine.d;
 						let nextDist = 5;
 						let nextLineIndex = 0;
-						for (let i = 0; i < fillEdgeParts.length; ++i) {
-							const dist = posmod(fillEdgeParts[i].in - currentLine.out, 4);
+						for (let i = 0; i < areaEdgeParts.length; ++i) {
+							const dist = posmod(areaEdgeParts[i].in - currentLine.out, 4);
 							if (dist < nextDist) {
 								nextLineIndex = i;
 								nextDist = dist;
@@ -130,28 +132,19 @@ export function renderCartesian(
 						) {
 							d += `L${frame[i % 4]}`;
 						}
-						currentLine = fillEdgeParts.splice(nextLineIndex, 1)[0];
+						currentLine = areaEdgeParts.splice(nextLineIndex, 1)[0];
 						if (nextLineIndex === 0) {
 							break;
 						}
 					}
-					fillParts.push(d + 'Z');
+					areaParts.push(d + 'Z');
 				}
 
-				if (compiled.ineq && fillParts.length) {
-					const patternSize = 10;
-					// TODO: can we make these pattern sizes scale invariant? (i.e. define them in screen coordinates)
-					const patternW = (patternSize * (rx1 - rx0)) / 400;
-					const patternH = (patternSize * (rx1 - rx0)) / 400;
-					const patternT = 0.2;
-					const patternShift =
-						[0, 0.5, 0.25, 0.75][elementNum] ?? elementNum * patternT;
-					const patternID = context.nextID();
-					fills += `<defs><pattern id="${patternID}" viewBox="0 0 1 1" preserveAspectRatio="none" width="${patternW}" height="${patternH}" patternUnits="userSpaceOnUse" class="area-pattern n${elementNum + 1}" x="${patternShift * patternW}"><path d="M0 ${patternT}V0H${patternT}ZM${patternT} 1H0L1 0V${patternT}Z" /></pattern></defs>`;
-					fills += `<path d="${fillParts.join('')}" class="area n${elementNum + 1}" fill="url(#${patternID})" />`;
+				if (compiled.ineq && areaParts.length) {
+					areas += `<svg ${svgCommon} class="area n${elementNum + 1}"><path d="${areaParts.join('')}" /></svg>`;
 				}
 				if (lineParts.length) {
-					lines += `<path d="${lineParts.join('')}" class="edge n${elementNum + 1} ${compiled.eq ? 'inclusive' : 'exclusive'}" />`;
+					lines += `<path d="${lineParts.join('')}" class="n${elementNum + 1} ${compiled.eq ? 'inclusive' : 'exclusive'}" />`;
 				}
 				break;
 			}
@@ -226,16 +219,18 @@ export function renderCartesian(
 			? `<div class="values" style="${yAxis.grid.map((v, i) => `--n${i}:${(ry1 - ry0) / v}`).join(';')}">${yLabels.map((l) => l.html).join('')}</div>`
 			: '',
 		'</div>',
-		`<svg xmlns="http://www.w3.org/2000/svg" version="1.1" fill="none" viewBox="${rx0} ${-ry1} ${rx1 - rx0} ${ry1 - ry0}" preserveAspectRatio="none" class="view">`,
+		`<div class="view">`,
+		`<svg ${svgCommon} fill="none" class="grid">`,
 		...grids
 			.map(
-				(g, l) =>
-					`<path d="${g.map((o) => o.line).join('')}" class="grid l${l}" />`,
+				(g, l) => `<path d="${g.map((o) => o.line).join('')}" class="l${l}" />`,
 			)
 			.reverse(),
-		fills,
-		lines,
 		'</svg>',
+		areas,
+		`<svg ${svgCommon} fill="none" class="lines">${lines}</svg>`,
+		'</svg>',
+		'</div>',
 		'</div>',
 	].join('');
 }

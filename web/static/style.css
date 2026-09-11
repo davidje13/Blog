@@ -321,6 +321,8 @@ figure {
 
 .plot {
 	--col: var(--col-chart-n);
+	--pattern-r: -45deg;
+	--pattern-x: 0;
 	--axis-value-gap: 4px;
 	--axis-value-min-w: 4ch;
 	--axis-value-min-h: 2.5em;
@@ -566,83 +568,116 @@ figure {
 		}
 	}
 
+	& .view {
+		display: grid;
+		position: relative;
+
+		& > .grid {
+			align-self: stretch;
+			justify-self: stretch;
+
+			& path {
+				stroke: var(--col-border);
+				stroke-width: 1;
+				vector-effect: non-scaling-stroke;
+				opacity: 0.1;
+
+				&.l0 {
+					opacity: 1;
+				}
+				&.l1 {
+					opacity: 0.4;
+				}
+				&.l2 {
+					opacity: 0.2;
+				}
+			}
+		}
+
+		& > .area,
+		& > .lines {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			contain: strict;
+		}
+
+		& > .area {
+			opacity: 0.2;
+			fill: var(--col);
+			fill-rule: nonzero;
+			mask: linear-gradient(
+					var(--pattern-r),
+					white 0%,
+					white 11%,
+					transparent 15%,
+					transparent 46%,
+					white 50%,
+					white 61%,
+					transparent 65%,
+					transparent 96%,
+					white 100%
+				)
+				calc(var(--pattern-x) * 10px) 0 / 10px 10px;
+		}
+
+		& > .lines path {
+			stroke: var(--col);
+			stroke-width: 2px;
+			vector-effect: non-scaling-stroke;
+			stroke-linejoin: round;
+			stroke-linecap: round;
+
+			&.exclusive {
+				stroke-dasharray: 6px 10px;
+			}
+		}
+	}
+
 	& .n1 {
 		--col: var(--col-chart-1);
 	}
 	& .n2 {
 		--col: var(--col-chart-2);
+		--pattern-r: 45deg;
 	}
 	& .n3 {
 		--col: var(--col-chart-3);
+		--pattern-x: 0.5;
 	}
 	& .n4 {
 		--col: var(--col-chart-4);
+		--pattern-r: 45deg;
+		--pattern-x: 0.5;
 	}
 	& .n5 {
 		--col: var(--col-chart-5);
+		--pattern-x: 0.25;
 	}
 	& .n6 {
 		--col: var(--col-chart-6);
+		--pattern-r: 45deg;
+		--pattern-x: 0.25;
 	}
 	& .n7 {
 		--col: var(--col-chart-7);
+		--pattern-x: 0.75;
 	}
 	& .n8 {
 		--col: var(--col-chart-8);
+		--pattern-r: 45deg;
+		--pattern-x: 0.75;
 	}
 	& .n9 {
 		--col: var(--col-chart-9);
+		--pattern-x: 0.125;
 	}
 	& .n10 {
 		--col: var(--col-chart-10);
-	}
-
-	& pattern {
-		&.n2,
-		&.n4,
-		&.n6,
-		&.n8,
-		&.n10 {
-			transform: rotate(90deg);
-		}
-	}
-
-	& .grid {
-		stroke: var(--col-border);
-		stroke-width: 1;
-		vector-effect: non-scaling-stroke;
-		opacity: 0.1;
-
-		&.l0 {
-			opacity: 1;
-		}
-		&.l1 {
-			opacity: 0.4;
-		}
-		&.l2 {
-			opacity: 0.2;
-		}
-	}
-
-	& .area {
-		opacity: 0.2;
-		fill-rule: nonzero;
-	}
-
-	& .area-pattern path {
-		fill: var(--col);
-	}
-
-	& .edge {
-		stroke: var(--col);
-		stroke-width: 2px;
-		vector-effect: non-scaling-stroke;
-		stroke-linejoin: round;
-		stroke-linecap: round;
-
-		&.exclusive {
-			stroke-dasharray: 6px 10px;
-		}
+		--pattern-r: 45deg;
+		--pattern-x: 0.125;
 	}
 }
 

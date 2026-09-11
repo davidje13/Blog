@@ -155,6 +155,28 @@ Foo -> +Bar: Hello
 }
 ```
 
+```json plot
+{
+  "title": "Overlapping fills",
+  "type": "cartesian",
+  "axes": [
+    { "label": "x", "range": [-2, 2] },
+    { "label": "y", "range": [-2, 2] }
+  ],
+  "elements": [
+    { "type": "equation", "equation": "(x)^2+(y)^2<=1" },
+    { "type": "equation", "equation": "(x-0.5)^2+(y)^2<=1" },
+    { "type": "equation", "equation": "(x+0.5)^2+(y)^2<=1" },
+    { "type": "equation", "equation": "(x)^2+(y-0.5)^2<=1" },
+    { "type": "equation", "equation": "(x-0.5)^2+(y-0.5)^2<=1" },
+    { "type": "equation", "equation": "(x+0.5)^2+(y-0.5)^2<=1" },
+    { "type": "equation", "equation": "(x)^2+(y+0.5)^2<=1" },
+    { "type": "equation", "equation": "(x-0.5)^2+(y+0.5)^2<=1" },
+    { "type": "equation", "equation": "(x+0.5)^2+(y+0.5)^2<=1" }
+  ]
+}
+```
+
 Some more complicated graphs:
 
 ```json plot
