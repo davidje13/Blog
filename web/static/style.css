@@ -331,7 +331,8 @@ figure {
 	--axis-width: 2px;
 	--axis-overshoot: 6px;
 	--arrow-space: 16px;
-	display: block;
+	display: flex;
+	flex-flow: column;
 	box-sizing: border-box;
 	max-width: 100%;
 	width: 600px;
@@ -351,18 +352,28 @@ figure {
 		text-align: center;
 	}
 
+	& .subplot {
+		flex: 1;
+	}
+
 	& .subplot.layout {
-		container: layout / inline-size;
-		contain: inline-size content;
+		display: flex;
+		flex-flow: column;
+		container: chart-layout / inline-size;
+		contain: inline-size layout paint style;
 
 		& > div {
+			flex: 1;
 			display: flex;
-			flex-direction: column;
+			flex-flow: column;
 			gap: 64px;
 			align-content: center;
 			justify-content: center;
 
 			& > section {
+				flex: 1;
+				display: flex;
+				flex-flow: column;
 				width: 100%;
 			}
 		}
@@ -370,7 +381,7 @@ figure {
 		&.h > div {
 			flex-flow: row;
 
-			@container layout (width < 600px) {
+			@container chart-layout (width < 600px) {
 				flex-flow: column;
 			}
 		}
@@ -382,7 +393,7 @@ figure {
 		grid-template-columns: max-content 1fr;
 		grid-template-rows: 1fr max-content;
 		overflow: hidden;
-		contain: inline-size content;
+		contain: inline-size layout paint style;
 
 		& .axis {
 			position: relative;
@@ -406,8 +417,8 @@ figure {
 			& .values {
 				display: flex;
 				position: relative;
-				container: axis / inline-size;
-				contain: inline-size content;
+				container: chart-axis / inline-size;
+				contain: inline-size layout style;
 
 				& > div {
 					--sn: var(--n3);
@@ -550,6 +561,8 @@ figure {
 
 		& .view {
 			grid-area: 1 / 2 / 2 / 3;
+			align-self: stretch;
+			justify-self: stretch;
 		}
 	}
 

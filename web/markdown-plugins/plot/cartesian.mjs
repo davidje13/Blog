@@ -74,10 +74,10 @@ export function renderCartesian(
 				const fillEdgeParts = [];
 				const lineParts = [];
 				const frame = [
-					ptSVGFloating({ x: rx0, y: -ry0 }, 4),
-					ptSVGFloating({ x: rx1, y: -ry0 }, 4),
-					ptSVGFloating({ x: rx1, y: -ry1 }, 4),
-					ptSVGFloating({ x: rx0, y: -ry1 }, 4),
+					ptSVGFloating({ x: bounds.x0, y: -bounds.y0 }, 4),
+					ptSVGFloating({ x: bounds.x1, y: -bounds.y0 }, 4),
+					ptSVGFloating({ x: bounds.x1, y: -bounds.y1 }, 4),
+					ptSVGFloating({ x: bounds.x0, y: -bounds.y1 }, 4),
 				];
 				if (compiled.ineq && shape.edges) {
 					fillParts.push(`M${frame.join('L')}Z`);
@@ -226,7 +226,7 @@ export function renderCartesian(
 			? `<div class="values" style="${yAxis.grid.map((v, i) => `--n${i}:${(ry1 - ry0) / v}`).join(';')}">${yLabels.map((l) => l.html).join('')}</div>`
 			: '',
 		'</div>',
-		`<svg xmlns="http://www.w3.org/2000/svg" version="1.1" fill="none" viewBox="${rx0} ${-ry1} ${rx1 - rx0} ${ry1 - ry0}" width="100%" preserveAspectRatio="none" class="view">`,
+		`<svg xmlns="http://www.w3.org/2000/svg" version="1.1" fill="none" viewBox="${rx0} ${-ry1} ${rx1 - rx0} ${ry1 - ry0}" preserveAspectRatio="none" class="view">`,
 		...grids
 			.map(
 				(g, l) =>
