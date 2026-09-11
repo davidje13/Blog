@@ -489,7 +489,7 @@ export const MARKED_HIGHLIGHT = {
 		code(token) {
 			const lang = token.primaryLanguage;
 			const code = token.formatted ?? escapeHTML(token.text);
-			return `<pre><code role="text" class="${escapeHTML('highlight' + (lang ? ` lang-${lang}` : ''))}">${code}${code.endsWith('\n') ? '' : '\n'}\n</code></pre>`;
+			return `<pre><code role="text" class="${escapeHTML('highlight' + (lang ? ` lang-${lang}` : ''))}">${code}${code.endsWith('\n') ? '' : '\n'}</code></pre>`;
 		},
 	},
 };
