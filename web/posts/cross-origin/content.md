@@ -13,8 +13,9 @@ tags:
 
 §In the beginning there was nothing. Then
 [Sir Tim Berners-Lee](https://en.wikipedia.org/wiki/Tim_Berners-Lee) said: "Let
-there be The World Wide Web". And Lo, there was The World Wide Web. And he saw
-that it was **Good Enough**.§
+there be The World Wide Web". And Lo,
+[there was The World Wide Web](https://info.cern.ch/hypertext/WWW/TheProject.html).
+And he saw that it was **Good Enough**.§
 
 In the early days of the web, there was nothing particularly sensitive or
 dangerous available on it. No credit card numbers, no virtually signed
