@@ -147,9 +147,41 @@ h3,
 h4,
 h5,
 h6 {
+	position: relative;
 	margin: 3em 0 0.9em;
 	line-height: 1.4;
 	text-rendering: optimizeLegibility;
+	break-after: avoid;
+	break-inside: avoid;
+}
+
+.heading {
+	display: flex;
+	flex-flow: row;
+	align-items: end;
+
+	& > span {
+		flex: 1;
+	}
+
+	& .anchorlink {
+		text-decoration: none;
+		padding: 0 8px;
+
+		&::before {
+			content: '#';
+			visibility: hidden;
+		}
+	}
+
+	&:hover,
+	&:focus-within {
+		box-shadow: 0 1px 0 var(--col-border);
+
+		& .anchorlink::before {
+			visibility: visible;
+		}
+	}
 }
 
 header {

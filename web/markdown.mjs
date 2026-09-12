@@ -32,7 +32,7 @@ export const makeMarkdownRenderer = ({
 		MARKED_FOOTNOTE(absolutePathsBase),
 		MARKED_ABBR(),
 		MARKED_SMART_QUOTES(),
-		MARKED_HEADING_IDS,
+		MARKED_HEADING_IDS(absolutePathsBase),
 		MARKED_SUP,
 		MARKED_FANCY,
 		MARKED_QR,
