@@ -164,15 +164,31 @@ Foo -> +Bar: Hello
     { "label": "y", "range": [-2, 2] }
   ],
   "elements": [
-    { "type": "equation", "equation": "(x)^2+(y)^2<=1" },
-    { "type": "equation", "equation": "(x-0.5)^2+(y)^2<=1" },
-    { "type": "equation", "equation": "(x+0.5)^2+(y)^2<=1" },
-    { "type": "equation", "equation": "(x)^2+(y-0.5)^2<=1" },
-    { "type": "equation", "equation": "(x-0.5)^2+(y-0.5)^2<=1" },
-    { "type": "equation", "equation": "(x+0.5)^2+(y-0.5)^2<=1" },
-    { "type": "equation", "equation": "(x)^2+(y+0.5)^2<=1" },
-    { "type": "equation", "equation": "(x-0.5)^2+(y+0.5)^2<=1" },
-    { "type": "equation", "equation": "(x+0.5)^2+(y+0.5)^2<=1" }
+    { "type": "equation", "equation": "(x)^2+(y)^2<=1", "label": "one" },
+    { "type": "equation", "equation": "(x-0.5)^2+(y)^2<=1", "label": "two" },
+    { "type": "equation", "equation": "(x+0.5)^2+(y)^2<=1", "label": "three" },
+    { "type": "equation", "equation": "(x)^2+(y-0.5)^2<=1", "label": "four" },
+    {
+      "type": "equation",
+      "equation": "(x-0.5)^2+(y-0.5)^2<=1",
+      "label": "five"
+    },
+    {
+      "type": "equation",
+      "equation": "(x+0.5)^2+(y-0.5)^2<=1",
+      "label": "six"
+    },
+    { "type": "equation", "equation": "(x)^2+(y+0.5)^2<=1", "label": "seven" },
+    {
+      "type": "equation",
+      "equation": "(x-0.5)^2+(y+0.5)^2<=1",
+      "label": "eight"
+    },
+    {
+      "type": "equation",
+      "equation": "(x+0.5)^2+(y+0.5)^2<=1",
+      "label": "nine"
+    }
   ]
 }
 ```

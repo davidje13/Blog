@@ -5,7 +5,7 @@ import { marchingSquares } from './marchingSquares.mjs';
 
 export function renderCartesian(
 	context,
-	{ axes: [xAxis, yAxis], elements },
+	{ axes: [xAxis, yAxis], elements, variant = [] },
 	headerID,
 ) {
 	const rx0 = xAxis.range[0];
@@ -42,7 +42,9 @@ export function renderCartesian(
 	});
 
 	let lines = '';
+	let lineHoverRegions = '';
 	let areas = '';
+	const keyItems = [];
 
 	const elementDescriptions = [];
 	for (let elementNum = 0; elementNum < elements.length; ++elementNum) {
@@ -51,13 +53,15 @@ export function renderCartesian(
 			case 'equation': {
 				const {
 					equation,
+					label,
 					description,
 					range: [rangeX = [], rangeY = []] = [],
 					resolution: [rx = 100, ry = 100] = [],
 					parameters = {},
 				} = element;
 				elementDescriptions.push(
-					description ?? `the equation ${labelEq(equation)}`,
+					description ??
+						`the equation ${label ? ` for ${label}: ` : ''}${labelEq(equation)}`,
 				);
 				const compiled = compileEq(equation);
 				const p = new Map(Object.entries(parameters));
@@ -144,7 +148,17 @@ export function renderCartesian(
 					areas += `<svg ${svgCommon} class="area n${elementNum + 1}"><path d="${areaParts.join('')}" /></svg>`;
 				}
 				if (lineParts.length) {
-					lines += `<path d="${lineParts.join('')}" class="n${elementNum + 1} ${compiled.eq ? 'inclusive' : 'exclusive'}" />`;
+					const lineID = context.nextID();
+					lineHoverRegions += `<use href="#${lineID}" class="hover n${elementNum + 1} ext" />`;
+					lines += `<path id="${lineID}" d="${lineParts.join('')}" class="hover n${elementNum + 1} ${compiled.eq ? 'inclusive' : 'exclusive'}" vector-effect="non-scaling-stroke" />`;
+				}
+				if (label) {
+					keyItems.push({
+						n: elementNum + 1,
+						label,
+						line: lineParts.length > 0,
+						area: compiled.ineq && areaParts.length > 0,
+					});
 				}
 				break;
 			}
@@ -203,7 +217,7 @@ export function renderCartesian(
 	const descriptionID = context.nextID();
 
 	return [
-		`<div class="subplot cartesian" role="img"${headerID ? ` aria-labelledby="${escapeHTML(headerID)}"` : ''} aria-describedby="${escapeHTML(descriptionID)}">`,
+		`<div class="subplot cartesian${escapeHTML((typeof variant === 'string' ? [variant] : variant).map((v) => ` chart-var-${v}`).join(' '))}${elements.length > 1 ? ' multi' : ''}" role="img"${headerID ? ` aria-labelledby="${escapeHTML(headerID)}"` : ''} aria-describedby="${escapeHTML(descriptionID)}">`,
 		`<div id="${escapeHTML(descriptionID)}" hidden>${escapeHTML(description)}</div>`,
 		`<div class="view">`,
 		`<svg ${svgCommon} fill="none" class="grid">`,
@@ -214,7 +228,7 @@ export function renderCartesian(
 			.reverse(),
 		'</svg>',
 		areas,
-		`<svg ${svgCommon} fill="none" class="lines">${lines}</svg>`,
+		`<svg ${svgCommon} fill="none" class="lines">${lineHoverRegions}${lines}</svg>`,
 		'</div>',
 		`<div class="axis x">`,
 		'<div class="line"></div>',
@@ -230,6 +244,9 @@ export function renderCartesian(
 			? `<div class="values" style="${yAxis.grid.map((v, i) => `--n${i}:${(ry1 - ry0) / v}`).join(';')}">${yLabels.map((l) => l.html).join('')}</div>`
 			: '',
 		'</div>',
+		keyItems.length > 0
+			? `<ul class="key">${keyItems.map(({ n, label, line, area }) => `<li class="hover n${n}${line ? ' line' : ''} ${area ? ' area' : ''}">${escapeHTML(label)}</li>`).join('')}</ul>`
+			: '',
 		'</div>',
 	].join('');
 }

@@ -353,6 +353,8 @@ figure {
 
 .plot {
 	--col: var(--col-chart-n);
+	--highlight: 0;
+	--dim: 0;
 	--pattern-r: -45deg;
 	--pattern-x: 0;
 	--axis-value-gap: 4px;
@@ -376,7 +378,7 @@ figure {
 	overflow: hidden;
 	contain: content;
 
-	&:has(.subplot.layout.h) {
+	&:has(.layout.h) {
 		width: 1000px;
 	}
 
@@ -388,216 +390,6 @@ figure {
 
 	& .subplot {
 		flex: 1;
-	}
-
-	& .subplot.layout {
-		display: flex;
-		flex-flow: column;
-		container: chart-layout / inline-size;
-		contain: inline-size layout paint style;
-
-		& > div {
-			flex: 1;
-			display: flex;
-			flex-flow: column;
-			gap: 64px;
-			align-content: center;
-			justify-content: center;
-
-			& > section {
-				flex: 1;
-				display: flex;
-				flex-flow: column;
-				width: 100%;
-			}
-		}
-
-		&.h > div {
-			flex-flow: row;
-
-			@container chart-layout (width < 600px) {
-				flex-flow: column;
-			}
-		}
-	}
-
-	& .subplot.cartesian {
-		display: grid;
-		padding: var(--arrow-space) var(--arrow-space) 0 0;
-		grid-template-columns: max-content 1fr;
-		grid-template-rows: 1fr max-content;
-		overflow: hidden;
-		contain: inline-size layout paint style;
-
-		& .axis {
-			position: relative;
-			display: flex;
-
-			& .line {
-				position: absolute;
-				background: var(--col-text);
-
-				&::after {
-					content: '';
-					position: absolute;
-					border: 0 solid transparent;
-				}
-			}
-
-			& .label {
-				text-align: center;
-			}
-
-			& .values {
-				display: flex;
-				position: relative;
-				container: chart-axis / inline-size;
-				contain: inline-size layout style;
-
-				& > div {
-					--sn: var(--n3);
-					position: relative;
-					font-size: 0.6em;
-					opacity: 0.7;
-					overflow: hidden;
-
-					&.l0 {
-						--sn: var(--n0);
-						font-size: 0.9em;
-						opacity: 1;
-					}
-
-					&.l1 {
-						--sn: var(--n1);
-						font-size: 0.8em;
-						opacity: 0.9;
-					}
-
-					&.l2 {
-						--sn: var(--n2);
-						font-size: 0.7em;
-						opacity: 0.8;
-					}
-
-					&::before {
-						content: '';
-						position: absolute;
-						background: var(--col-text);
-					}
-				}
-			}
-		}
-
-		& .axis.x {
-			grid-area: 2 / 2 / 3 / 3;
-			flex-direction: column-reverse;
-			min-height: var(--arrow-space);
-
-			& .line {
-				top: calc(var(--axis-width) * -0.5);
-				left: calc(var(--axis-width) * -0.5);
-				width: calc(var(--axis-width) + 100% + var(--axis-overshoot));
-				height: var(--axis-width);
-
-				&::after {
-					top: calc(var(--axis-width) * 0.5 - var(--arrow-rad));
-					left: 100%;
-					border-width: var(--arrow-rad) 0 var(--arrow-rad) var(--arrow-length);
-					border-left-color: var(--col-text);
-				}
-			}
-
-			& .label {
-				padding-top: var(--axis-label-gap);
-			}
-
-			& .values {
-				& > div {
-					--size: calc(100cqw / var(--sn));
-					--vissize: calc(
-						sign(sign(calc(var(--size) - var(--axis-value-min-w))) + 1) *
-							var(--size)
-					);
-					width: var(--vissize);
-					margin-inline: calc(var(--vissize) * -0.5);
-					left: calc(var(--pos) * 100%);
-					padding-top: calc(var(--axis-value-gap) + var(--notch-size));
-					text-align: center;
-					pointer-events: none;
-
-					& span {
-						pointer-events: all;
-					}
-
-					&::before {
-						left: calc(50% - 0.5px);
-						top: 0;
-						width: 1px;
-						height: var(--notch-size);
-					}
-				}
-			}
-		}
-
-		& .axis.y {
-			grid-area: 1 / 1 / 2 / 2;
-			writing-mode: sideways-lr;
-			flex-direction: column;
-			min-width: var(--arrow-space);
-
-			& .line {
-				bottom: 0;
-				right: calc(var(--axis-width) * -0.5);
-				width: var(--axis-width);
-				height: calc(100% + var(--axis-overshoot));
-
-				&::after {
-					bottom: 100%;
-					left: calc(var(--axis-width) * 0.5 - var(--arrow-rad));
-					border-width: 0 var(--arrow-rad) var(--arrow-length);
-					border-bottom-color: var(--col-text);
-				}
-			}
-
-			& .label {
-				padding-right: var(--axis-label-gap);
-			}
-
-			& .values {
-				flex-direction: row;
-
-				& > div {
-					--vissize: calc(
-						sign(sign(calc(100cqh / var(--sn) - var(--axis-value-min-h))) + 1) *
-							1em
-					);
-					height: var(--vissize);
-					margin-inline: calc(var(--vissize) * -0.5);
-					bottom: calc(var(--pos) * 100%);
-					padding-right: calc(var(--axis-value-gap) + var(--notch-size));
-					display: grid;
-					align-items: end;
-
-					& span {
-						writing-mode: initial;
-						text-align: right;
-					}
-
-					&::before {
-						top: calc(50% - 0.5px);
-						right: 0;
-						height: 1px;
-						width: var(--notch-size);
-					}
-				}
-			}
-		}
-
-		& .view {
-			grid-area: 1 / 2 / 2 / 3;
-			align-self: stretch;
-			justify-self: stretch;
-		}
 	}
 
 	& .view {
@@ -637,7 +429,7 @@ figure {
 		}
 
 		& > .area {
-			opacity: 0.3;
+			opacity: calc(0.3 + var(--highlight) * 0.3 - var(--dim) * 0.2);
 			fill: var(--col);
 			fill-rule: nonzero;
 			mask: repeating-linear-gradient(
@@ -649,64 +441,384 @@ figure {
 					white 50%
 				)
 				calc(var(--pattern-x) * 10px) 0 / 10px 10px;
+			transition: opacity 0.2s ease;
 		}
 
-		& > .lines path {
-			stroke: var(--col);
-			stroke-width: 2px;
-			vector-effect: non-scaling-stroke;
+		& > .lines {
 			stroke-linejoin: round;
 			stroke-linecap: round;
+			path {
+				stroke: var(--col);
+				stroke-width: calc(2px + var(--highlight) * 2px);
+				opacity: calc(1 + (var(--highlight) - var(--dim)) * 0.6);
+				transition:
+					stroke-width 0.2s ease,
+					opacity 0.2s ease;
 
-			&.exclusive {
-				stroke-dasharray: 6px 10px;
+				&.exclusive {
+					stroke-dasharray: 6px 10px;
+				}
+			}
+
+			.ext {
+				stroke: transparent;
+				stroke-width: 12px;
 			}
 		}
 	}
 
+	& .key {
+		display: flex;
+		flex-flow: row wrap;
+		gap: 4px 8px;
+		list-style: none;
+		margin: 0;
+		padding: 8px;
+		background: var(--col-back);
+
+		li {
+			position: relative;
+			margin: 0;
+			padding: 4px 8px 2px calc(1em + 16px);
+			min-width: 6ch;
+			border-radius: 100px;
+			cursor: default;
+			box-shadow: 0 0 0 calc(var(--highlight) * 2px - 1px) var(--col-border);
+
+			&::before,
+			&::after {
+				content: '';
+				position: absolute;
+				top: 4px;
+				left: 8px;
+				width: 1em;
+				height: 0.4em;
+			}
+
+			&.area::before {
+				opacity: 0.5;
+				background: repeating-linear-gradient(
+						var(--pattern-r),
+						var(--col) 0%,
+						var(--col) 9%,
+						transparent 15%,
+						transparent 44%,
+						var(--col) 50%
+					)
+					0 0 / 6px 6px;
+			}
+
+			&.line::after {
+				border-bottom: 3px solid var(--col);
+			}
+		}
+	}
+}
+
+.subplot {
+	&.multi:has(.hover:hover) {
+		--dim: 1;
+	}
 	& .n1 {
 		--col: var(--col-chart-1);
+	}
+	&.multi:has(.hover.n1:hover) .n1 {
+		--highlight: 1;
 	}
 	& .n2 {
 		--col: var(--col-chart-2);
 		--pattern-r: 45deg;
 	}
+	&.multi:has(.hover.n2:hover) .n2 {
+		--highlight: 1;
+	}
 	& .n3 {
 		--col: var(--col-chart-3);
 		--pattern-x: 0.5;
+	}
+	&.multi:has(.hover.n3:hover) .n3 {
+		--highlight: 1;
 	}
 	& .n4 {
 		--col: var(--col-chart-4);
 		--pattern-r: 45deg;
 		--pattern-x: 0.5;
 	}
+	&.multi:has(.hover.n4:hover) .n4 {
+		--highlight: 1;
+	}
 	& .n5 {
 		--col: var(--col-chart-5);
 		--pattern-x: 0.25;
+	}
+	&.multi:has(.hover.n5:hover) .n5 {
+		--highlight: 1;
 	}
 	& .n6 {
 		--col: var(--col-chart-6);
 		--pattern-r: 45deg;
 		--pattern-x: 0.25;
 	}
+	&.multi:has(.hover.n6:hover) .n6 {
+		--highlight: 1;
+	}
 	& .n7 {
 		--col: var(--col-chart-7);
 		--pattern-x: 0.75;
+	}
+	&.multi:has(.hover.n7:hover) .n7 {
+		--highlight: 1;
 	}
 	& .n8 {
 		--col: var(--col-chart-8);
 		--pattern-r: 45deg;
 		--pattern-x: 0.75;
 	}
+	&.multi:has(.hover.n8:hover) .n8 {
+		--highlight: 1;
+	}
 	& .n9 {
 		--col: var(--col-chart-9);
 		--pattern-x: 0.125;
+	}
+	&.multi:has(.hover.n9:hover) .n9 {
+		--highlight: 1;
 	}
 	& .n10 {
 		--col: var(--col-chart-10);
 		--pattern-r: 45deg;
 		--pattern-x: 0.125;
 	}
+	&.multi:has(.hover.n10:hover) .n10 {
+		--highlight: 1;
+	}
+}
+
+.plot .layout {
+	display: flex;
+	flex-flow: column;
+	container: chart-layout / inline-size;
+	contain: inline-size layout paint style;
+
+	& > div {
+		flex: 1;
+		display: flex;
+		flex-flow: column;
+		gap: 64px;
+		align-content: center;
+		justify-content: center;
+
+		& > section {
+			flex: 1;
+			display: flex;
+			flex-flow: column;
+			width: 100%;
+		}
+	}
+
+	&.h > div {
+		flex-flow: row;
+
+		@container chart-layout (width < 600px) {
+			flex-flow: column;
+		}
+	}
+}
+
+.subplot.cartesian {
+	display: grid;
+	padding: 0;
+	grid-template-columns:
+		min-content
+		max-content 1fr minmax(var(--arrow-space), min-content);
+	grid-template-rows:
+		minmax(var(--arrow-space), min-content)
+		1fr max-content min-content;
+	overflow: hidden;
+	contain: inline-size layout paint style;
+
+	& .axis {
+		position: relative;
+		display: flex;
+
+		& .line {
+			position: absolute;
+			background: var(--col-text);
+
+			&::after {
+				content: '';
+				position: absolute;
+				border: 0 solid transparent;
+			}
+		}
+
+		& .label {
+			text-align: center;
+		}
+
+		& .values {
+			display: flex;
+			position: relative;
+			container: chart-axis / inline-size;
+			contain: inline-size layout style;
+
+			& > div {
+				--sn: var(--n3);
+				position: relative;
+				font-size: 0.6em;
+				opacity: 0.7;
+				overflow: hidden;
+
+				&.l0 {
+					--sn: var(--n0);
+					font-size: 0.9em;
+					opacity: 1;
+				}
+
+				&.l1 {
+					--sn: var(--n1);
+					font-size: 0.8em;
+					opacity: 0.9;
+				}
+
+				&.l2 {
+					--sn: var(--n2);
+					font-size: 0.7em;
+					opacity: 0.8;
+				}
+
+				&::before {
+					content: '';
+					position: absolute;
+					background: var(--col-text);
+				}
+			}
+		}
+	}
+
+	& .axis.x {
+		grid-area: 3 / 3 / 4 / 4;
+		flex-direction: column-reverse;
+		min-height: var(--arrow-space);
+
+		& .line {
+			top: calc(var(--axis-width) * -0.5);
+			left: calc(var(--axis-width) * -0.5);
+			width: calc(var(--axis-width) + 100% + var(--axis-overshoot));
+			height: var(--axis-width);
+
+			&::after {
+				top: calc(var(--axis-width) * 0.5 - var(--arrow-rad));
+				left: 100%;
+				border-width: var(--arrow-rad) 0 var(--arrow-rad) var(--arrow-length);
+				border-left-color: var(--col-text);
+			}
+		}
+
+		& .label {
+			padding-top: var(--axis-label-gap);
+		}
+
+		& .values {
+			& > div {
+				--size: calc(100cqw / var(--sn));
+				--vissize: calc(
+					sign(sign(calc(var(--size) - var(--axis-value-min-w))) + 1) *
+						var(--size)
+				);
+				width: var(--vissize);
+				margin-inline: calc(var(--vissize) * -0.5);
+				left: calc(var(--pos) * 100%);
+				padding-top: calc(var(--axis-value-gap) + var(--notch-size));
+				text-align: center;
+				pointer-events: none;
+
+				& span {
+					pointer-events: all;
+				}
+
+				&::before {
+					left: calc(50% - 0.5px);
+					top: 0;
+					width: 1px;
+					height: var(--notch-size);
+				}
+			}
+		}
+	}
+
+	& .axis.y {
+		grid-area: 2 / 2 / 3 / 3;
+		writing-mode: sideways-lr;
+		flex-direction: column;
+		min-width: var(--arrow-space);
+
+		& .line {
+			bottom: 0;
+			right: calc(var(--axis-width) * -0.5);
+			width: var(--axis-width);
+			height: calc(100% + var(--axis-overshoot));
+
+			&::after {
+				bottom: 100%;
+				left: calc(var(--axis-width) * 0.5 - var(--arrow-rad));
+				border-width: 0 var(--arrow-rad) var(--arrow-length);
+				border-bottom-color: var(--col-text);
+			}
+		}
+
+		& .label {
+			padding-right: var(--axis-label-gap);
+		}
+
+		& .values {
+			flex-direction: row;
+
+			& > div {
+				--vissize: calc(
+					sign(sign(calc(100cqh / var(--sn) - var(--axis-value-min-h))) + 1) *
+						1em
+				);
+				height: var(--vissize);
+				margin-inline: calc(var(--vissize) * -0.5);
+				bottom: calc(var(--pos) * 100%);
+				padding-right: calc(var(--axis-value-gap) + var(--notch-size));
+				display: grid;
+				align-items: end;
+
+				& span {
+					writing-mode: initial;
+					text-align: right;
+				}
+
+				&::before {
+					top: calc(50% - 0.5px);
+					right: 0;
+					height: 1px;
+					width: var(--notch-size);
+				}
+			}
+		}
+	}
+
+	& .view {
+		grid-area: 2 / 3 / 3 / 4;
+		align-self: stretch;
+		justify-self: stretch;
+	}
+
+	& > .key {
+		grid-area: 1 / 3 / 2 / 4;
+	}
+}
+
+.cartesian.chart-var-key-inside .key {
+	grid-area: 2 / 3 / 3 / 4;
+	align-self: start;
+	justify-self: end;
+	position: absolute;
+	margin: 8px;
+	border-radius: 20px;
 }
 
 .hscroll {

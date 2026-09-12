@@ -22,7 +22,7 @@ function renderSubplot(context, d, headerID) {
 }
 
 function renderLayout(context, { direction, parts }) {
-	return `<div class="subplot layout ${direction === 'vertical' ? 'v' : 'h'}"><div>${parts
+	return `<div class="layout ${direction === 'vertical' ? 'v' : 'h'}"><div>${parts
 		.map((part) => {
 			let subHeaderID = null;
 			if (part.title) {
