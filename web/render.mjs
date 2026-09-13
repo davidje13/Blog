@@ -178,7 +178,7 @@ function renderLinkItem(post, { skipTag = null } = {}) {
 		'<div class="tags">',
 		...tags.map(
 			(t) =>
-				`<a class="tag" href="${escapeHTML(`/tagged/${encodeURIComponent(t)}`)}">${escapeHTML(t)}</a>`,
+				`<a class="tag" href="${escapeHTML(`/tagged/${encodeURIComponent(t)}/`)}">${escapeHTML(t)}</a>`,
 		),
 		'</div>',
 		'</li>',
@@ -299,7 +299,7 @@ async function renderPost(
 			'<nav class="tags">',
 			...tags.map(
 				(t) =>
-					`<a class="tag" href="${escapeHTML(`/tagged/${encodeURIComponent(t)}`)}">${escapeHTML(t)}</a>`,
+					`<a class="tag" href="${escapeHTML(`/tagged/${encodeURIComponent(t)}/`)}">${escapeHTML(t)}</a>`,
 			),
 			'<a class="tag" href="/">all posts</a>',
 			'</nav>',
