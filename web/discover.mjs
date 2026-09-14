@@ -11,6 +11,7 @@ export async function discoverAllPaths() {
 		{ path: ['robots.txt'], type: 'meta' },
 		{ path: ['posts.rss'], type: 'meta' },
 		{ path: ['sitemap.xml'], type: 'meta' },
+		{ path: ['tagged', 'index.html'], type: 'page' },
 	];
 
 	for (const item of await readdir(join(SOURCE_DIR, 'posts'), {

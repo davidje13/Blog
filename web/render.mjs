@@ -41,6 +41,11 @@ export async function renderPage(env, path, allPaths = null) {
 	}
 
 	if (path.length === 2 && path[1] === 'index.html') {
+		if (path[0] === 'tagged') {
+			return htmlFrame(
+				renderTagList(env, allPaths ?? (await discoverAllPaths())),
+			);
+		}
 		const page = await renderPost(env, path[0], allPaths, {
 			header: true,
 			footer: true,
@@ -187,13 +192,13 @@ function renderLinkItem(post, { skipTag = null } = {}) {
 
 async function renderRoot(env, allPaths) {
 	const posts = await getPostsAndMetadata(allPaths);
-	let html = `<header><h1>${escapeHTML(metadata.title)}</h1></header><ul class="posts">`;
+	let html = `<header><h1>${escapeHTML(metadata.title)}</h1></header><section><ul class="posts">`;
 	for (const p of posts) {
 		html += renderLinkItem(p);
 	}
 	html += '</ul>';
 	html +=
-		'<p><a href="/posts.rss" rel="alternate" target="_blank" class="feed">RSS Feed</a></p>';
+		'<p><a href="/posts.rss" rel="alternate" target="_blank" class="feed">RSS Feed</a></p></section>';
 	return {
 		title: metadata.title,
 		html,
@@ -206,6 +211,19 @@ async function renderRoot(env, allPaths) {
 			`<meta name="description" property="og:description" content="${escapeHTML(metadata.description)}" />`,
 		],
 	};
+}
+
+function renderTagList(_env, allPaths) {
+	let html =
+		'<header><h1>Tags</h1></header><section><div class="tags"><a class="tag" href="/">all posts</a>';
+	for (const page of allPaths) {
+		if (page.type !== 'tag') {
+			continue;
+		}
+		html += `<a class="tag" href="${escapeHTML(toPath(page.path))}">${escapeHTML(page.path[1])}</a>`;
+	}
+	html += '</div></section>';
+	return { title: `Tags \u2014 ${metadata.title}`, html, headContent: [] };
 }
 
 async function renderTag(env, name, allPaths) {
@@ -227,7 +245,7 @@ async function renderTag(env, name, allPaths) {
 	for (const p of taggedPosts) {
 		html += renderLinkItem(p, { skipTag: name });
 	}
-	html += '</ul></section>';
+	html += '</ul><p><a href="/">All posts</a></p></section>';
 	return {
 		title: `Tagged: ${name} \u2014 ${metadata.title}`,
 		html,
