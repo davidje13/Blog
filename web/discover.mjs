@@ -17,7 +17,7 @@ export async function discoverAllPaths() {
 		withFileTypes: true,
 	})) {
 		if (!item.isDirectory()) {
-			console.warn(`unexpected file: ${item.name}`);
+			console.warn(`unexpected file: ${join(SOURCE_DIR, 'posts', item.name)}`);
 		} else if (
 			!VALID_SLUG.test(item.name) ||
 			['tagged', 'inline'].includes(item.name)
