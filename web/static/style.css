@@ -1,6 +1,8 @@
 html {
 	--col-page: #fbfbf9;
 	--col-back: #ffffff;
+	--col-quote-back: #f0f0ea;
+	--col-quote-back-2: rgba(0, 0, 0, 0.02);
 	--col-text: #444444;
 	--col-link: #4466aa;
 	--col-link-hover: #6699bb;
@@ -33,6 +35,8 @@ html {
 	@media (prefers-color-scheme: dark) {
 		--col-page: #111111;
 		--col-back: #000000;
+		--col-quote-back: #222220;
+		--col-quote-back-2: rgba(255, 255, 200, 0.03);
 		--col-text: #dddddd;
 		--col-link: #4499ee;
 		--col-link-hover: #aaccee;
@@ -66,6 +70,8 @@ html {
 	@media (prefers-contrast: more) {
 		--col-page: Canvas;
 		--col-back: Canvas;
+		--col-quote-back: Canvas;
+		--col-quote-back-2: transparent;
 		--col-text: CanvasText;
 		--col-link: LinkText;
 		--col-link-hover: LinkText;
@@ -303,6 +309,18 @@ a:hover {
 	text-decoration: none;
 }
 
+code a:link,
+code a:visited {
+	color: inherit;
+	text-decoration: underline dotted 1px;
+}
+
+code a:active,
+code a:hover {
+	color: inherit;
+	text-decoration: underline solid 1px;
+}
+
 .tags {
 	display: flex;
 	flex-flow: row wrap;
@@ -404,7 +422,6 @@ figure {
 				stroke: var(--col-border);
 				stroke-width: 1;
 				vector-effect: non-scaling-stroke;
-				opacity: 0.1;
 
 				&.l0 {
 					opacity: 1;
@@ -665,8 +682,6 @@ figure {
 			& > div {
 				--sn: var(--n3);
 				position: relative;
-				font-size: 0.6em;
-				opacity: 0.7;
 				overflow: hidden;
 
 				&.l0 {
@@ -978,9 +993,35 @@ table {
 }
 
 blockquote {
+	border: 1px solid transparent; /* for high contrast mode */
 	border-left: 2px solid var(--col-border);
-	padding-left: 16px;
+	background: var(--col-quote-back);
+	padding: 15px 15px 15px 24px;
 	margin: 16px 0 16px 16px;
+
+	& > :first-child {
+		margin-top: 0;
+	}
+
+	& > :last-child {
+		margin-bottom: 0;
+	}
+
+	& > pre {
+		margin: 0;
+		padding: 16px 0;
+		background: transparent;
+		border: none;
+
+		&:only-child {
+			margin: -15px -15px -15px -24px;
+			padding: 16px 16px 16px 24px;
+		}
+	}
+
+	& blockquote {
+		background: var(--col-quote-back-2);
+	}
 }
 
 .fancy {

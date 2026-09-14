@@ -84,6 +84,8 @@ set -e
 FOO=bar
 echo hello > /dev/null
 echo "foo is $FOO or ${FOO:-fallback}"
+
+# random-command does something
 random-command blah
 A=b C=d E="f g h" I="j" K=l\ m random-command arg
 echo hi | A=B random-command
@@ -104,6 +106,8 @@ cat <<"EOF" | sudo tee file.txt
 document $FOO
 EOF
 ```
+
+Link in code style: [`random-command`].
 
 ```sequence-diagram
 Foo is red
@@ -245,6 +249,8 @@ Some more complicated graphs:
 ```
 
 *[WYSIWYG]: What You See Is What You Get
+
+[`random-command`]: #about-random-command
 
 [^note]: Numbered footnote content
 

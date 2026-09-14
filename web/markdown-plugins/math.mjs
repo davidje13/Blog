@@ -5,6 +5,8 @@ function wrappedMath(content, block) {
 		.replaceAll(/(<(mtd|mrow)\b[^>]*?) style="/g, '$1 class="msty')
 		.replaceAll(/(?<=<[^>]+ class="msty[^"]*)text-align:left;?/g, ' l')
 		.replaceAll(/(?<=<[^>]+ class="msty[^"]*)text-align:right;?/g, ' r')
+		.replaceAll(/(?<=<[^>]+ class="msty[^"]*)justify-items:start;?/g, ' l')
+		.replaceAll(/(?<=<[^>]+ class="msty[^"]*)justify-items:end;?/g, ' r')
 		.replaceAll(/(?<=<[^>]+ class="msty[^"]*)padding-left:0;?/g, ' pl')
 		.replaceAll(/(?<=<[^>]+ class="msty[^"]*)padding-right:0;?/g, ' pr')
 		.replaceAll(

@@ -470,7 +470,7 @@ highlightjs.registerLanguage('bash', (hljs) => {
 	};
 });
 
-export const MARKED_HIGHLIGHT = {
+export const MARKED_HIGHLIGHT = (baseURL) => ({
 	walkTokens(token) {
 		if (token.type !== 'code') {
 			return;
@@ -481,15 +481,49 @@ export const MARKED_HIGHLIGHT = {
 
 		const language = highlightjs.getLanguage(lang) ? lang : 'plaintext';
 		const code = highlightjs.highlight(token.text, { language }).value;
+		let formatted;
 		if (typeof code === 'string' && code !== token.text) {
-			token.formatted = code;
+			formatted = code;
+		} else {
+			formatted = escapeHTML(token.text);
 		}
+		if (!formatted.endsWith('\n')) {
+			formatted += '\n';
+		}
+
+		// linkify any definitions which are enclosed in backticks
+		for (const [k, v] of Object.entries(
+			this.defaults.tokenizer.lexer.tokens.links,
+		)) {
+			if (k.length > 2 && k[0] === '`' && k.endsWith('`')) {
+				const search = new RegExp(
+					`((?:^|(?<!class="(?:string|comment|meta)")>)[^<]*)\\b(${RegExp.escape(k.substring(1, k.length - 1))})\\b(?![\._])`,
+					'g',
+				);
+				let link = null;
+				formatted = formatted.replaceAll(search, (_, pre, label) => {
+					if (!link) {
+						const href = baseURL
+							? URL.parse(v.href, baseURL).toString()
+							: v.href;
+						link = ` href="${escapeHTML(href)}"`;
+						if (!href.startsWith('#')) {
+							link += ' target="_blank" rel="external noopener"';
+						}
+						if (v.title) {
+							link += ` title="${escapeHTML(v.title)}"`;
+						}
+					}
+					return `${pre}<a${link}>${label}</a>`;
+				});
+			}
+		}
+
+		token.formatted = formatted;
 	},
 	renderer: {
-		code(token) {
-			const lang = token.primaryLanguage;
-			const code = token.formatted ?? escapeHTML(token.text);
-			return `<pre><code role="text" class="${escapeHTML('highlight' + (lang ? ` lang-${lang}` : ''))}">${code}${code.endsWith('\n') ? '' : '\n'}</code></pre>`;
+		code({ primaryLanguage: lang, formatted }) {
+			return `<pre><code role="text" class="${escapeHTML('highlight' + (lang ? ` lang-${lang}` : ''))}">${formatted}</code></pre>`;
 		},
 	},
-};
+});

@@ -15,6 +15,13 @@ export function renderCartesian(
 
 	const svgCommon = `xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="${rx0} ${-ry1} ${rx1 - rx0} ${ry1 - ry0}" preserveAspectRatio="none"`;
 
+	if (xAxis.grid?.length > 3) {
+		throw new Error('only 3 levels of grid supported');
+	}
+	if (yAxis.grid?.length > 3) {
+		throw new Error('only 3 levels of grid supported');
+	}
+
 	let grids = [];
 	xAxis.grid?.forEach((step, i) => {
 		const dp = countDP(step);

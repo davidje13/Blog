@@ -14,10 +14,11 @@ tags:
 
 # HTTPS with NGINX
 
-NGINX makes setting up HTTPS very easy (especially when combined with
-`certbot`), but some optional features can be a bit trickier to set up. Here
-we'll focus on hosting multiple sites with different certificates, and setting
-up TLS Session Resumption.
+[NGINX](https://nginx.org/) makes setting up HTTPS very easy (especially when
+combined with [`certbot`]), but some optional features can be a bit trickier to
+set up. Here we'll focus on hosting multiple sites with different certificates,
+blocking requests for unknown or unspecified hosts, and setting up TLS Session
+Resumption.
 
 ## The basics
 
@@ -38,9 +39,10 @@ steps:
    sudo chown root:root /etc/nginx/dhparam.pem;
    ```
 
-2. Configure nginx with a set of secure ciphers and the generated parameters (in
-   the `http` block, _not_ inside individual `server` blocks; we'll see why
-   below). This is typically done by adding a new file to `/etc/nginx/conf.d/`:
+2. Configure nginx with a set of secure ciphers and the generated parameters
+   (put this config in the `http` block, _not_ inside individual `server`
+   blocks; we'll see why below). This is typically done by adding a new file to
+   `/etc/nginx/conf.d/`:
 
    ```nginxconf
    ssl_protocols TLSv1.2 TLSv1.3;
@@ -180,8 +182,8 @@ TLS Session Resumption saves some round-trips and processing time when clients
 reconnect to download new content. Without Session Resumption, the client would
 need to perform the full TLS handshake again (2 round-trips before requesting
 any data), but with Session Resumption, the client can request the new data
-after just a single round trip (or even 0 round trips if using `ssl_early_data`,
-but beware of the potential for "replay attacks" with that).
+after just a single round trip (or even 0 round trips if using
+[`ssl_early_data`], but beware of the potential for "replay attacks" with that).
 
 There are 2 implementations of TLS Session Resumption:
 
@@ -253,9 +255,8 @@ but Session Resumption will simply not work whenever clients reach a different
 server when resuming their connection (falling back to a full handshake).
 
 To share keys, they must be generated externally and passed in to nginx via
-[`ssl_session_ticket_key`](https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_session_ticket_key).
-Then you can use whatever means you prefer for sharing the key files between
-servers.
+[`ssl_session_ticket_key`]. Then you can use whatever means you prefer for
+sharing the key files between servers.
 
 The keys can be generated and cycled with:
 
@@ -318,7 +319,7 @@ you are not sharing the keys between them correctly.
 This probably means the keys are not cycling at all, not being reloaded by
 nginx, or the `ssl_session_timeout` is set too high.
 
-## Multiple sites
+## Blocking unknown and unspecified hosts
 
 When working with multiple sites served by a single nginx instance, it's often
 desirable to _block_ access to the raw IP address (by default, nginx will serve
@@ -383,7 +384,7 @@ then get re-assigned to the correct site.
 
 ## Bonus HTTPS configuration
 
-There are some more (simpler) HTTPS features which can also be enabled:
+There are some simpler HTTPS features which can also be enabled:
 
 - [`Strict-Transport-Security`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Strict-Transport-Security)
   can tell browsers to only ever connect to your site using HTTPS, even if a
@@ -413,13 +414,12 @@ There are some more (simpler) HTTPS features which can also be enabled:
   (after adding this header with `preload`, you can manually submit the site to
   the [HSTS Preload List](https://hstspreload.org/)).
 
-- [`ssl_early_data`](https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_early_data)
-  allows 0-round-trip requests from returning clients using TLS 1.3, improving
-  latency. This comes at a cost of introducing a potential vulnerability: replay
-  attacks. See the nginx documentation for full details on how you can mitigate
-  this in your application. If you know for sure that your application is not
-  vulnerable to replay attacks (e.g. if your application serves read-only
-  content), you can safely enable this option.
+- [`ssl_early_data`] allows 0-round-trip requests from returning clients using
+  TLS 1.3, improving latency. This comes at a cost of introducing a potential
+  vulnerability: replay attacks. See the nginx documentation for full details on
+  how you can mitigate this in your application. If you know for sure that your
+  application is not vulnerable to replay attacks (e.g. if your application
+  serves read-only content), you can safely enable this option.
 
 ## More information / further reading
 
@@ -431,9 +431,62 @@ I found the following sources useful while figuring this stuff out:
 - [OneUptime guide on setting up and monitoring Session Resumption](https://oneuptime.com/blog/post/2026-03-20-tls-session-resumption-faster-https/view)
 - [Compass Security explanation of interaction between TLS Session Resumption and Perfect Forward Secrecy](https://blog.compass-security.com/2017/06/about-tls-perfect-forward-secrecy-and-session-resumption/)
   (note: the advice at the end of this article is out-of-date)
-- [certbot documentation](https://eff-certbot.readthedocs.io/en/stable/man/certbot.html)
-- [`openssl dhparam` manpage](https://manpages.debian.org/trixie/openssl/openssl-dhparam.1ssl.en.html)
-- [`openssl rand` manpage](https://manpages.debian.org/trixie/openssl/openssl-rand.1ssl.en.html)
+- [certbot documentation][`certbot`]
+- [`openssl dhparam` manpage][`dhparam`]
+- [`openssl rand` manpage][`rand`]
+
+[`certbot`]: https://eff-certbot.readthedocs.io/en/stable/man/certbot.html
+[`dhparam`]:
+  https://manpages.debian.org/trixie/openssl/openssl-dhparam.1ssl.en.html
+  'Debian manpage'
+[`rand`]:
+  https://manpages.debian.org/trixie/openssl/openssl-rand.1ssl.en.html
+  'Debian manpage'
+[`s_client`]:
+  https://manpages.debian.org/trixie/openssl/openssl-s_client.1ssl.en.html
+  'Debian manpage'
+[`ssl_protocols`]:
+  https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_protocols
+  'NGINX reference'
+[`ssl_prefer_server_ciphers`]:
+  https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_prefer_server_ciphers
+  'NGINX reference'
+[`ssl_ciphers`]:
+  https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_ciphers
+  'NGINX reference'
+[`ssl_dhparam`]:
+  https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_dhparam
+  'NGINX reference'
+[`ssl_certificate`]:
+  https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_certificate
+  'NGINX reference'
+[`ssl_certificate_key`]:
+  https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_certificate_key
+  'NGINX reference'
+[`ssl_early_data`]:
+  https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_early_data
+  'NGINX reference'
+[`ssl_session_cache`]:
+  https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_session_cache
+  'NGINX reference'
+[`ssl_session_timeout`]:
+  https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_session_timeout
+  'NGINX reference'
+[`ssl_session_tickets`]:
+  https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_session_tickets
+  'NGINX reference'
+[`ssl_session_ticket_key`]:
+  https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_session_ticket_key
+  'NGINX reference'
+[`ssl_reject_handshake`]:
+  https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_reject_handshake
+  'NGINX reference'
+[`lingering_close`]:
+  https://nginx.org/en/docs/http/ngx_http_core_module.html#lingering_close
+  'NGINX reference'
+[`return`]:
+  https://nginx.org/en/docs/http/ngx_http_rewrite_module.html#return
+  'NGINX reference'
 
 [^forward-secrecy]:
     Forward Secrecy is the idea that if an attacker passively records encrypted

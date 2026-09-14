@@ -13,7 +13,7 @@ tags:
 
 # What Makes a System User?
 
-When creating a user with `useradd` on Linux (specifically Debian and
+When creating a user with [`useradd`] on Linux (specifically Debian and
 Debian-derived distributions like Ubuntu), one of the available flags is
 `--system`. This flag is explained as:
 
@@ -21,15 +21,15 @@ Debian-derived distributions like Ubuntu), one of the available flags is
 >
 > System users will be created with no aging information in `/etc/shadow`, and
 > their numeric identifiers are choosen in the **SYS_UID_MIN**-**SYS_UID_MAX**
-> range, defined in `/etc/login.defs`, instead of **UID_MIN**-**UID_MAX** (and
+> range, defined in [`/etc/login.defs`], instead of **UID_MIN**-**UID_MAX** (and
 > their **GID** counterparts for the creation of groups).
 >
 > Note that `useradd` will not create a home directory for such a user,
-> regardless of the default setting in `/etc/login.defs` (**CREATE_HOME**). You
-> have to specify the `-m` options if you want a home directory for a system
+> regardless of the default setting in [`/etc/login.defs`] (**CREATE_HOME**).
+> You have to specify the `-m` options if you want a home directory for a system
 > account to be created.
 >
-> Note that this option will not update `/etc/subuid` and `/etc/subgid`. You
+> Note that this option will not update [`/etc/subuid`] and [`/etc/subgid`]. You
 > have to specify the `-F` options if you want to update the files for a system
 > account to be created.
 
@@ -110,7 +110,7 @@ distributions too, but some paths and default values may be different.
    sudo rm -r /home/<user-name>
    ```
 
-   To avoid spurious warnings from `pwck`, you can mark the user as
+   To avoid spurious warnings from [`pwck`], you can mark the user as
    intentionally not having a home directory with:
 
    ```sh
@@ -217,7 +217,7 @@ Sometimes it is necessary for a system user to have a home directory, but most
 of the time it is not needed. The default behaviour of `useradd` is to mark the
 user as having a regular home directory (`/home/<user-name>`), but not create
 it. This is fine, but will trigger warnings with some linting tools, for example
-`pwck` prints:
+[`pwck`] prints:
 
 > ```text
 > user '<user-name>': directory '/home/<user-name>' does not exist
@@ -240,13 +240,34 @@ it will fail.
 ## More information / further reading
 
 - [Wikipedia page on User IDs](https://en.wikipedia.org/wiki/User_identifier)
-- Debian manpages for
-  [`useradd`](https://manpages.debian.org/trixie/passwd/useradd.8.en.html),
-  [`usermod`](https://manpages.debian.org/trixie/passwd/usermod.8.en.html),
-  [`groupmod`](https://manpages.debian.org/trixie/passwd/groupmod.8.en.html),
-  [`chage`](https://manpages.debian.org/trixie/passwd/chage.1.en.html),
-  [`/etc/subuid`](https://manpages.debian.org/trixie/passwd/subuid.5.en.html),
-  [`/etc/subgid`](https://manpages.debian.org/trixie/passwd/subgid.5.en.html),
-  [`/etc/login.defs`](https://manpages.debian.org/trixie/login.defs/login.defs.5.en.html),
-  [`pwck`](https://manpages.debian.org/trixie/passwd/pwck.8.en.html),
-  [`journalctl`](https://manpages.debian.org/trixie/systemd/journalctl.1.en.html)
+- Debian manpages for [`useradd`], [`usermod`], [`groupmod`], [`chage`],
+  [`/etc/subuid`], [`/etc/subgid`], [`/etc/login.defs`], [`pwck`],
+  [`journalctl`]
+
+[`useradd`]:
+  https://manpages.debian.org/trixie/passwd/useradd.8.en.html
+  'Debian manpage'
+[`usermod`]:
+  https://manpages.debian.org/trixie/passwd/usermod.8.en.html
+  'Debian manpage'
+[`groupmod`]:
+  https://manpages.debian.org/trixie/passwd/groupmod.8.en.html
+  'Debian manpage'
+[`chage`]:
+  https://manpages.debian.org/trixie/passwd/chage.1.en.html
+  'Debian manpage'
+[`/etc/subuid`]:
+  https://manpages.debian.org/trixie/passwd/subuid.5.en.html
+  'Debian manpage'
+[`/etc/subgid`]:
+  https://manpages.debian.org/trixie/passwd/subgid.5.en.html
+  'Debian manpage'
+[`/etc/login.defs`]:
+  https://manpages.debian.org/trixie/login.defs/login.defs.5.en.html
+  'Debian manpage'
+[`pwck`]:
+  https://manpages.debian.org/trixie/passwd/pwck.8.en.html
+  'Debian manpage'
+[`journalctl`]:
+  https://manpages.debian.org/trixie/systemd/journalctl.1.en.html
+  'Debian manpage'
