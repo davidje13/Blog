@@ -4,7 +4,7 @@ import { MARKED_EXTERNAL_LINK } from './markdown-plugins/externalLink.mjs';
 import { MARKED_FOOTNOTE } from './markdown-plugins/footnote.mjs';
 import { MARKED_SMART_QUOTES } from './markdown-plugins/smartQuotes.mjs';
 import { MARKED_HEADING_IDS } from './markdown-plugins/headingIds.mjs';
-import { MARKED_SUP } from './markdown-plugins/sup.mjs';
+import { MARKED_SUPSUB } from './markdown-plugins/supsub.mjs';
 import { MARKED_ABSOLUTE_PATHS } from './markdown-plugins/absolutePaths.mjs';
 import { MARKED_ABBR } from './markdown-plugins/abbr.mjs';
 import { MARKED_QR } from './markdown-plugins/qr.mjs';
@@ -33,7 +33,7 @@ export const makeMarkdownRenderer = ({
 		MARKED_ABBR(),
 		MARKED_SMART_QUOTES(),
 		MARKED_HEADING_IDS(absolutePathsBase),
-		MARKED_SUP,
+		MARKED_SUPSUB,
 		MARKED_FANCY,
 		MARKED_QR,
 		MARKED_IMAGE_CLASS,

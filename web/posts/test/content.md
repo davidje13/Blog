@@ -33,7 +33,15 @@ more[^***], dagger[^dagger] more[^dagger2], and section[^section].
 1st, 2nd, 3rd, 4th, 5th, ..., 10th, 11th, 15th, 20th, 21st, 25th, 30th, 100th,
 101st, etc.
 
-Text with ^^superscript^^.
+<!-- prettier-ignore-start -->
+<!-- waiting on release of https://github.com/prettier/prettier/pull/19739 -->
+Text with ^^superscript^^ ~subscript~ ~~strikeout~~. ^^superscript^^~~strikeout~~. \^\^not superscript\^\^ \~not subscript\~ \~\~not strikeout\~\~. ~sub~~strike~~ ~ ^^sup~~strike~~^^. ^^superscript \^^ still superscript\\^^. ~subscript \~ still subscript\\~.
+
+Chemical formulae: H~2~O, CO~2~, C~6~H~5~---COOH.
+
+Generic~subscript~; both^^super^^~and sub~; both~sub~^^and super^^. ^^16^^O^^2+^^~2~
+
+<!-- prettier-ignore-end -->
 
 > Blockquote
 >

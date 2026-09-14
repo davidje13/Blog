@@ -114,6 +114,8 @@ html {
 			--col-chart-10: #88ffcc;
 		}
 	}
+
+	--supsub-sz: 0.8;
 }
 
 html,
@@ -256,18 +258,42 @@ p {
 	text-align: justify;
 }
 
-sup {
-	/* use custom vertical alignment to avoid changing the line height */
-	vertical-align: baseline;
-	position: relative;
-	top: -0.5em;
-}
-
+sup,
 sub {
 	/* use custom vertical alignment to avoid changing the line height */
 	vertical-align: baseline;
 	position: relative;
-	top: 0.5em;
+	font-size: calc(1em * var(--supsub-sz));
+}
+
+sup {
+	top: calc(-0.5em / var(--supsub-sz));
+}
+
+sub {
+	top: calc(0.4em / var(--supsub-sz));
+}
+
+.supsub {
+	display: inline-grid;
+	grid-template-rows: 1fr 1fr;
+	vertical-align: baseline;
+	position: relative;
+	top: -0.5em;
+	height: calc(0.5em + 0.4em + 1em * var(--supsub-sz));
+	margin-bottom: calc(1em - (0.5em + 0.4em + 1em * var(--supsub-sz)));
+	line-height: 1;
+
+	& > sup {
+		grid-row: 1;
+		align-self: start;
+		top: 0;
+	}
+	& > sub {
+		grid-row: 2;
+		align-self: end;
+		top: 0;
+	}
 }
 
 hr {
