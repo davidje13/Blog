@@ -1,3 +1,5 @@
+import { marked } from 'marked';
+
 export const MARKED_SMART_QUOTES = () => {
 	let previous = '';
 
@@ -18,7 +20,7 @@ export const MARKED_SMART_QUOTES = () => {
 						token.text = token.text
 							.replaceAll(/(?<!-)---(?!-)/g, '\u2014') // em-dash
 							.replaceAll(/(?<!-)--(?!-)/g, '\u2013') // en-dash
-							.replaceAll(/(?<!\.)\.\.\.(?!\.)/g, '\u2026'); // ellipsis;
+							.replaceAll(/(?<!\.)\.\.\.(?!\.)/g, '\u2026'); // ellipsis
 						previous = token.text[token.text.length - 1];
 					}
 					break;
@@ -46,6 +48,16 @@ export const MARKED_SMART_QUOTES = () => {
 						previous = 'x';
 					}
 			}
+		},
+		renderer: {
+			text(token) {
+				return marked.Renderer.prototype.text
+					.call(this, token)
+					.replaceAll(/1st\b/g, '1<sup>st</sup>') // ordinals
+					.replaceAll(/2nd\b/g, '2<sup>nd</sup>')
+					.replaceAll(/3rd\b/g, '3<sup>rd</sup>')
+					.replaceAll(/(\d)th\b/g, '$1<sup>th</sup>');
+			},
 		},
 	};
 };

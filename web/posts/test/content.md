@@ -30,6 +30,9 @@ Wide tables
 Footnotes with: number[^note] more[^another-note], asterisk[^*] more[^**]
 more[^***], dagger[^dagger] more[^dagger2], and section[^section].
 
+1st, 2nd, 3rd, 4th, 5th, ..., 10th, 11th, 15th, 20th, 21st, 25th, 30th, 100th,
+101st, etc.
+
 Text with ^^superscript^^.
 
 > Blockquote
