@@ -6,7 +6,7 @@ description:
   certificates, block requests for unknown hosts, and still support TLS Session
   Resumption.'
 created: 2026-08-25
-modified: 2026-08-29
+modified: 2026-09-15
 tags:
   - security
   - web
@@ -29,8 +29,8 @@ steps:
    [Diffie-Hellman key exchanges](https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange).
    Using Diffie-Hellman for the initial key exchange means that the
    per-connection encryption keys will remain secret, even if an attacker
-   compromises the certificate's private key (this is called Perfect Forward
-   Secrecy):
+   records the network traffic and later compromises the certificate's private
+   key (this is called Perfect Forward Secrecy):
 
    ```sh
    openssl dhparam -out dhparam.pem 2048;
@@ -72,6 +72,8 @@ steps:
      }
 
      location /.well-known/acme-challenge/ {
+       # this block can be empty; it's more specific than
+       # '/' above, so takes priority (avoiding the redirect)
      }
    }
    ```
@@ -311,13 +313,44 @@ change at intervals of `ssl_session_timeout`.
 
 #### The key changes with every request
 
-This probably means you are using a load-balanced cluster of nginx servers and
-you are not sharing the keys between them correctly.
+This probably means you are not sharing the keys between servers / workers
+correctly, or the `ssl_session_timeout` is set too low:
+
+- Ensure you have set the `ssl_session_cache` to `shared`;
+- Check the units of your `ssl_session_timeout` value, and note that values
+  without a unit are assumed to be in seconds;
+- If you are load-balancing between multiple servers, check your code for
+  distributing keys between the servers.
 
 #### The key never changes
 
 This probably means the keys are not cycling at all, not being reloaded by
-nginx, or the `ssl_session_timeout` is set too high.
+nginx, or the `ssl_session_timeout` is set too high:
+
+- Check the units of your `ssl_session_timeout` value;
+- If you are generating your own keys, check that the files on disk are actually
+  changing when you expect them to (if they are not updating, check that the
+  background process has the necessary permissions to change them);
+- Updated keys should be picked up by nginx immediately (without the need to
+  reload the config), but if you have exhausted all other options, you may want
+  to try running `nginx -s reload` after cycling the keys to check if it makes
+  any difference.
+
+#### SSLLabs reports "IDs assigned but not accepted"
+
+If your SSLLabs report includes "Session resumption (caching): No (IDs assigned
+but not accepted)", this could mean the _default_ server does not have the
+necessary SSL configuration for session resumption, the keys are cycling too
+quickly to be useful, or the keys are not being shared between servers / workers
+correctly:
+
+- Confirm your SSL Session configuration options are in the `http` block of
+  nginx's config, not a `server` block;
+- Ensure you have set the `ssl_session_cache` to `shared`;
+- Check your `ssl_session_timeout` value (ensure it is at least a few minutes,
+  and ideally at least an hour);
+- If you are load-balancing between multiple servers, check that the key files
+  on each server have the same content.
 
 ## Blocking unknown and unspecified hosts
 
@@ -400,11 +433,11 @@ There are some simpler HTTPS features which can also be enabled:
   If you are ready to add it, the nginx syntax is:
 
   ```nginxconf
-  add_header Strict-Transport-Security "max-age=3600; includeSubDomains" always;
+  add_header Strict-Transport-Security "max-age=30; includeSubDomains" always;
   ```
 
   Then after confirming it has not broken anything, you can gradually increase
-  the max age until it reaches 1 year (`31536000`), and add `preload` to allow
+  the `max-age` until it reaches 1 year (`31536000`), and add `preload` to allow
   adding the site to the HSTS Preload List:
 
   ```nginxconf
