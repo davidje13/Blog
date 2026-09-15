@@ -5,6 +5,11 @@ export const MARKED_IMAGE_CLASS = {
 	renderer: {
 		image(node) {
 			let img = marked.Renderer.prototype.image.call(this, node);
+			if (!node.className) {
+				if (/\.noborder\.[^.]+$/.test(node.href)) {
+					node.className = 'noborder';
+				}
+			}
 			if (node.className) {
 				img = img.replace(
 					/^<img/,

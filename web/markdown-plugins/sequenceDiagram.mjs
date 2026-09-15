@@ -16,7 +16,7 @@ export const MARKED_SEQUENCE_DIAGRAM = {
 								}),
 							),
 						text: token.text.trim().replaceAll(/\n+/g, '; '),
-						className: 'sequence-diagram',
+						className: 'noborder sequence-diagram',
 					},
 				],
 			});

@@ -381,7 +381,7 @@ figure {
 	text-align: center;
 	align-items: center;
 
-	img:not(.sequence-diagram),
+	img:not(.noborder),
 	.plot {
 		border: 1px solid var(--col-outline);
 		border-radius: 4px;
@@ -393,6 +393,10 @@ figure {
 		font-size: 0.9em;
 		max-width: 75ch;
 	}
+}
+
+summary {
+	cursor: pointer;
 }
 
 .plot {
@@ -1129,10 +1133,12 @@ ol {
 	}
 }
 
-.highlight .comment,
-.highlight .meta {
+.highlight .comment {
 	color: var(--col-h-comment);
 	font-style: italic;
+}
+.highlight .meta {
+	color: var(--col-h-comment);
 }
 .highlight .error {
 	color: var(--col-h-error);

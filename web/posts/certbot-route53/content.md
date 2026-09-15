@@ -94,7 +94,7 @@ Assuming you wish to set up a "DNS-01" challenge using
 [AWS Route53](https://aws.amazon.com/route53/) as your DNS provider, you will
 need `certbot`'s `dns-route53` plugin.
 
-Annoyingly, the `certbot` which is included in most linux distributions'
+Annoyingly, the `certbot` which is included in most Linux distributions'
 repositories does not include plugins for managing DNS entries, and installing
 just the plugins via `pip` would lead to version incompatibilities. Instead, it
 is necessary to uninstall any distribution-provided `certbot`, and install the
