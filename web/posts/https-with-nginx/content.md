@@ -317,8 +317,9 @@ This probably means you are not sharing the keys between servers / workers
 correctly, or the `ssl_session_timeout` is set too low:
 
 - Ensure you have set the `ssl_session_cache` to `shared`;
-- Check the units of your `ssl_session_timeout` value, and note that values
-  without a unit are assumed to be in seconds;
+- [Check the units](https://nginx.org/en/docs/syntax.html) of your
+  `ssl_session_timeout` value, and note that values without a unit are assumed
+  to be in seconds;
 - If you are load-balancing between multiple servers, check your code for
   distributing keys between the servers.
 
@@ -327,7 +328,8 @@ correctly, or the `ssl_session_timeout` is set too low:
 This probably means the keys are not cycling at all, not being reloaded by
 nginx, or the `ssl_session_timeout` is set too high:
 
-- Check the units of your `ssl_session_timeout` value;
+- [Check the units](https://nginx.org/en/docs/syntax.html) of your
+  `ssl_session_timeout` value;
 - If you are generating your own keys, check that the files on disk are actually
   changing when you expect them to (if they are not updating, check that the
   background process has the necessary permissions to change them);

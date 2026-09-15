@@ -22,15 +22,16 @@ to automate the process.
 This article uses
 [`certbot`](https://eff-certbot.readthedocs.io/en/stable/man/certbot.html) (as
 it is the common choice of client for automation) to validate domain ownership
-via DNS with Route53, but the guidance here is also valid for other ACME clients
-which support DNS validation. In particular, this article focuses on how to run
-`certbot` as a non-privileged user (e.g. directly on an EC2 instance or an
+via DNS with Route53, but the guidance here is also valid for
+[other ACME clients](https://letsencrypt.org/docs/client-options/) which support
+DNS validation. In particular, this article focuses on how to run `certbot` as a
+non-privileged user (e.g. directly on an EC2 instance, in a container, or on an
 external server), and how to limit IAM permissions to the minimum necessary for
 responding to the ACME DNS challenge.
 
 ## Validation methods
 
-The ACME protocol (which is at the heart of Let's Encrypt's certificate
+The ACME protocol[^acme] (which is at the heart of Let's Encrypt's certificate
 issuance) currently supports 2 ways to prove domain ownership so that a
 certificate can be issued. These are termed "challenges", and are described in
 detail on
@@ -41,9 +42,10 @@ A summary of the key points:
 
 This is the most common challenge type, because it is often the easiest to set
 up for small deployments. The service challenges you to serve a
-randomly-generated file at a specific location. If you can do this, it proves
-you own the server which the domain points to. In `certbot` this is enabled with
-the `--webroot` authentication flag.
+randomly-generated file at a
+[specific location](https://en.wikipedia.org/wiki/Well-known_URIs). If you can
+do this, it proves you own the server which the domain points to. In `certbot`
+this is enabled with the `--webroot` authentication flag.
 
 The main downsides of this challenge type are:
 
@@ -56,10 +58,11 @@ The main downsides of this challenge type are:
 
 ### DNS-01 challenge
 
-This challenges you to assign a randomly-generated `TXT` record to the DNS for
-the domain. If you can do this, it proves you own the DNS rules for the domain.
-In `certbot`, this is enabled with the `--dns-*` authentication flags (the
-specific flag depends on the DNS service being used).
+This challenges you to assign a randomly-generated
+[`TXT` record](https://en.wikipedia.org/wiki/TXT_record) to the DNS for the
+domain. If you can do this, it proves you own the DNS rules for the domain. In
+`certbot`, this is enabled with the `--dns-*` authentication flags (the specific
+flag depends on the DNS service being used).
 
 The main downsides of this challenge type are:
 
@@ -68,11 +71,11 @@ The main downsides of this challenge type are:
   and
 - the time taken for DNS changes to propagate can be long and unpredictable.
 
-Route53 does provide an API for making changes to DNS records automatically, and
+Route53 provides an API for making changes to DNS records automatically, and
 propagates changes quite rapidly. It is also possible (though not very
-intuitive) to set up permissions for editing the records safely. Overall,
-`certbot` and Route53 can be set up to provide a "best of both worlds" approach
-to issuing SSL certificates.
+intuitive) to set up limited permissions for editing the records safely.
+Overall, `certbot` and Route53 can be set up to provide a "best of both worlds"
+approach to issuing SSL certificates.
 
 ### DNS-PERSIST-01 challenge
 
@@ -88,7 +91,7 @@ distribute and protect account credentials for a Let's Encrypt account.
 ## Installing `certbot` with `certbot-dns-route53`
 
 Assuming you wish to set up a "DNS-01" challenge using
-[AWS's Route53](https://aws.amazon.com/route53/) as your DNS provider, you will
+[AWS Route53](https://aws.amazon.com/route53/) as your DNS provider, you will
 need `certbot`'s `dns-route53` plugin.
 
 Annoyingly, the `certbot` which is included in most linux distributions'
@@ -96,6 +99,7 @@ repositories does not include plugins for managing DNS entries, and installing
 just the plugins via `pip` would lead to version incompatibilities. Instead, it
 is necessary to uninstall any distribution-provided `certbot`, and install the
 whole thing manually.
+
 [Basic instructions are available for several platforms](https://certbot.eff.org/instructions),
 but here are some more "security hardened" instructions for Debian-based
 distributions. These set `certbot` up as a non-root user, with scheduled
@@ -133,7 +137,8 @@ of security if a part of your server is compromised.
      /var/lib/letsencrypt;
    ```
 
-4. Set up `pip` (Python package manager) and install `certbot`:
+4. Set up `pip` (Python package manager) and install `certbot` and
+   `certbot-dns-route53`:
 
    ```sh
    sudo -u certbot-runner python3 -m venv /opt/certbot/;
@@ -267,12 +272,14 @@ To update DNS entries, `certbot` requires permission to run
 and
 [`route53:ChangeResourceRecordSets`](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ChangeResourceRecordSets.html).
 Of those, the first two have no particular security concerns, but the third is
-very dangerous: it allows editing _all_ DNS records; not just the `TXT` records,
-but `A` and `AAAA` records too. If this user were compromised, an attacker would
-not only be able to get certificates for the domain, but also update the DNS to
-point to their own servers. This would give them total control over the domain,
-allowing them to (among other things) act as an eavesdropping proxy, seeing and
-modifying unencrypted traffic for all the clients. Very much a
+very dangerous: it allows editing _all_ DNS records; not just the
+[`TXT` records](https://en.wikipedia.org/wiki/TXT_record), but
+[`A`, `AAAA`, `CNAME`, etc. records](https://en.wikipedia.org/wiki/List_of_DNS_record_types)
+too. If this user were compromised, an attacker would not only be able to get
+certificates for the domain, but also update the DNS to point to their own
+servers. This would give them total control over the domain, allowing them to
+(among other things) act as an eavesdropping proxy, seeing and modifying
+unencrypted traffic for all the clients. Very much a
 ["keys to the kingdom"](https://en.wiktionary.org/wiki/keys_to_the_kingdom)
 situation.
 
@@ -405,12 +412,40 @@ Now that a certificate has been requested, `certbot` will automatically renew it
 when it is close to expiry. And during renewal, it will automatically update the
 DNS records with the next challenge.
 
+## Bonus configuration: limit certificate issuance
+
+If you know exactly which certificate authorities you want to get SSL
+certificates from, you can add an extra DNS record to make this explicit. This
+helps to avoid some risk if a certificate authority you are not using has a bug
+in their verification method. It won't stop certificates issued by other
+authorities from being valid, but it should stop well-behaved certificate
+authorities from issuing certificates for your domain if they are not on the
+list.
+
+The DNS record is `CAA` (Certificate Authority Authorization), and it is quite
+easy to configure:
+
+- type: `CAA`
+- name: `example.com` _(note: this automatically applies to all subdomains)_
+- value: `0 issue "letsencrypt.org"`
+- ttl: _(any appropriate time-to-live value)_
+
+It is also possible to list multiple certificate authorities, and to restrict
+the type of challenges which the authority may use. See
+[Let's Encrypt's documentation](https://letsencrypt.org/docs/caa/) for more
+details.
+
 ## More information / further reading
 
 - [Let's Encrypt list of ACME challenge types](https://letsencrypt.org/docs/challenge-types/)
 - [AWS Route53 fine-grained access control](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/specifying-conditions-route53.html)
+- [Certificate Authority Authorization explanation](https://letsencrypt.org/docs/caa/)
 - [`certbot` CLI documentation](https://eff-certbot.readthedocs.io/en/stable/man/certbot.html)
+
+[^acme]:
+    Not to be confused with the
+    [ACME corporation](https://en.wikipedia.org/wiki/Acme_Corporation)
 
 *[ACME]: Automated Certificate Management Environment
 
-*[IAM]: AWS' Identity and Access Management
+*[IAM]: AWS Identity and Access Management
