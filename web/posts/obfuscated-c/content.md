@@ -2,6 +2,7 @@
 title: 'Obfuscated C'
 author: David Evans
 created: 2026-09-15
+modified: 2026-09-16
 tags:
   - fun
 ---
@@ -50,42 +51,33 @@ run(vars, init)
 
 function(init) (
 	if (depth > vars + 1) (
-		if (scratch) (
-			do wincount = 0
-			do best = 0
-		)
-		do storage2 = size / 5
-		do storage3 = size / 10
+		do b = size / 5 // number of rocks
+		do c = size / 10 // number of walls
 		do allgems = wincount * 3 + size / 20 + 1
-		if (allgems + storage2 + storage3 + 1 > size) (
+		if (allgems + b + c + 1 > size) (
 			do allgems = size / 20 + 1
 		)
 		do player_x = width / 2
 		do player_y = height - 1
-		do storage = 0
 		do gems = allgems
 		do dead = 0
 		for (loop_init, size)
 		goto(gameloop)
-		if (gems > best) (
-			do best = gems
-		)
-		if (gems >= allgems) (
-			do wincount ++
-		)
+		if (gems > best) ( do best = gems )
+		if (gems >= allgems) ( do wincount ++ )
 		if (dead == -3) (
 			break
 		) elif (dead != -2) (
 			do printf(" (best: %d) Press any key to restart.\n", best)
 			do getc(stdin)
 		)
-		do scratch = 0
 		goto(init)
 	) elif (argc == 3) (
+		do wincount = 0
+		do best = 0
 		do width = atoi(argv[1])
 		do height = atoi(argv[2])
 		do size = width * height
-		do scratch = 1
 		if (size > 1000) (
 			do printf("\nLarge grid, continue? (y/n) ")
 			if (getc(stdin) != 'y') (
@@ -102,35 +94,27 @@ function(init) (
 
 function(gameloop) (
 	do printf("\n\n")
-	if (p) (
+	if (parameter) (
 		do map_at_player_offset(0, 0) = empty
-		switch (p) (
-			case (1)
-				do player_y --
-				break
-			case (2)
-				do player_x --
-				break
-			case (3)
-				do player_y ++
-				break
-			case (4)
-				do player_x ++
-				break
+		switch (parameter) (
+			case (1) do player_y -- break
+			case (2) do player_x -- break
+			case (3) do player_y ++ break
+			case (4) do player_x ++ break
 		)
 		switch (map_at_player_offset(0, 0)) (
 			case (gem)
 				do gems ++
 				break
 			case (rock)
-				do map_at_player_offset((p == 4) * 2 - 1, 0) = rock
+				do map_at_player_offset((parameter == 4) * 2 - 1, 0) = rock
 				break
 		)
 		do map_at_player_offset(0, 0) = player
 		goto(gravity)
 	)
 
-	do storage2 = (
+	do b = ( // can move left?
 		player_x > 0 &&
 		(
 			map_at_player_offset(-1, 0) is soft ||
@@ -141,7 +125,7 @@ function(gameloop) (
 			)
 		)
 	)
-	do storage3 = (
+	do c = ( // can move right?
 		player_x < width - 1 &&
 		(
 			map_at_player_offset(1, 0) is soft ||
@@ -155,8 +139,8 @@ function(gameloop) (
 
 	if (!dead) (
 		if (
-			!storage2 &&
-			!storage3 &&
+			!b &&
+			!c &&
 			!(player_y > 0 && map_at_player_offset(0, -1) is soft) &&
 			!(player_y < height - 1 && map_at_player_offset(0, 1) is soft)
 		) (
@@ -169,103 +153,52 @@ function(gameloop) (
 	goto(drawmap)
 
 	switch (dead) (
-		case (-1)
-			do printf("All %d Gems Collected! ", gems)
-			break
-		case (2)
-			do printf("Stuck!   Final gems: %d", gems)
-			break
-		case (1)
-			do printf("Crushed! Final gems: %d", gems)
-			break
+		case (-1) do printf("All %d Gems Collected! ", gems) break
+		case (2) do printf("Stuck!   Final gems: %d", gems) break
+		case (1) do printf("Crushed! Final gems: %d", gems) break
 		default
 			do printf("%d / %d gems (past best: %d). WASD: move, R: reset, Q: quit.\n", gems, allgems, best)
-			do storage = 0
+			do a = 0
 			switch (getc(stdin)) (
 				case (27)
 					if (getc(stdin) == 91) (
 						switch (getc(stdin)) (
-							case (65)
-								do storage = 1
-								break
-							case (68)
-								do storage = 2
-								break
-							case (66)
-								do storage = 3
-								break
-							case (67)
-								do storage = 4
-								break
+							case (65) do a = 1 break
+							case (68) do a = 2 break
+							case (66) do a = 3 break
+							case (67) do a = 4 break
 						)
 					)
 					break
 				case (239)
 					if (getc(stdin) == 156) (
 						switch (getc(stdin)) (
-							case (128)
-								do storage = 1
-								break
-							case (130)
-								do storage = 2
-								break
-							case (129)
-								do storage = 3
-								break
-							case (131)
-								do storage = 4
-								break
+							case (128) do a = 1 break
+							case (130) do a = 2 break
+							case (129) do a = 3 break
+							case (131) do a = 4 break
 						)
 					)
 					break
-				case ('w')
-					do storage = 1
-					break
-				case ('a')
-					do storage = 2
-					break
-				case ('s')
-					do storage = 3
-					break
-				case ('d')
-					do storage = 4
-					break
-				case ('r')
-					do storage = -1
-					break
-				case ('q')
-					do storage = -2
-					break
+				case ('w') do a = 1 break
+				case ('a') do a = 2 break
+				case ('s') do a = 3 break
+				case ('d') do a = 4 break
+				case ('r') do a = -1 break
+				case ('q') do a = -2 break
 			)
-			switch (storage) (
-				case (-1)
-					do dead = -2
-					do printf("\rReset.")
-					break
-				case (-2)
-					do dead = -3
-					do printf("\rQuit.")
-					break
-				case (1)
-					reset_cursor
-					goto(gameloop with 1 * (player_y > 0 && map_at_player_offset(0, -1) is soft))
-					break
-				case (2)
-					reset_cursor
-					goto(gameloop with 2 * storage2)
-					break
-				case (3)
-					reset_cursor
-					goto(gameloop with 3 * (player_y < height - 1 && map_at_player_offset(0, 1) is soft))
-					break
-				case (4)
-					reset_cursor
-					goto(gameloop with 4 * storage3)
-					break
-				default
-					reset_cursor
-					goto(gameloop)
-					break
+			switch (a) (
+				case (-1) do dead = -2 do a = -1 do printf("\rReset.") break
+				case (-2) do dead = -3 do a = -1 do printf("\rQuit.") break
+				case (1) do a = 1 * (player_y > 0 && map_at_player_offset(0, -1) is soft) break
+				case (2) do a = 2 * b break
+				case (3) do a = 3 * (player_y < height - 1 && map_at_player_offset(0, 1) is soft) break
+				case (4) do a = 4 * c break
+				default do a = 0 break
+			)
+			if (a >= 0) (
+				reset_cursor
+				goto(gameloop with a)
 			)
 			break
 	)
@@ -286,22 +219,22 @@ function(gravity) (
 )
 
 lambda(loop_gravx) (
-	do storage = p
+	do a = parameter
 	for (loop_gravy, height - 1)
 )
 
 lambda(loop_gravy) (
-	do storage2 = mapcoord(storage, p)
-	if (var(storage2) == rock && var(storage2 + width) == empty) (
-		for (loop_gravy2, height - p - 1)
+	do b = mapcoord(a, parameter)
+	if (var(b) == rock && var(b + width) == empty) (
+		for (loop_gravy2, height - parameter - 1)
 	)
 )
 lambda(loop_gravy2) (
-	switch (var(storage2 + width)) (
+	switch (var(b + width)) (
 		case (empty)
-			do var(storage2) = empty
-			do var(storage2 + width) = rock
-			do storage2 += width
+			do var(b) = empty
+			do var(b + width) = rock
+			do b += width
 			break
 		case (player)
 			do dead = 1
@@ -310,45 +243,27 @@ lambda(loop_gravy2) (
 )
 
 lambda(loop_drawy) (
-	do storage = height - p - 1
+	do a = height - parameter - 1
 	do printf("| ")
 	for (loop_drawx, width)
 	do printf("|\n")
 )
 
 lambda(loop_drawx) (
-	switch (map_at(width - p - 1, storage)) (
+	switch (map_at(width - parameter - 1, a)) (
 		case (player)
 			switch (dead) (
-				case (-1)
-					put(T_ME, ":D")
-					break
-				case (2)
-					put(T_ME, ":S")
-					break
-				case (1)
-					put(T_ME, ":(")
-					break
-				default
-					put(T_ME, ":)")
-					break
+				case (-1) put(T_ME, ":D") break
+				case (2) put(T_ME, ":S") break
+				case (1) put(T_ME, ":(") break
+				default put(T_ME, ":)") break
 			)
 			break
-		case (empty)
-			do printf("   ")
-			break
-		case (soil)
-			do printf("~~ ")
-			break
-		case (gem)
-			put(T_GEM, "<>")
-			break
-		case (rock)
-			put(T_ROCK, "@@")
-			break
-		case (wall)
-			do printf("XX ")
-			break
+		case (empty) do printf("   ") break
+		case (soil) do printf("~~ ") break
+		case (gem) put(T_GEM, "<>") break
+		case (rock) put(T_ROCK, "@@") break
+		case (wall) do printf("XX ") break
 	)
 )
 
@@ -357,22 +272,22 @@ lambda(loop_drawx2) (
 )
 
 lambda(loop_init) (
-	if (mapcoord(player_x, player_y) == mapindex(p)) (
-		do var(mapindex(p)) = player
-		do storage = 1
+	if (mapcoord(player_x, player_y) == mapindex(parameter)) (
+		do var(mapindex(parameter)) = player
+		do a = 1
 	) else (
-		do scratch = rand() % (p + storage)
-		if (scratch < storage2) (
-			do var(mapindex(p)) = rock
-			do storage2 --
-		) elif (scratch < storage2 + storage3) (
-			do var(mapindex(p)) = wall
-			do storage3 --
-		) elif (scratch < storage2 + storage3 + gems) (
-			do var(mapindex(p)) = gem
+		do d = rand() % (parameter + a)
+		if (d < b) (
+			do var(mapindex(parameter)) = rock
+			do b --
+		) elif (d < b + c) (
+			do var(mapindex(parameter)) = wall
+			do c --
+		) elif (d < b + c + gems) (
+			do var(mapindex(parameter)) = gem
 			do gems --
 		) else (
-			do var(mapindex(p)) = soil
+			do var(mapindex(parameter)) = soil
 		)
 	)
 )
@@ -399,14 +314,16 @@ eof
 #define T_ROCK "\x1b[31m"
 #define DEF    "\x1b[0m"
 
+// Short-lived scratch variables (various purposes)
+#define a var(0)
+#define b var(1)
+#define c var(2)
+#define d var(3)
+
 // Variables
-#define size     var(0)
-#define width    var(1)
-#define height   var(2)
-#define storage  var(3)
-#define storage2 var(4)
-#define storage3 var(5)
-#define scratch  var(6)
+#define size     var(4)
+#define width    var(5)
+#define height   var(6)
 #define player_x var(7)
 #define player_y var(8)
 #define allgems  var(9)
@@ -452,42 +369,44 @@ eof
 // Prototypes
 int main(int v, char **s)
 
-// Shorthand
+// Keywords
 #define run(allocSize,entryMethod){return 0&(!METHOD&&(v=(-STACK_OFFSET&0xFFF)<<8|v&0xFF)&&!main(entryMethod|allocSize+3,(char**)&v)\
-ELIF(METHOD==entryMethod&&p)1|(!STACK_FRAME_DELTA&&1|(ENV|=STACK_OFFSET<<20)&&1|system("stty -icanon 2>/dev/null")\
-ELIF(STACK_OFFSET/STACK_FRAME_DELTA==2)(N(void,(unsigned int),srand,((unsigned int)time(0)))))&&!main(v-1,s)
+ELIF(METHOD==entryMethod&&parameter)1|(!STACK_FRAME_DELTA&&1|(ENV|=STACK_OFFSET<<20)&&1|system("stty -icanon 2>/dev/null")\
+ELIF(STACK_OFFSET/STACK_FRAME_DELTA==2)(INVOKE(void,(unsigned int),srand,((unsigned int)time(0)))))&&!main(v-1,s)
 #define var(x)(*(int*)((size_t)s+(size_t)STACK_FRAME_DELTA*(size_t)((x)+3)))
-#define argv ((char**)((size_t)s+(size_t)(ENV>>8&0xFFF)))
 #define case(x))&&(ACTIVE=1))|1&&(ACTIVE&&(ACTIVE==1||SWITCH==(x))&&(1
-#define n(r,q)(*(r(**)q)((size_t)&s-(size_t)STACK_FRAME_DELTA))
-#define N(r,q,f,x)(n(void,q)=&f)&&n(int,q)x
-#define STACK_OFFSET ((int)(size_t)&v-(int)(size_t)s)
-#define METHOD ((unsigned int)v&0xFFFF0000)
-#define S(x)do((ACTIVE=2)&&(0 x)))&&(ACTIVE=1
-#define for(y,x)if(x)(goto(y|x-1))
-#define L(x)F(x if(p)(goto(v-1)))
-#define function(x)ELIF(METHOD==x)F
-#define goto(x)do main((x),s)
-#define F(x)((ACTIVE=1)x)|1&&(ACTIVE=1)
-#define lambda(x)ELIF(METHOD==x)L
-#define default ))|1&&(ACTIVE&&(1
-#define switch(x)do SWITCH=x S
-#define elif(x)ELIF(x)I
-#define ELIF(x)||(x)&&
-#define if(x)do(x)&&I
-#define break )&&(ACTIVE=0
+#define argv ((char**)((size_t)s+(size_t)(ENV>>8&0xFFF)))
 #define depth (STACK_OFFSET/STACK_FRAME_DELTA-3)
-#define else(x)||I(x)
+#define function(x)ELIF(METHOD==x)FUNC_IMPL
+#define lambda(x)ELIF(METHOD==x)LAMBDA_IMPL
+#define switch(x)do SWITCH=x SWITCH_IMPL
+#define for(y,x)if(x)(goto(y|x-1))
+#define default ))|1&&(ACTIVE&&(1
+#define elif(x)ELIF(x)IF_IMPL
+#define goto(x)do main((x),s)
+#define parameter (v&0xFFFF)
+#define if(x)do(x)&&IF_IMPL
+#define else(x)||IF_IMPL(x)
+#define break )&&(ACTIVE=0
 #define do )&&ACTIVE&&1|(
 #define argc (ENV&0xFF)
-#define p (v&0xFFFF)
-#define ENV *(int*)s
-#define SWITCH var(-1)
-#define ACTIVE var(-2)
-#define STACK_FRAME_DELTA (ENV>>20)
-#define I(x)(1 x)
 #define with )|(
 #define eof );}
+
+// Internal shorthand
+#define n(r,q)(*(r(**)q)((size_t)&s-(size_t)STACK_FRAME_DELTA))
+#define LAMBDA_IMPL(x)FUNC_IMPL(x if(parameter)(goto(v-1)))
+#define SWITCH_IMPL(x)do((ACTIVE=2)&&(0 x)))&&(ACTIVE=1
+#define STACK_OFFSET ((int)(size_t)&v-(int)(size_t)s)
+#define INVOKE(r,q,f,x)(n(void,q)=&f)&&n(int,q)x
+#define FUNC_IMPL(x)((ACTIVE=1)x)|1&&(ACTIVE=1)
+#define METHOD ((unsigned int)v&0xFFFF0000)
+#define STACK_FRAME_DELTA (ENV>>20)
+#define IF_IMPL(x)(1 x)
+#define ELIF(x)||(x)&&
+#define SWITCH var(-1)
+#define ACTIVE var(-2)
+#define ENV *(int*)s
 ```
 
 </details>
@@ -569,17 +488,17 @@ The language defined in `lang.h` works like so:
   recursive `main` call with the function ID in `argc`.
 - `goto(function_id with parameter)` same as `goto` but also sets a single
   parameter for the called function (this parameter defaults to 0 if `with` is
-  not used). The value is available to the function as `p` (which is simply
-  `argc & 0x0000FFFF`; internally the function ID and parameter value are
+  not used). The value is available to the function as `parameter` (which is
+  simply `argc & 0x0000FFFF`; internally the function ID and parameter value are
   combined and passed as `argc`)
 - `lambda(id) ( code )` like `function`, but adds code for looping using
   recursion. This is used with `for`.
 - `for(lambda_id, iterations)` convenience wrapper for looping; this invokes the
   given lambda if `iterations` is greater than 0. Each invocation of lambda will
-  see the loop counter variable in `p`, counting _down_ from `iterations-1` to
-  `0`. Because `lambda` contains code for recursing, it will automatically
-  perform the full loop. Once the loop completes, any code below the `for` will
-  run as normal.
+  see the loop counter variable in `parameter`, counting _down_ from
+  `iterations-1` to `0`. Because `lambda` contains code for recursing, it will
+  automatically perform the full loop. Once the loop completes, any code below
+  the `for` will run as normal.
 - `do` denotes a section of regular code, akin to a statement. It will execute
   the statement if the program flow is not marked as stopped (e.g. by the use of
   a `break` statement). `do` can be chained, and behaves in a similar manner as
@@ -629,12 +548,11 @@ Internal value indices:
 
 Perhaps this language will take off and become the next Python? &#x1F91E;
 
-## But seriously
+## Practical purposes
 
 The [IOCCC](https://www.ioccc.org/) is a gem of crazy, creative things that are
 possible when the standard rules are thrown away. If you write software, please
-take a look at some of the other entries to their competitions (and if you don't
-write software, why are you reading this article?).
+take a look at some of the other entries to their competitions.
 
 In a similar vein, the [Underhanded C Contest](https://www.underhanded-c.org/)
 has lots of entries showing how subtle language features can cause unexpected
