@@ -33,7 +33,7 @@ Debian-derived distributions like Ubuntu), one of the available flags is
 > have to specify the `-F` options if you want to update the files for a system
 > account to be created.
 
-This tells us a few of the differences: system users have no password aging,
+This tells us a few of the differences: system users have no password ageing,
 have no home directory by default (their home directory is still set on the
 user, but it isn't _created_), do not have sub-User-IDs or sub-Group-IDs
 assigned by default, and have a different User ID and Group ID range (typically
@@ -97,7 +97,7 @@ distributions too, but some paths and default values may be different.
    - if the group is assigned to any files (including files in a home
      directory), re-apply the ownership (`sudo chgrp <group-name> <file>`)
 
-3. Clear the password aging configuration:
+3. Clear the password ageing configuration:
 
    ```sh
    sudo chage --mindays -1 --maxdays -1 --warndays -1 <user-name>
@@ -161,7 +161,7 @@ distributions too, but some paths and default values may be different.
    - if the group is assigned to any files (including files in a home
      directory), re-apply the ownership (`sudo chgrp <group-name> <file>`)
 
-3. Optionally set password aging configuration:
+3. Optionally set password ageing configuration:
 
    ```sh
    sudo chage --mindays 0 --maxdays 99999 --warndays 7 <user-name>
