@@ -370,26 +370,38 @@ a.tag:hover {
 img {
 	box-sizing: border-box;
 	max-width: 100%;
+
+	&.small {
+		max-width: min(100%, 400px);
+	}
 }
 
 figure {
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
-	margin: 32px max(-200px, calc((100vw - 100%) / -2 + 16px));
+	margin: 32px 0;
 	padding: 0;
 	text-align: center;
 	align-items: center;
 
-	img:not(.noborder),
-	.plot {
+	&:has(.wide) {
+		margin: 32px max(-200px, calc((100vw - 100%) / -2 + 16px));
+	}
+
+	& > img:not(.noborder),
+	& > .plot {
 		border: 1px solid var(--col-outline);
 		border-radius: 4px;
 		background: var(--col-back);
 		padding: 8px;
 	}
 
-	figcaption {
+	& > .plot {
+		padding: 16px;
+	}
+
+	& > figcaption {
 		font-size: 0.9em;
 		max-width: 75ch;
 	}
@@ -436,6 +448,14 @@ summary {
 		text-align: center;
 	}
 
+	& img.inline {
+		vertical-align: middle;
+		height: calc(var(--h) * 1em);
+		margin: calc(var(--mt) * 1em) calc(var(--mr) * 1em) calc(var(--mb) * 1em)
+			calc(var(--ml) * 1em);
+		max-width: none;
+	}
+
 	& .subplot {
 		flex: 1;
 	}
@@ -449,23 +469,24 @@ summary {
 			justify-self: stretch;
 
 			& path {
-				stroke: var(--col-border);
+				stroke: var(--col-outline);
 				stroke-width: 1;
 				vector-effect: non-scaling-stroke;
 
 				&.l0 {
-					opacity: 1;
+					opacity: 0.2;
 				}
 				&.l1 {
-					opacity: 0.4;
+					opacity: 0.08;
 				}
 				&.l2 {
-					opacity: 0.2;
+					opacity: 0.05;
 				}
 			}
 		}
 
 		& > .area,
+		& > .map,
 		& > .lines {
 			position: absolute;
 			top: 0;
@@ -489,6 +510,10 @@ summary {
 				)
 				calc(var(--pattern-x) * 10px) 0 / 10px 10px;
 			transition: opacity 0.2s ease;
+		}
+
+		& > .map {
+			z-index: -1;
 		}
 
 		& > .lines {
@@ -710,9 +735,15 @@ summary {
 			contain: inline-size layout style;
 
 			& > div {
-				--sn: var(--n3);
+				--sn: 100;
 				position: relative;
 				overflow: hidden;
+
+				&.lSpc {
+					--sn: 1;
+					font-size: 0.9em;
+					opacity: 1;
+				}
 
 				&.l0 {
 					--sn: var(--n0);
@@ -731,12 +762,12 @@ summary {
 					font-size: 0.7em;
 					opacity: 0.8;
 				}
+			}
 
-				&::before {
-					content: '';
-					position: absolute;
-					background: var(--col-text);
-				}
+			&.notch > div::before {
+				content: '';
+				position: absolute;
+				background: var(--col-text);
 			}
 		}
 	}
@@ -830,6 +861,13 @@ summary {
 				padding-right: calc(var(--axis-value-gap) + var(--notch-size));
 				display: grid;
 				align-items: end;
+				justify-items: center;
+
+				&.lSpc {
+					height: 100%;
+					margin-inline: -50%;
+					overflow: visible;
+				}
 
 				& span {
 					writing-mode: initial;
@@ -850,6 +888,29 @@ summary {
 		grid-area: 2 / 3 / 3 / 4;
 		align-self: stretch;
 		justify-self: stretch;
+
+		& .label {
+			position: absolute;
+			top: calc(var(--y) * 100%);
+			left: calc(var(--x) * 100%);
+			transform: translate(calc(var(--ax) * -100%), calc(var(--ay) * -100%));
+
+			&.l {
+				text-align: left;
+			}
+
+			&.r {
+				text-align: right;
+			}
+
+			&.c {
+				text-align: center;
+			}
+
+			&.w {
+				width: calc(var(--w) * 100%);
+			}
+		}
 	}
 
 	& > .key {
@@ -864,6 +925,14 @@ summary {
 	position: absolute;
 	margin: 8px;
 	border-radius: 20px;
+}
+
+.plot .map {
+	filter: url(/palette.svg#light);
+
+	@media (prefers-color-scheme: dark) {
+		filter: url(/palette.svg#dark);
+	}
 }
 
 .hscroll {

@@ -6,9 +6,16 @@ export const MARKED_IMAGE_CLASS = {
 		image(node) {
 			let img = marked.Renderer.prototype.image.call(this, node);
 			if (!node.className) {
-				if (/\.noborder\.[^.]+$/.test(node.href)) {
-					node.className = 'noborder';
+				const classNames = [];
+				if (/\.noborder\.[^\/]+$/.test(node.href)) {
+					classNames.push('noborder');
 				}
+				if (/\.small\.[^\/]+$/.test(node.href)) {
+					classNames.push('small');
+				} else if (/\.wide\.[^\/]+$/.test(node.href)) {
+					classNames.push('wide');
+				}
+				node.className = classNames.join(' ');
 			}
 			if (node.className) {
 				img = img.replace(
