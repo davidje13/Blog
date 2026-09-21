@@ -148,7 +148,47 @@ Foo -> +Bar: Hello
         { "type": "equation", "equation": "(x-10)^2+(y-5)^2<=1" },
         { "type": "equation", "equation": "(x)^2+(y-10)^2<=1" },
         { "type": "equation", "equation": "(x-5)^2+(y-10)^2<=1" },
-        { "type": "equation", "equation": "(x-10)^2+(y-10)^2<=1" }
+        { "type": "equation", "equation": "(x-10)^2+(y-10)^2<=1" },
+        {
+          "type": "measurement",
+          "text": "w",
+          "position": {
+            "p1": [4, 4.2],
+            "p2": [6, 4.2],
+            "direction": "x",
+            "position": "below"
+          }
+        },
+        {
+          "type": "measurement",
+          "text": "w",
+          "position": {
+            "p1": [4, 5.8],
+            "p2": [6, 5.8],
+            "direction": "x",
+            "position": "above"
+          }
+        },
+        {
+          "type": "measurement",
+          "text": "h",
+          "position": {
+            "p1": [4.2, 4],
+            "p2": [4.2, 6],
+            "direction": "y",
+            "position": "left"
+          }
+        },
+        {
+          "type": "measurement",
+          "text": "h",
+          "position": {
+            "p1": [5.8, 4],
+            "p2": [5.8, 6],
+            "direction": "y",
+            "position": "right"
+          }
+        }
       ]
     },
     {
@@ -159,6 +199,11 @@ Foo -> +Bar: Hello
         { "label": "y", "range": [0, 10], "grid": [10, 1] }
       ],
       "elements": [
+        {
+          "type": "label",
+          "text": "Comments",
+          "position": { "coord": [9, 8], "anchor": [1, 0] }
+        },
         {
           "type": "equation",
           "equation": "min((x)^2+(y)^2,(x-5)^2+(y)^2,(x-10)^2+(y)^2,(x)^2+(y-5)^2,(x-5)^2+(y-5)^2,(x-10)^2+(y-5)^2,(x)^2+(y-10)^2,(x-5)^2+(y-10)^2,(x-10)^2+(y-10)^2)>1",

@@ -1,6 +1,7 @@
 import { escapeHTML } from '../common.mjs';
 import { addEquation } from './cartesian/equation.mjs';
 import { addLabel } from './cartesian/label.mjs';
+import { addLine } from './cartesian/line.mjs';
 import { addMap } from './cartesian/map.mjs';
 import { addMeasurement } from './cartesian/measurement.mjs';
 import { plainText, printText } from './text.mjs';
@@ -82,19 +83,18 @@ export function renderCartesian(
 
 		lines: '',
 		lineHoverRegions: '',
-		layers: '',
-		overlays: '',
+		layers: [],
 		keyItems: new Map(),
 		elementDescriptions: [],
+		elementNum: 0,
 	};
 
-	for (let elementNum = 0; elementNum < elements.length; ++elementNum) {
-		const element = elements[elementNum];
+	for (const element of elements) {
 		const fn = ELEMENT_TYPES.get(element.type);
 		if (!fn) {
 			throw new Error(`unknown element type: ${element.type}`);
 		}
-		fn(target, framebounds, elementNum, element);
+		fn(target, framebounds, element);
 	}
 
 	// Safari does not currently support CSS' attr(data-* type(<number>)) syntax, so we have
@@ -147,24 +147,34 @@ export function renderCartesian(
 	const descriptionID = context.nextID();
 	const labelledKeyItems = [...target.keyItems.values()].filter((k) => k.label);
 
+	target.layers.push({
+		html: [
+			`<svg ${svgCommon} fill="none" class="grid">`,
+			`<g transform="${escapeHTML(transformCommon)}">`,
+			...grids
+				.map(
+					(g, l) =>
+						`<path d="${g.map((o) => o.line).join('')}" class="l${l}" />`,
+				)
+				.reverse(),
+			'</g>',
+			'</svg>',
+		].join(''),
+		order: 0,
+	});
+	if (target.lineHoverRegions || target.lines) {
+		target.layers.push({
+			html: `<svg ${svgCommon} fill="none" class="lines"><g transform="${escapeHTML(transformCommon)}">${target.lineHoverRegions}${target.lines}</g></svg>`,
+			order: 100,
+		});
+	}
+	target.layers.sort((a, b) => a.order - b.order);
+
 	return [
 		`<div class="subplot cartesian${escapeHTML((typeof variant === 'string' ? [variant] : variant).map((v) => ` chart-var-${v}`).join(' '))}${target.keyItems.size > 1 ? ' multi' : ''}" role="img"${headerID ? ` aria-labelledby="${escapeHTML(headerID)}"` : ''} aria-describedby="${escapeHTML(descriptionID)}">`,
 		`<div id="${escapeHTML(descriptionID)}" hidden>${escapeHTML(description)}</div>`,
 		`<div class="view">`,
-		`<svg ${svgCommon} fill="none" class="grid">`,
-		`<g transform="${escapeHTML(transformCommon)}">`,
-		...grids
-			.map(
-				(g, l) => `<path d="${g.map((o) => o.line).join('')}" class="l${l}" />`,
-			)
-			.reverse(),
-		'</g>',
-		'</svg>',
-		target.layers,
-		target.lineHoverRegions || target.lines
-			? `<svg ${svgCommon} fill="none" class="lines"><g transform="${escapeHTML(transformCommon)}">${target.lineHoverRegions}${target.lines}</g></svg>`
-			: '',
-		target.overlays,
+		...target.layers.map((l) => l.html),
 		'</div>',
 		`<div class="axis x">`,
 		xAxis.line !== false ? '<div class="line"></div>' : '',
@@ -189,6 +199,7 @@ export function renderCartesian(
 
 const ELEMENT_TYPES = new Map([
 	['equation', addEquation],
+	['line', addLine],
 	['map', addMap],
 	['label', addLabel],
 	['measurement', addMeasurement],

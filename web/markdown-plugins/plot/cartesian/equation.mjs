@@ -13,12 +13,11 @@ import { plainText } from '../text.mjs';
 export function addEquation(
 	target,
 	framebounds,
-	elementNum,
 	{
 		equation,
 		label,
 		description,
-		palette = elementNum + 1,
+		palette = null,
 		range: [rangeX = [], rangeY = []] = [],
 		resolution = null,
 		parameters = {},
@@ -37,6 +36,9 @@ export function addEquation(
 		description ??
 			`the equation ${label ? `for ${plainText(label)}: ` : ''}${labelEq(equation)}`,
 	);
+	if (palette === null) {
+		palette = ++target.elementNum;
+	}
 	const p = new Map(Object.entries(parameters));
 	const bounds = {
 		x0: clamp(rangeX[0] ?? framebounds.x0, framebounds.x0, framebounds.x1),
@@ -208,7 +210,10 @@ export function addEquation(
 	}
 
 	if (areaParts.length) {
-		target.layers += `<svg ${target.svgCommon} class="area n${Number(palette)}"><path transform="${escapeHTML(target.transformCommon)}" d="${areaParts.join('')}" /></svg>`;
+		target.layers.push({
+			html: `<svg ${target.svgCommon} class="area n${Number(palette)}"><path transform="${escapeHTML(target.transformCommon)}" d="${areaParts.join('')}" /></svg>`,
+			order: 2,
+		});
 	}
 	if (lineParts.length) {
 		const lineID = target.context.nextID();

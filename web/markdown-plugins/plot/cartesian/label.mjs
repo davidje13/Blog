@@ -4,7 +4,6 @@ import { printText } from '../text.mjs';
 export function addLabel(
 	target,
 	framebounds,
-	_elementNum,
 	{
 		text,
 		position: {
@@ -31,5 +30,8 @@ export function addLabel(
 		vars.push(`--w:${(width * mx).toFixed(4)}`);
 		classNames.push('w');
 	}
-	target.overlays += `<div class="${escapeHTML(classNames.join(' '))}" style="${escapeHTML(vars.join(';'))}">${printText(text)}</div>`;
+	target.layers.push({
+		html: `<div class="${escapeHTML(classNames.join(' '))}" style="${escapeHTML(vars.join(';'))}">${printText(text)}</div>`,
+		order: Number.POSITIVE_INFINITY,
+	});
 }
