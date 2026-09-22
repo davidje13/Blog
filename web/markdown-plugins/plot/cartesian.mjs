@@ -106,7 +106,18 @@ export function renderCartesian(
 	const yLabels = [];
 	for (let i = 0; i < grids.length; ++i) {
 		for (const { pos, axis, label } of grids[i]) {
-			const target = axis === 'x' ? xLabels : yLabels;
+			let target;
+			if (axis === 'x') {
+				if (xAxis.gridLabels === false) {
+					continue;
+				}
+				target = xLabels;
+			} else {
+				if (yAxis.gridLabels === false) {
+					continue;
+				}
+				target = yLabels;
+			}
 			target.push({
 				pos,
 				html: `<div class="l${i}" style="--pos:${pos}"><span>${escapeHTML(label)}</span></div>`,

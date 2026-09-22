@@ -527,7 +527,8 @@ summary {
 					stroke-width 0.2s ease,
 					opacity 0.2s ease;
 
-				&.exclusive {
+				&.exclusive,
+				&.dashed {
 					stroke-dasharray: 6px 10px;
 				}
 			}

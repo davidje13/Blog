@@ -1,10 +1,17 @@
 import { penTool } from 'curve-ops';
 import { plainText } from '../text.mjs';
+import { escapeHTML } from '../../common.mjs';
 
 export function addLine(
 	target,
 	_framebounds,
-	{ label, description, palette = null, samples: [xSamples, ySamples] },
+	{
+		label,
+		description,
+		palette = null,
+		samples: [xSamples, ySamples],
+		style = 'solid',
+	},
 ) {
 	if (description || label) {
 		target.elementDescriptions.push(
@@ -44,9 +51,10 @@ export function addLine(
 	);
 
 	if (lineParts.length) {
+		const className = style === 'dashed' ? 'dashed' : '';
 		const lineID = target.context.nextID();
 		target.lineHoverRegions += `<use href="#${lineID}" class="hover n${Number(palette)} ext" />`;
-		target.lines += `<path id="${lineID}" d="${lineParts.join('')}" class="hover n${Number(palette)} inclusive" vector-effect="non-scaling-stroke" />`;
+		target.lines += `<path id="${lineID}" d="${lineParts.join('')}" class="hover n${Number(palette)} ${escapeHTML(className)}" vector-effect="non-scaling-stroke" />`;
 	}
 	target.keyItems.set(Number(palette), {
 		n: Number(palette),
