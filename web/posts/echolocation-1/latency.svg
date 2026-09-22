@@ -1,0 +1,16 @@
+<?xml version="1.0" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 582 300" width="582" height="300" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" font-family="sans-serif" text-anchor="middle">
+<defs>
+<pattern id="wall" viewBox="0 0 20 6" width="20" height="6" patternUnits="userSpaceOnUse"><path stroke="#CC3300" stroke-width="1" d="M0 0l9 9M4-2l5 5" /></pattern>
+</defs>
+<path stroke="#00aaccdd" d="M111 140l80-40H250M112 168l80 40c40 0 30 10 10 20s-20 25 -10 30 20 0 44-24" /><path stroke="#00aaccaa" d="M282 106L499 150L288 194" stroke-dasharray="2 4" />
+<g transform="translate(90 150)" stroke="#dd9944"><path fill="#dd994440" d="M-40 0l40-20l40 20l1 7l-41 21.5l-41-21.5Z" /><path stroke-width="1" d="M-40 0l40 20l40-20M0 20v7" /><path id="con" d="M-37 5l-1 5l-2 1m7-4l-1 5l-2 1m7-4l-1 5l-2 1m7-4l-1 5l-2 1m7-4l-1 5l-2 1m7-4l-1 5l-2 1m7-4l-1 5l-2 1m7-4l-1 5l-2 1m7-4l-1 5l-2 1" /><use href="#con" transform="scale(-1 1)" /><text fill="#bb7733" stroke="none" y="5" font-size="13">CPU</text></g>
+<g transform="translate(250 100)" stroke="#11aa44"><path stroke="none" fill="#11bb4440" d="M16 34L8 14h-4a3 14 0 0 1 0 -28h4L16-34A6 36 0 0 0 16 34" /><path d="M16 34L8 14h-4a3 14 0 0 1 0 -28h4L16-34" /><path stroke-width="1" d="M8 14a3 16 0 0 1 0 -28M12-12a4 10 0 0 1 0 24" /><ellipse cx="20" cy="0" rx="8" ry="40" /><ellipse stroke-width="1" cx="19" cy="0" rx="6" ry="36" /></g>
+<g transform="translate(250 200)" stroke="#2255cc"><path stroke="none" fill="#2255cc40" d="M18 16l-8 2l-19 17a2 1 45 0 1-6-6l17-19l2-8A15 16 45 0 0 18 16" /><path d="M18 16l-8 2l-19 17a2 1 45 0 1-6-6l17-19l2-8" /><path stroke-width="1" d="M2.5 8.5a5 2 45 0 0 9 9" /><ellipse transform="rotate(45)" transform-origin="20 0" cx="20" cy="0" rx="15" ry="16" /><path stroke-width="1" d="M8-8a20 20 0 0 0 20 20m-2 2a20 20 0 0 1-20-20" /></g>
+<g transform="translate(500 10)"><rect width="11" height="280" fill="url(#wall)" /><path d="M0 0V280" stroke="#CC3300" /></g>
+<g fill="#000000" stroke="none" font-size="14">
+<text x="170" y="90">Unknown latency</text>
+<text x="170" y="280">Unknown latency</text>
+<text x="390" y="155">Unknown distance</text>
+</g>
+</svg>

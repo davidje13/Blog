@@ -1,0 +1,24 @@
+<?xml version="1.0" standalone="yes"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 582 300" width="582" height="300" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+<defs>
+<pattern id="wall" viewBox="0 0 20 6" width="20" height="6" patternUnits="userSpaceOnUse"><path stroke="#CC3300" stroke-width="1" d="M0 0l9 9M4-2l5 5" /></pattern>
+<clipPath id="air"><rect width="500" height="300" /></clipPath>
+<radialGradient id="sound" cx="-10" cy="0" r="40" spreadMethod="repeat" gradientUnits="userSpaceOnUse">
+<stop offset="-0.52" stop-color="#00aaccaa" stop-opacity="0"><animate attributeName="offset" values="-0.52;0.48" dur="8s" repeatCount="indefinite" /></stop>
+<stop offset="-0.51" stop-color="#00aaccaa"><animate attributeName="offset" values="-0.51;0.49" dur="8s" repeatCount="indefinite" /></stop>
+<stop offset="-0.49" stop-color="#00aaccaa"><animate attributeName="offset" values="-0.49;0.51" dur="8s" repeatCount="indefinite" /></stop>
+<stop offset="-0.48" stop-color="#00aaccaa" stop-opacity="0"><animate attributeName="offset" values="-0.48;0.52" dur="8s" repeatCount="indefinite" /></stop>
+<stop offset="0.48" stop-color="#00aaccaa" stop-opacity="0"><animate attributeName="offset" values="0.48;1.48" dur="8s" repeatCount="indefinite" /></stop>
+<stop offset="0.49" stop-color="#00aaccaa"><animate attributeName="offset" values="0.49;1.49" dur="8s" repeatCount="indefinite" /></stop>
+<stop offset="0.51" stop-color="#00aaccaa"><animate attributeName="offset" values="0.51;1.51" dur="8s" repeatCount="indefinite" /></stop>
+<stop offset="0.52" stop-color="#00aaccaa" stop-opacity="0"><animate attributeName="offset" values="0.52;1.52" dur="8s" repeatCount="indefinite" /></stop>
+</radialGradient>
+</defs>
+<g clip-path="url(#air)">
+<rect y="-30" width="404" height="60" transform="translate(102 103) rotate(6.7686)" fill="url(#sound)" stroke="none" />
+<rect x="396" y="-30" width="396" height="60" transform="translate(498 150) rotate(173.2314) translate(-400 0)" fill="url(#sound)" stroke="none" />
+<path stroke="#00aaccaa" d="M102 103L499 150L110 196" stroke-dasharray="2 4" />
+</g>
+<g transform="translate(70 100)" stroke="#11aa44"><path stroke="none" fill="#11bb4440" d="M16 34L8 14h-4a3 14 0 0 1 0 -28h4L16-34A6 36 0 0 0 16 34" /><path d="M16 34L8 14h-4a3 14 0 0 1 0 -28h4L16-34" /><path stroke-width="1" d="M8 14a3 16 0 0 1 0 -28M12-12a4 10 0 0 1 0 24" /><ellipse cx="20" rx="8" ry="40" /><ellipse stroke-width="1" cx="19" rx="6" ry="36" /></g>
+<g transform="translate(70 200)" stroke="#2255cc"><path stroke="none" fill="#2255cc40" d="M18 16l-8 2l-19 17a2 1 45 0 1-6-6l17-19l2-8A15 16 45 0 0 18 16" /><path d="M18 16l-8 2l-19 17a2 1 45 0 1-6-6l17-19l2-8" /><path stroke-width="1" d="M2.5 8.5a5 2 45 0 0 9 9" /><ellipse transform="rotate(45)" transform-origin="20 0" cx="20" rx="15" ry="16" /><path stroke-width="1" d="M8-8a20 20 0 0 0 20 20m-2 2a20 20 0 0 1-20-20" /></g>
+<g transform="translate(500 10)"><rect width="11" height="280" fill="url(#wall)" /><line y2="280" stroke="#CC3300" /></g>
+</svg>
