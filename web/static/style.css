@@ -33,7 +33,7 @@ html {
 	--col-chart-n: #444444;
 
 	@media (prefers-color-scheme: dark) {
-		--col-page: #111111;
+		--col-page: #222222;
 		--col-back: #000000;
 		--col-quote-back: #222220;
 		--col-quote-back-2: rgba(255, 255, 200, 0.03);
@@ -384,6 +384,7 @@ figure {
 	padding: 0;
 	text-align: center;
 	align-items: center;
+	break-inside: avoid;
 
 	&:has(.wide) {
 		margin: 32px max(-200px, calc((100vw - 100%) / -2 + 16px));
@@ -717,6 +718,7 @@ summary {
 		& .line {
 			position: absolute;
 			background: var(--col-text);
+			print-color-adjust: exact;
 
 			&::after {
 				content: '';
@@ -769,6 +771,7 @@ summary {
 				content: '';
 				position: absolute;
 				background: var(--col-text);
+				print-color-adjust: exact;
 			}
 		}
 	}
@@ -896,6 +899,7 @@ summary {
 			left: calc(var(--x) * 100%);
 			transform: translate(calc(var(--ax) * -100%), calc(var(--ay) * -100%));
 			background: var(--col-back);
+			print-color-adjust: exact;
 
 			&.l {
 				text-align: left;
@@ -918,6 +922,7 @@ summary {
 			content: '';
 			position: absolute;
 			background: var(--col-border);
+			print-color-adjust: exact;
 
 			&.x {
 				top: calc(var(--y) * 100% - var(--axis-width) * 0.5);
@@ -938,17 +943,20 @@ summary {
 			position: absolute;
 			text-align: center;
 			background: var(--col-back);
+			print-color-adjust: exact;
 
 			&::before,
 			&::after {
 				content: '';
 				position: absolute;
 				background: var(--col-border);
+				print-color-adjust: exact;
 			}
 
 			& .line {
 				position: absolute;
 				background: var(--col-text);
+				print-color-adjust: exact;
 
 				&::before,
 				&::after {
@@ -1099,6 +1107,10 @@ summary {
 	@media (prefers-color-scheme: dark) {
 		filter: url(/palette.svg#dark);
 	}
+
+	@media print {
+		filter: invert();
+	}
 }
 
 .hscroll {
@@ -1145,6 +1157,7 @@ summary {
 		currentColor calc(50% + 0.5px),
 		transparent calc(50% + 1px)
 	);
+	print-color-adjust: exact;
 }
 
 .msty.strike {
@@ -1155,6 +1168,7 @@ summary {
 		currentColor 50%,
 		transparent 50%
 	);
+	print-color-adjust: exact;
 }
 
 .table-outline {
@@ -1415,6 +1429,8 @@ ol {
 		--col-back: white;
 		--col-text: black;
 		--col-link: black;
+		--col-border: #aaaaaa;
+		--col-outline: black;
 		font-size: 1em;
 		padding: 0;
 	}
