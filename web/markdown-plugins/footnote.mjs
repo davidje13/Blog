@@ -68,6 +68,10 @@ export const MARKED_FOOTNOTE = (baseURL = null) => {
 						isBlock: true,
 						raw,
 						name: KNOWN_LABELS.get(label), // if unknown, this is populated once we know the display order
+						label: null,
+						shortname: null,
+						prefix: '',
+						suffix: '',
 						id: `footnote-def-${label}`,
 						refs: [],
 						content: this.lexer.blockTokens(content),
@@ -93,7 +97,14 @@ export const MARKED_FOOTNOTE = (baseURL = null) => {
 						if (!footnote) {
 							return;
 						}
-						footnote.name ??= String((globalState.n += 1));
+						if (!footnote.name) {
+							const n = ++globalState.n;
+							footnote.name = String(n);
+							footnote.label = `note ${n}`;
+							footnote.shortname = `footnote #${n}`;
+							footnote.prefix = '(';
+							footnote.suffix = ')';
+						}
 						globalState.unusedEntries.delete(label);
 						globalState.orderedEntries.set(label, footnote);
 					}
@@ -112,14 +123,9 @@ export const MARKED_FOOTNOTE = (baseURL = null) => {
 					if (baseURL) {
 						link = URL.parse(link, baseURL).toString();
 					}
-					let title;
-					if (String(Number.parseInt(target.name)) === target.name) {
-						title = `Go to footnote #${target.name}`;
-					} else {
-						title = `Go to ${target.name} footnote`;
-					}
+					const title = `Go to ${target.shortname ?? `${target.name} footnote`}`;
 
-					return `<sup><a id="${escapeHTML(id)}" title="${escapeHTML(title)}" href="${escapeHTML(link)}" aria-label="${escapeHTML(title)}">${escapeHTML(target.name)}</a></sup>`;
+					return `<sup>${escapeHTML(target.prefix)}<a id="${escapeHTML(id)}" title="${escapeHTML(title)}" href="${escapeHTML(link)}" aria-label="${escapeHTML(title)}">${escapeHTML(target.label ?? target.name)}</a>${escapeHTML(target.suffix)}</sup>`;
 				},
 			},
 			{

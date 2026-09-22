@@ -31,7 +31,7 @@ responding to the ACME DNS challenge.
 
 ## Validation methods
 
-The ACME protocol[^acme] (which is at the heart of Let's Encrypt's certificate
+The ACME protocol[^*] (which is at the heart of Let's Encrypt's certificate
 issuance) currently supports 2 ways to prove domain ownership so that a
 certificate can be issued. These are termed "challenges", and are described in
 detail on
@@ -442,7 +442,7 @@ details.
 - [Certificate Authority Authorization explanation](https://letsencrypt.org/docs/caa/)
 - [`certbot` CLI documentation](https://eff-certbot.readthedocs.io/en/stable/man/certbot.html)
 
-[^acme]:
+[^*]:
     Not to be confused with the
     [ACME corporation](https://en.wikipedia.org/wiki/Acme_Corporation)
 
