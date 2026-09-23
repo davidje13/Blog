@@ -5,6 +5,7 @@ description: 'The mathematics behind echolocation.'
 created: 2026-09-23
 tags:
   - fun
+  - mathematics
 ---
 
 # Echolocation Part 1: The Mathematics
@@ -897,9 +898,8 @@ device. This may include software latencies (due to signal processing and
 queues) as well as hardware / firmware latencies (such as the time taken to send
 a signal to a bluetooth speaker). But these values are not guaranteed to account
 for everything, and they may not be available at all (especially if the user has
-external speakers with unknown characteristics). These values are a good
-starting point when they are available, but they are not enough to solve the
-problem.
+external speakers with unknown characteristics). These are a good starting point
+when they are available, but they are not enough to solve the problem.
 
 ### Error tolerance
 
@@ -958,6 +958,18 @@ reduces our problem to 2 unknowns (total latency, and distance to object).
       "description": "error at a distance of 2 metres (minimum is 10 centimetres if the latency estimate is correct, increasing at 17 centimetres per millisecond of error)",
       "equation": "y=(d*0.05+abs(x*171.5))*0.1",
       "parameters": { "d": 2000 }
+    },
+    {
+      "type": "label",
+      "text": "underestimate",
+      "position": { "coord": [-1.9, 2], "anchor": [0, 1] },
+      "align": "left"
+    },
+    {
+      "type": "label",
+      "text": "overestimate",
+      "position": { "coord": [1.9, 2], "anchor": [1, 1] },
+      "align": "right"
     }
   ]
 }
@@ -993,6 +1005,18 @@ normalisation. We can compare our example echoes at 40 and 60cm:
       "description": "relative reflection intensity error for objects at 40 and 60 centimetres (0% if the latency estimate is correct, quickly rising to 10% for latency errors in either direction, then slowing down for underestimates and speeding up for overestimates)",
       "equation": "y=100*abs(x(b-a)/(a(x-b)))",
       "parameters": { "a": 2.837, "b": 4.002 }
+    },
+    {
+      "type": "label",
+      "text": "underestimate",
+      "position": { "coord": [-1.9, 2], "anchor": [0, 1] },
+      "align": "left"
+    },
+    {
+      "type": "label",
+      "text": "overestimate",
+      "position": { "coord": [1.9, 2], "anchor": [1, 1] },
+      "align": "right"
     }
   ]
 }
