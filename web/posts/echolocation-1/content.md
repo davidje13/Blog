@@ -607,10 +607,10 @@ approximate $c$ as a constant: values around 1000 work quite well (this
 corresponds to a SNR of -30Db, reflecting the fact that many frequencies do not
 occur at all in our signal).
 
-### Cross correlation
+### Cross-correlation
 
 Some sources use
-"[cross correlation](https://en.wikipedia.org/wiki/Cross-correlation)" rather
+"[cross-correlation](https://en.wikipedia.org/wiki/Cross-correlation)" rather
 than deconvolution to detect echoes. The two approaches are very closely
 related: the process is the same, but cross-correlation replaces $\frac{1}{b}$
 with $b^*$ in the inversion above; dropping the denominator
@@ -619,7 +619,7 @@ by applying a collection of specifically-tuned
 [band-passes](https://en.wikipedia.org/wiki/Band-pass_filter) to the input
 first.
 
-In practice, using cross correlation on its own (without these band-passes) is
+In practice, using cross-correlation on its own (without these band-passes) is
 workable, but gives less focused results, making it more difficult to
 distinguish echoes from the noise and interference patterns. Deconvolution has
 the same performance (if we precompute $B_\text{inv}$ as noted earlier) and
