@@ -451,6 +451,7 @@ async function loadMetadata(p) {
 
 const postOrder = (a, b) =>
 	b.metadata.modified - a.metadata.modified ||
+	b.metadata.created - a.metadata.created ||
 	(a.metadata.title > b.metadata.title ? 1 : -1);
 
 function printDate(timestamp) {
