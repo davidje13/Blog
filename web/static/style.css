@@ -1102,7 +1102,16 @@ summary {
 }
 
 .plot .map {
+	/* fallback styling for old browsers and Safari */
 	filter: invert();
+
+	@media (prefers-color-scheme: dark) {
+		filter: none;
+	}
+
+	@media print {
+		filter: invert();
+	}
 }
 
 /* disable colour map filters on iOS: they glitch and cause the image to not display at all. Desktop Safari also fails, but falls-back to showing the image with no filter. */

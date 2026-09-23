@@ -927,7 +927,7 @@ reduces our problem to 2 unknowns (total latency, and distance to object).
       "grid": [1, 0.1]
     },
     {
-      "label": "total distance error (cm)",
+      "label": "maximum distance error (cm)",
       "range": [0, 50],
       "grid": [10, 1]
     }
