@@ -1102,14 +1102,21 @@ summary {
 }
 
 .plot .map {
-	filter: url(/palette.svg#light);
+	filter: invert();
+}
 
-	@media (prefers-color-scheme: dark) {
-		filter: url(/palette.svg#dark);
-	}
+/* disable colour map filters on iOS: they glitch and cause the image to not display at all. Desktop Safari also fails, but falls-back to showing the image with no filter. */
+@supports (filter: url(/)) and (not (font: -apple-system-body)) {
+	.plot .map {
+		filter: url(/palette.svg#light);
 
-	@media print {
-		filter: invert();
+		@media (prefers-color-scheme: dark) {
+			filter: url(/palette.svg#dark);
+		}
+
+		@media print {
+			filter: invert();
+		}
 	}
 }
 
