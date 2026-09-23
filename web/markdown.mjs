@@ -26,7 +26,7 @@ export const makeMarkdownRenderer = ({
 		inlineAssetStorage ? MARKED_INLINE_ASSET_STORAGE(inlineAssetStorage) : {},
 		MARKED_HIGHLIGHT(absolutePathsBase),
 		MARKED_SEQUENCE_DIAGRAM,
-		MARKED_PLOT(),
+		MARKED_PLOT(absolutePathsBase),
 		MARKED_EXTERNAL_LINK,
 		MARKED_MATH,
 		MARKED_FOOTNOTE(absolutePathsBase),

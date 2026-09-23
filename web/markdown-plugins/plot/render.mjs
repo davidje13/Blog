@@ -1,3 +1,4 @@
+import { escapeHTML } from '../common.mjs';
 import { renderCartesian } from './cartesian.mjs';
 import { printText } from './text.mjs';
 
@@ -6,11 +7,11 @@ const PLOT_RENDERERS = new Map([
 	['layout', renderLayout],
 ]);
 
-export function drawPlot(definition, idPrefix = 'plot-') {
+export function drawPlot(definition, id = 'plot') {
 	let defID = 0;
-	const context = { nextID: () => `${idPrefix}${defID++}` };
+	const context = { nextID: () => `${id}-${defID++}` };
 
-	return `<section class="plot wide">${renderSubplot(context, definition)}</section>`;
+	return `<section id="${escapeHTML(id)}" class="plot wide">${renderSubplot(context, definition)}</section>`;
 }
 
 function renderSubplot(context, d, headerID) {
