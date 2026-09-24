@@ -2,7 +2,7 @@
 title: 'Raspberry Pi Ethernet Switching'
 author: David Evans
 description:
-  'Setting up a Raspberry Pi to prefer ethernet connections when available.'
+  'Setting up a Raspberry Pi to prefer Ethernet connections when available.'
 created: 2026-09-23
 modified: 2026-09-24
 tags:
@@ -54,7 +54,7 @@ inconsistent[^rapid-wifi].
 
 ## Faster over Ethernet
 
-Connecting the Pi to the router via ethernet improves this substantially, even
+Connecting the Pi to the router via Ethernet improves this substantially, even
 if the laptop still connects to the router via Wi-Fi:
 
 > ```
