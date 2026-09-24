@@ -4,6 +4,7 @@ author: David Evans
 description:
   'Setting up a Raspberry Pi to prefer ethernet connections when available.'
 created: 2026-09-23
+modified: 2026-09-24
 tags:
   - unix
   - hardware
