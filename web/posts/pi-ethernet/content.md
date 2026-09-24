@@ -87,7 +87,7 @@ connectivity issues even though we could just as well have used Ethernet.
 
 ## Picking a favourite
 
-The `nmcli` (Network Manager CLI) command can show us the Pi's networking
+The [`nmcli`] (Network Manager CLI) command can show us the Pi's networking
 preferences:
 
 ```sh
@@ -114,7 +114,8 @@ sudo nmcli connection modify "my-wifi-network" connection.autoconnect-priority -
 ```
 
 But **this does not actually work**: the autoconnect priority only applies
-between Wi-Fi networks; it doesn't account for Ethernet.
+within the same device (e.g. between multiple available Wi-Fi networks); it
+doesn't apply across multiple devices (e.g. Wi-Fi and Ethernet).
 
 ## An actual solution
 
@@ -142,7 +143,7 @@ Pi will not only configure itself correctly when first switched on, but also
 automatically (and immediately) reconfigure if the setup changes.
 
 One thing to watch out for: if you are connected to the Pi over Wi-Fi then plug
-the it in to Ethernet, your existing connection will be lost (due to Wi-Fi being
+it in to Ethernet, your existing connection will be lost (due to Wi-Fi being
 switched off).
 
 ## Bluetooth interactions
@@ -183,34 +184,22 @@ The maximum round-trip has shot up to nearly 2 seconds!
 As noted in the introduction, this is probably because the chip is entering a
 "sleep" mode from inactivity, and takes some time to wake up.
 
-So when Wi-Fi is being used, it's definitely better to keep Bluetooth enabled to
-avoid the worst of the latency. But when Ethernet is being used and we turn
-Wi-Fi off, it would be nice to disable Bluetooth to avoid wasting electricity /
-processing power. This can be done by amending our
-`/etc/NetworkManager/dispatcher.d/10-prefer-ethernet` script:
+So when Wi-Fi is being used, it's definitely better to keep Bluetooth powered on
+to avoid the worst of the latency. We can at least disable the software side of
+things if we're not using it, to save a few system resources:
 
 ```sh
-#!/bin/sh
-if [ "$2" = "up" ] || [ "$2" = "down" ]; then
-  if nmcli --fields type connection show --active | grep ethernet; then
-    nmcli radio wifi off
-    systemctl stop bluetooth
-  else
-    nmcli radio wifi on
-    systemctl start bluetooth
-  fi
-fi
+systemctl disable --now bluetooth
 ```
 
-Using `systemctl stop bluetooth` is not as effective as disabling Bluetooth
-entirely in the firmware, but it can be toggled without a restart and does at
-least reduce the resource usage.
+It would be nice to be able to fully power it down when Ethernet is connected,
+but I don't know of a way to do that without a restart.
 
 ## Only Ethernet
 
 The fixes above assume you have a Pi which is set up to connect to Wi-Fi, and
 you want a more reliable connection when using Ethernet. If you _only_ want
-ethernet, you can simply turn off Wi-Fi entirely with:
+Ethernet, you can simply turn off Wi-Fi entirely with:
 
 ```sh
 echo 'dtoverlay=disable-wifi' | sudo tee -a /boot/firmware/config.txt >/dev/null
@@ -229,6 +218,7 @@ Thanks to
 for the main solution in this article.
 
 - [Network Manager CLI documentation](https://networkmanager.dev/docs/api/latest/nmcli.html)
+- [Network Manager connection settings](https://networkmanager.dev/docs/api/latest/settings-connection.html)
 
 [^rapid-wifi]:
     The situation is not so bad when using rapid pings over the same total
@@ -255,3 +245,7 @@ for the main solution in this article.
     > 1000 packets transmitted, 1000 packets received, 0.0% packet loss
     > round-trip min/avg/max/stddev = 2.657/3.586/7.955/0.452 ms
     > ```
+
+[`ping`]: https://manpages.debian.org/trixie/inetutils-ping/ping.1.en.html
+[`nmcli`]: https://networkmanager.dev/docs/api/latest/nmcli.html
+[`systemctl`]: https://manpages.debian.org/trixie/systemd/systemctl.1.en.html
