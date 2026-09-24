@@ -131,7 +131,17 @@ export const MARKED_FOOTNOTE = (baseURL = null) => {
 			{
 				name: 'footnote-section',
 				renderer({ entries }) {
-					let html = `<section><h2>Footnotes</h2><ul class="footnote-list">`;
+					let ordered = true;
+					let i = 1;
+					for (const entry of entries.values()) {
+						if (entry.name !== String(i)) {
+							ordered = false;
+							break;
+						}
+						++i;
+					}
+					const listType = ordered ? 'ol' : 'ul';
+					let html = `<section><h2>Footnotes</h2><${listType} class="footnote-list">`;
 					for (const id of KNOWN_LABELS.keys()) {
 						const entry = entries.get(id);
 						if (entry) {
@@ -142,7 +152,7 @@ export const MARKED_FOOTNOTE = (baseURL = null) => {
 					for (const entry of entries.values()) {
 						html += `<li data-symbol="${escapeHTML(entry.name)}" id="${escapeHTML(encodeURIComponent(entry.id))}">${renderEntry(entry, this.parser, !baseURL)}</li>`;
 					}
-					html += '</ul></section>';
+					html += `</${listType}></section>`;
 					return html;
 				},
 			},
