@@ -497,7 +497,7 @@ export const MARKED_HIGHLIGHT = (baseURL) => ({
 		)) {
 			if (k.length > 2 && k[0] === '`' && k.endsWith('`')) {
 				const search = new RegExp(
-					`((?:^|(?<!class="(?:string|comment|meta)")>)[^<]*)\\b(${RegExp.escape(k.substring(1, k.length - 1))})\\b(?![\._])`,
+					`((?:^|(?<!class="(?:string|comment|meta)")>)[^<]*?)\\b(${RegExp.escape(k.substring(1, k.length - 1))})\\b(?![\._])`,
 					'g',
 				);
 				let link = null;
