@@ -380,11 +380,12 @@ a.tag:hover {
 }
 
 img {
-	box-sizing: border-box;
-	max-width: 100%;
+	--px: 0px;
+	max-width: calc(100% - var(--px));
+	height: auto;
 
 	&.small {
-		max-width: min(100%, 400px);
+		max-width: calc(min(100%, 400px) - var(--px));
 	}
 }
 
@@ -409,7 +410,8 @@ figure {
 		border: 1px solid var(--col-outline);
 		border-radius: 4px;
 		background: var(--col-back);
-		padding: 0.5em;
+		padding: calc(0.5em / 1.2);
+		--px: calc((1em / 1.2) + 2px);
 	}
 
 	& > .plot {
@@ -465,6 +467,7 @@ summary {
 
 	& img.inline {
 		vertical-align: middle;
+		width: auto;
 		height: calc(var(--h) * 1em);
 		margin: calc(var(--mt) * 1em) calc(var(--mr) * 1em) calc(var(--mb) * 1em)
 			calc(var(--ml) * 1em);
@@ -1246,6 +1249,7 @@ code {
 	box-shadow: 0 0 0 1px var(--col-border);
 	background: var(--col-back);
 	border-radius: 4px;
+	font-size: 0.9em;
 }
 
 pre {

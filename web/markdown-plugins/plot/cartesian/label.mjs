@@ -31,7 +31,7 @@ export function addLabel(
 		classNames.push('w');
 	}
 	target.layers.push({
-		html: `<div class="${escapeHTML(classNames.join(' '))}" style="${escapeHTML(vars.join(';'))}">${printText(text)}</div>`,
+		html: `<div class="${escapeHTML(classNames.join(' '))}" style="${escapeHTML(vars.join(';'))}">${printText(target.context, text)}</div>`,
 		order: Number.POSITIVE_INFINITY,
 	});
 }

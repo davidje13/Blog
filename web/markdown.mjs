@@ -10,7 +10,7 @@ import { MARKED_ABBR } from './markdown-plugins/abbr.mjs';
 import { MARKED_QR } from './markdown-plugins/qr.mjs';
 import { MARKED_MATH } from './markdown-plugins/math.mjs';
 import { MARKED_SEQUENCE_DIAGRAM } from './markdown-plugins/sequenceDiagram.mjs';
-import { MARKED_IMAGE_CLASS } from './markdown-plugins/imageClass.mjs';
+import { MARKED_IMAGE_EXT } from './markdown-plugins/imageExt.mjs';
 import { MARKED_INLINE_ASSET_STORAGE } from './markdown-plugins/inlineAssetStorage.mjs';
 import { MARKED_FANCY } from './markdown-plugins/fancy.mjs';
 import { MARKED_FIGURE } from './markdown-plugins/figure.mjs';
@@ -37,7 +37,7 @@ export const makeMarkdownRenderer = ({
 		MARKED_SUPSUB,
 		MARKED_FANCY,
 		MARKED_QR,
-		MARKED_IMAGE_CLASS,
+		MARKED_IMAGE_EXT(fileRelativePath),
 		MARKED_FIGURE,
 		MARKED_MACRO(),
 		{ tokenizer: { url() {} } }, // disable auto-links

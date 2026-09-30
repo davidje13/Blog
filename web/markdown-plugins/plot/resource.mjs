@@ -3,7 +3,7 @@ import { resolve, sep } from 'node:path';
 
 export function loadResourceSync(path, basePath) {
 	if (path.startsWith('data:')) {
-		const parts = /^data:([^,]+?)(;base64)?,(.*)$/;
+		const parts = /^data:([^,]+?)(;base64)?,(.*)$/.exec(path);
 		if (!parts) {
 			throw new Error('Invalid data URI');
 		}

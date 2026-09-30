@@ -1,6 +1,7 @@
 export const MARKED_ABSOLUTE_PATHS = (baseURL) => ({
 	walkTokens: (token) => {
 		if (token.href && !token.href.startsWith('data:')) {
+			token.rawHref = token.href;
 			token.href = URL.parse(token.href, baseURL).toString();
 		}
 	},

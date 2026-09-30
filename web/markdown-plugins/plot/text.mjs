@@ -1,6 +1,8 @@
 import { escapeHTML } from '../common.mjs';
+import { readImageSizeSync } from './image.mjs';
+import { loadResourceSync } from './resource.mjs';
 
-export function printText(content) {
+export function printText(context, content) {
 	if (!content?.length) {
 		return '';
 	}
@@ -17,17 +19,29 @@ export function printText(content) {
 		} else {
 			switch (part.type) {
 				case 'strong':
-					r += `<strong>${printText(part.content)}</strong>`;
+					r += `<strong>${printText(context, part.content)}</strong>`;
 					break;
 				case 'em':
-					r += `<em>${printText(part.content)}</em>`;
+					r += `<em>${printText(context, part.content)}</em>`;
 					break;
 				case 'del':
-					r += `<del>${printText(part.content)}</del>`;
+					r += `<del>${printText(context, part.content)}</del>`;
 					break;
-				case 'image':
-					r += `<img class="inline" src="${escapeHTML(part.image)}" style="--h:${Number(part.height ?? 1)};--mt:${Number(part.margin?.[0] ?? 0)};--mr:${Number(part.margin?.[1] ?? 0)};--mb:${Number(part.margin?.[2] ?? 0)};--ml:${Number(part.margin?.[3] ?? 0)}"${part.alt ? ` alt="${escapeHTML(part.alt)}"` : ''} />`;
+				case 'image': {
+					let attrs = '';
+					try {
+						const imageResource = loadResourceSync(
+							part.image,
+							context.fileRelativePath,
+						);
+						const imageSize = readImageSizeSync(imageResource);
+						if (imageSize) {
+							attrs += ` loading="lazy" width="${imageSize.width}" height="${imageSize.height}"`;
+						}
+					} catch {}
+					r += `<img class="inline"${attrs} src="${escapeHTML(part.image)}" style="--h:${Number(part.height ?? 1)};--mt:${Number(part.margin?.[0] ?? 0)};--mr:${Number(part.margin?.[1] ?? 0)};--mb:${Number(part.margin?.[2] ?? 0)};--ml:${Number(part.margin?.[3] ?? 0)}"${part.alt ? ` alt="${escapeHTML(part.alt)}"` : ''} />`;
 					break;
+				}
 			}
 		}
 	}

@@ -192,20 +192,24 @@ export function renderCartesian(
 		'</div>',
 		`<div class="axis x">`,
 		xAxis.line !== false ? '<div class="line"></div>' : '',
-		xAxis.label ? `<div class="label">${printText(xAxis.label)}</div>` : '',
+		xAxis.label
+			? `<div class="label">${printText(context, xAxis.label)}</div>`
+			: '',
 		xLabels.length || xAxis.labels?.length
-			? `<div class="values${xAxis.notches === false ? '' : ' notch'}" hidden style="${(xAxis.grid ?? []).map((v, i) => `--n${i}:${(framebounds.x1 - framebounds.x0) / v}`).join(';')}">${xLabels.map((l) => l.html).join('')}${axisLabels(xAxis.labels, framebounds.x0, framebounds.x1)}</div>`
+			? `<div class="values${xAxis.notches === false ? '' : ' notch'}" hidden style="${(xAxis.grid ?? []).map((v, i) => `--n${i}:${(framebounds.x1 - framebounds.x0) / v}`).join(';')}">${xLabels.map((l) => l.html).join('')}${axisLabels(context, xAxis.labels, framebounds.x0, framebounds.x1)}</div>`
 			: '',
 		'</div>',
 		`<div class="axis y">`,
 		yAxis.line !== false ? '<div class="line"></div>' : '',
-		yAxis.label ? `<div class="label">${printText(yAxis.label)}</div>` : '',
+		yAxis.label
+			? `<div class="label">${printText(context, yAxis.label)}</div>`
+			: '',
 		yLabels.length || yAxis.labels?.length
-			? `<div class="values${yAxis.notches === false ? '' : ' notch'}" hidden style="${(yAxis.grid ?? []).map((v, i) => `--n${i}:${(framebounds.y1 - framebounds.y0) / v}`).join(';')}">${yLabels.map((l) => l.html).join('')}${axisLabels(yAxis.labels, framebounds.y0, framebounds.y1)}</div>`
+			? `<div class="values${yAxis.notches === false ? '' : ' notch'}" hidden style="${(yAxis.grid ?? []).map((v, i) => `--n${i}:${(framebounds.y1 - framebounds.y0) / v}`).join(';')}">${yLabels.map((l) => l.html).join('')}${axisLabels(context, yAxis.labels, framebounds.y0, framebounds.y1)}</div>`
 			: '',
 		'</div>',
 		labelledKeyItems.length > 0
-			? `<ul class="key">${labelledKeyItems.map(({ n, label, line, area }) => `<li class="hover n${n}${line ? ' line' : ''} ${area ? ' area' : ''}">${printText(label)}</li>`).join('')}</ul>`
+			? `<ul class="key">${labelledKeyItems.map(({ n, label, line, area }) => `<li class="hover n${n}${line ? ' line' : ''} ${area ? ' area' : ''}">${printText(context, label)}</li>`).join('')}</ul>`
 			: '',
 		'</div>',
 	].join('');
@@ -230,14 +234,14 @@ function* identifyGridlines(l0, l1, masked, step) {
 	}
 }
 
-function axisLabels(labels, v0, v1) {
+function axisLabels(context, labels, v0, v1) {
 	if (!labels) {
 		return '';
 	}
 	return labels
 		.map(
 			([v, { label }]) =>
-				`<div class="lSpc" style="--pos:${(v - v0) / (v1 - v0)}"><span>${printText(label)}</span></div>`,
+				`<div class="lSpc" style="--pos:${(v - v0) / (v1 - v0)}"><span>${printText(context, label)}</span></div>`,
 		)
 		.join('');
 }

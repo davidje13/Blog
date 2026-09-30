@@ -32,7 +32,7 @@ function renderLayout(context, { direction, parts }) {
 			if (part.title) {
 				subHeaderID = context.nextID();
 			}
-			return `<section>${part.title ? `<header id="${subHeaderID}">${printText(part.title)}</header>` : ''}${renderSubplot(context, part, subHeaderID)}</section>`;
+			return `<section>${part.title ? `<header id="${subHeaderID}">${printText(context, part.title)}</header>` : ''}${renderSubplot(context, part, subHeaderID)}</section>`;
 		})
 		.join('')}</div></div>`;
 }

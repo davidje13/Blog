@@ -84,7 +84,7 @@ export function addMeasurement(
 		}
 	}
 	target.layers.push({
-		html: `<div class="measurement ${dir}" ${cssVars(vars)}><div class="line"></div>${printText(text)}</div>`,
+		html: `<div class="measurement ${dir}" ${cssVars(vars)}><div class="line"></div>${printText(target.context, text)}</div>`,
 		order: Number.POSITIVE_INFINITY,
 	});
 }
