@@ -26,7 +26,7 @@ export function printText(content) {
 					r += `<del>${printText(part.content)}</del>`;
 					break;
 				case 'image':
-					r += `<img class="inline" src="${escapeHTML(part.image)}" style="--h:${Number(part.height ?? 1)};--mt:${Number(part.margin?.[0] ?? 0)};--mr:${Number(part.margin?.[1] ?? 0)};--mb:${Number(part.margin?.[2] ?? 0)};--ml:${Number(part.margin?.[3] ?? 0)}" />`;
+					r += `<img class="inline" src="${escapeHTML(part.image)}" style="--h:${Number(part.height ?? 1)};--mt:${Number(part.margin?.[0] ?? 0)};--mr:${Number(part.margin?.[1] ?? 0)};--mb:${Number(part.margin?.[2] ?? 0)};--ml:${Number(part.margin?.[3] ?? 0)}"${part.alt ? ` alt="${escapeHTML(part.alt)}"` : ''} />`;
 					break;
 			}
 		}

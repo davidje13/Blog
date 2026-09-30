@@ -10,11 +10,11 @@ html {
 	--col-border: #cccccc;
 	--col-border-hover: #888888;
 
-	--col-h-comment: #999988;
+	--col-h-comment: #777766;
 	--col-h-error: #a61717;
 	--col-h-error-back: transparent;
 	--col-h-builtin: #000099;
-	--col-h-number: #009999;
+	--col-h-number: #008080;
 	--col-h-string: #dd1144;
 	--col-h-name: #445588;
 	--col-h-variable: #008080;

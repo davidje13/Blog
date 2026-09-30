@@ -63,6 +63,7 @@ At its most basic, echolocation consists of:
               {
                 "type": "image",
                 "image": "./microphone.png",
+                "alt": "microphone",
                 "margin": [0, -0.5, -2.8, 0],
                 "height": 5
               }
@@ -76,6 +77,7 @@ At its most basic, echolocation consists of:
               {
                 "type": "image",
                 "image": "./speaker.png",
+                "alt": "speaker",
                 "margin": [0, -0.5, 0, 0],
                 "height": 5
               }
