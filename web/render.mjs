@@ -102,18 +102,18 @@ async function renderSiteMap(env, allPaths) {
 	return r;
 }
 
-async function getPostsAndMetadata(allPaths) {
+async function getPostsAndMetadata(allPaths, order = createdOrder) {
 	let posts = allPaths.filter((p) => p.type === 'post');
 	for (const p of posts) {
 		await loadMetadata(p);
 	}
 	posts = posts.filter((p) => !p.metadata.hidden);
-	posts.sort(postOrder);
+	posts.sort(order);
 	return posts;
 }
 
 async function renderRSS(env, allPaths) {
-	const posts = await getPostsAndMetadata(allPaths);
+	const posts = await getPostsAndMetadata(allPaths, updatedOrder);
 	const latestChange = posts[0].metadata.modified;
 	const now = new Date();
 	let r = [
@@ -235,7 +235,6 @@ async function renderTag(env, name, allPaths) {
 
 	const posts = await getPostsAndMetadata(allPaths);
 	const taggedPosts = posts.filter((p) => p.metadata.tags.has(name));
-	posts.sort(postOrder);
 	let html = `<header><h1>${escapeHTML(`Tagged: ${name}`)}</h1></header>`;
 	html += await makeMarkdownRenderer({
 		fileRelativePath: dirname(tag.metadata.fsPath),
@@ -449,7 +448,12 @@ async function loadMetadata(p) {
 	return true;
 }
 
-const postOrder = (a, b) =>
+const createdOrder = (a, b) =>
+	b.metadata.created - a.metadata.created ||
+	b.metadata.modified - a.metadata.modified ||
+	(a.metadata.title > b.metadata.title ? 1 : -1);
+
+const updatedOrder = (a, b) =>
 	b.metadata.modified - a.metadata.modified ||
 	b.metadata.created - a.metadata.created ||
 	(a.metadata.title > b.metadata.title ? 1 : -1);
