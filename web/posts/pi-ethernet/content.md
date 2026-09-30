@@ -4,7 +4,7 @@ author: David Evans
 description:
   'Setting up a Raspberry Pi to prefer Ethernet connections when available.'
 created: 2026-09-23
-modified: 2026-09-24
+modified: 2026-09-30
 tags:
   - unix
   - hardware
@@ -83,7 +83,7 @@ But there's a problem: by default, the Pi will connect to _all available
 networks_ and advertise its hostname to all of them. When it is attached to a
 network over _both_ Wi-Fi _and_ Ethernet, it doesn't know that both are going to
 the same place, and it is effectively random which route will be used when
-communicating by hostname. If the Wi-Fi route is chosen, we get the same
+communicating by hostname[^ip]. If the Wi-Fi route is chosen, we get the same
 connectivity issues even though we could just as well have used Ethernet.
 
 ## Picking a favourite
@@ -246,6 +246,12 @@ for the main solution in this article.
     > 1000 packets transmitted, 1000 packets received, 0.0% packet loss
     > round-trip min/avg/max/stddev = 2.657/3.586/7.955/0.452 ms
     > ```
+
+[^ip]:
+    It's still possible to pick the Wi-Fi or Ethernet connection explicitly by
+    connecting by IP (since the Pi gets assigned a separate IP address for each
+    connectivity method), but this requires knowing the IP address which was
+    assigned, and is all-round less convenient than using a hostname.
 
 [`ping`]: https://manpages.debian.org/trixie/inetutils-ping/ping.1.en.html
 [`nmcli`]: https://networkmanager.dev/docs/api/latest/nmcli.html
