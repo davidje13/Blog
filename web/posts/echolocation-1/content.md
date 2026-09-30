@@ -164,9 +164,9 @@ Hardware which performs this exact operation is readily available, such as the
 typically advertises accuracy of "up to 3mm" (theoretically requiring a sample
 rate of at least 60kHz).
 
-![HC-SR04](./hc-sr04.small.jpg) An HC-SR04 Ultrasonic Distance Sensor. It has a
-directional transmitter (speaker) on the left and a directional receiver
-(microphone) on the right.
+![HC-SR04](./hc-sr04.small.noborder.png) An HC-SR04 Ultrasonic Distance Sensor.
+It has a directional transmitter (speaker) on the left and a directional
+receiver (microphone) on the right.
 
 This specific example sends out a series of 8 very short 40kHz beeps (which
 requires a digital sample rate of at least 80kHz due to
