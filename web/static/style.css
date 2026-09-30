@@ -142,6 +142,8 @@ body {
 	line-height: 1.8;
 	color: var(--col-text);
 	background: var(--col-page);
+	--indent: 0px;
+	--enddent: 0px;
 }
 
 main {
@@ -387,7 +389,9 @@ figure {
 	break-inside: avoid;
 
 	&:has(.wide) {
-		margin: 32px max(-200px, calc((100vw - 100%) / -2 + 16px));
+		--m: calc((100vw - var(--indent) - var(--enddent) - 100%) / -2 + 16px);
+		margin: 32px max(-200px, calc(var(--m) - var(--enddent))) 32px
+			max(-200px, calc(var(--m) - var(--indent)));
 	}
 
 	& > img:not(.noborder),
@@ -1142,8 +1146,10 @@ summary {
 }
 
 .hscroll {
-	margin: 16px max(-200px, calc((100vw - 100%) / -2));
-	padding: 8px 16px 16px;
+	--m: calc((100vw - var(--indent) - var(--enddent) - 100%) / -2);
+	margin: 16px max(-200px, calc(var(--m) - var(--enddent))) 16px
+		max(-200px, calc(var(--m) - var(--indent)));
+	padding: 8px 16px 16px calc(var(--indent) + 16px);
 	overflow-x: auto;
 
 	& > math {
@@ -1305,6 +1311,8 @@ blockquote {
 	background: var(--col-quote-back);
 	padding: 15px 15px 15px 24px;
 	margin: 16px 0 16px 16px;
+	--indent: 42px;
+	--enddent: 15px;
 
 	& > :first-child {
 		margin-top: 0;
@@ -1340,6 +1348,7 @@ ul,
 ol {
 	margin: 16px 0;
 	padding: 0 0 0 40px;
+	--indent: 40px;
 
 	li {
 		margin: 8px 0;
