@@ -83,6 +83,7 @@ export function renderCartesian(
 
 		lines: '',
 		lineHoverRegions: '',
+		custom: new Map(),
 		layers: [],
 		keyItems: new Map(),
 		elementDescriptions: [],
@@ -185,7 +186,9 @@ export function renderCartesian(
 		`<div class="subplot cartesian${escapeHTML((typeof variant === 'string' ? [variant] : variant).map((v) => ` chart-var-${v}`).join(' '))}${target.keyItems.size > 1 ? ' multi' : ''}" role="img"${headerID ? ` aria-labelledby="${escapeHTML(headerID)}"` : ''} aria-describedby="${escapeHTML(descriptionID)}">`,
 		`<div id="${escapeHTML(descriptionID)}" hidden>${escapeHTML(description)}</div>`,
 		`<div class="view">`,
-		...target.layers.map((l) => l.html),
+		...target.layers.map((l) =>
+			typeof l.html === 'string' ? l.html : l.html(),
+		),
 		'</div>',
 		`<div class="axis x">`,
 		xAxis.line !== false ? '<div class="line"></div>' : '',

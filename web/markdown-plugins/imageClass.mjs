@@ -17,12 +17,12 @@ export const MARKED_IMAGE_CLASS = {
 				}
 				node.className = classNames.join(' ');
 			}
+			let attrs = '';
+			//attrs += ' loading="lazy"'; - ideally set width+height if using this
 			if (node.className) {
-				img = img.replace(
-					/^<img/,
-					`<img class="${escapeHTML(node.className)}"`,
-				);
+				attrs += ` class="${escapeHTML(node.className)}"`;
 			}
+			img = img.replace(/^<img/, () => '<img ' + attrs);
 			return img;
 		},
 	},

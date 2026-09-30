@@ -1,7 +1,7 @@
 import { escapeHTML } from './common.mjs';
-import { drawPlot } from './plot/render.mjs';
+import { drawPlotSync } from './plot/render.mjs';
 
-export const MARKED_PLOT = (asLink = null) => {
+export const MARKED_PLOT = (fileRelativePath, asLink = null) => {
 	let nextID = 0;
 	return {
 		walkTokens(token) {
@@ -25,7 +25,7 @@ export const MARKED_PLOT = (asLink = null) => {
 					if (asLink) {
 						return `<p><a href="${escapeHTML(URL.parse('#' + encodeURIComponent(plotID), asLink).toString())}" target="_blank">Click here to see the diagram</a></p>`;
 					} else {
-						return drawPlot(definition, plotID);
+						return drawPlotSync(definition, { fileRelativePath, id: plotID });
 					}
 				},
 			},

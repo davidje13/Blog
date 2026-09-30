@@ -7,9 +7,12 @@ const PLOT_RENDERERS = new Map([
 	['layout', renderLayout],
 ]);
 
-export function drawPlot(definition, id = 'plot') {
+export function drawPlotSync(
+	definition,
+	{ fileRelativePath = '.', id = 'plot' },
+) {
 	let defID = 0;
-	const context = { nextID: () => `${id}-${defID++}` };
+	const context = { nextID: () => `${id}-${defID++}`, fileRelativePath };
 
 	return `<section id="${escapeHTML(id)}" class="plot wide">${renderSubplot(context, definition)}</section>`;
 }

@@ -18,6 +18,7 @@ import { MARKED_MACRO } from './markdown-plugins/macro.mjs';
 import { MARKED_PLOT } from './markdown-plugins/plot.mjs';
 
 export const makeMarkdownRenderer = ({
+	fileRelativePath = '.',
 	absolutePathsBase = null,
 	inlineAssetStorage = null,
 } = {}) =>
@@ -26,7 +27,7 @@ export const makeMarkdownRenderer = ({
 		inlineAssetStorage ? MARKED_INLINE_ASSET_STORAGE(inlineAssetStorage) : {},
 		MARKED_HIGHLIGHT(absolutePathsBase),
 		MARKED_SEQUENCE_DIAGRAM,
-		MARKED_PLOT(absolutePathsBase),
+		MARKED_PLOT(fileRelativePath, absolutePathsBase),
 		MARKED_EXTERNAL_LINK,
 		MARKED_MATH,
 		MARKED_FOOTNOTE(absolutePathsBase),

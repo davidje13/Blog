@@ -237,10 +237,9 @@ async function renderTag(env, name, allPaths) {
 	const taggedPosts = posts.filter((p) => p.metadata.tags.has(name));
 	posts.sort(postOrder);
 	let html = `<header><h1>${escapeHTML(`Tagged: ${name}`)}</h1></header>`;
-	html += await makeMarkdownRenderer().parse(
-		(await getMarkdownContent(tag.metadata.fsPath)).md,
-		{ async: true },
-	);
+	html += await makeMarkdownRenderer({
+		fileRelativePath: dirname(tag.metadata.fsPath),
+	}).parse((await getMarkdownContent(tag.metadata.fsPath)).md, { async: true });
 	html += '<section><ul class="posts">';
 	for (const p of taggedPosts) {
 		html += renderLinkItem(p, { skipTag: name });
@@ -280,6 +279,7 @@ async function renderPost(
 
 	const pageURL = URL.parse(`/${encodeURIComponent(name)}/`, env.host);
 	const renderer = makeMarkdownRenderer({
+		fileRelativePath: dirname(post.metadata.fsPath),
 		absolutePathsBase: absolutePaths ? pageURL : null,
 		inlineAssetStorage: env.inlineAssetStorage,
 	});

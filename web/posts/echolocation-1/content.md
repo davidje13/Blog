@@ -212,10 +212,12 @@ to distinguish if they are all the same frequency:
       "type": "map",
       "image": "./flat-sim.png",
       "description": "A single tone at 40kHz. It is almost impossible to see the echoes because they overlap the original signal.",
-      "range": [
-        [0, 20],
-        [48, 0]
-      ]
+      "position": {
+        "range": [
+          [0, 20],
+          [48, 0]
+        ]
+      }
     }
   ]
 }
@@ -248,10 +250,12 @@ makes them much easier to distinguish:
       "type": "map",
       "image": "./linear-sim.png",
       "description": "A linear 40kHz–6kHz chirp. Both echoes are easy to see.",
-      "range": [
-        [0, 20],
-        [48, 0]
-      ]
+      "position": {
+        "range": [
+          [0, 20],
+          [48, 0]
+        ]
+      }
     }
   ]
 }
@@ -290,10 +294,12 @@ frequency space, rather than being linear:
       "type": "map",
       "image": "./hyperbolic-sim.png",
       "description": "A hyperbolic 40kHz–6kHz chirp. It curves steeply from 40kHz to 20kHz or so, then is relatively flat. Both echoes are easy to see, especially at the higher frequencies where the gradient is steepest.",
-      "range": [
-        [0, 20],
-        [48, 0]
-      ]
+      "position": {
+        "range": [
+          [0, 20],
+          [48, 0]
+        ]
+      }
     }
   ]
 }
@@ -335,10 +341,12 @@ We don't have to be constrained to nature, or even to lines:
       "type": "map",
       "image": "./face-sim.png",
       "description": "A smiley face used as a signal. The echoes are easy to see, but it's not very practical.",
-      "range": [
-        [0, 20],
-        [48, 0]
-      ]
+      "position": {
+        "range": [
+          [0, 20],
+          [48, 0]
+        ]
+      }
     }
   ]
 }

@@ -1129,6 +1129,18 @@ summary {
 	}
 }
 
+.plot .map {
+	isolation: isolate;
+
+	& > * {
+		mix-blend-mode: lighten;
+
+		&.and {
+			mix-blend-mode: darken;
+		}
+	}
+}
+
 .hscroll {
 	margin: 16px max(-200px, calc((100vw - 100%) / -2));
 	padding: 8px 16px 16px;
