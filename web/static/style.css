@@ -32,6 +32,8 @@ html {
 	--col-chart-10: #22bb77;
 	--col-chart-n: #444444;
 
+	--base-font-size: 1rem;
+
 	@media (prefers-color-scheme: dark) {
 		--col-page: #222222;
 		--col-back: #000000;
@@ -138,7 +140,7 @@ section {
 body {
 	margin: 0;
 	padding: 8px 16px 80vh;
-	font: 1.2em sans-serif;
+	font: calc(var(--base-font-size) * 1.2) sans-serif;
 	line-height: 1.8;
 	color: var(--col-text);
 	background: var(--col-page);
@@ -407,11 +409,11 @@ figure {
 		border: 1px solid var(--col-outline);
 		border-radius: 4px;
 		background: var(--col-back);
-		padding: 8px;
+		padding: 0.5em;
 	}
 
 	& > .plot {
-		padding: 16px;
+		padding: 1em;
 	}
 
 	& > figcaption {
@@ -430,22 +432,22 @@ summary {
 	--dim: 0;
 	--pattern-r: -45deg;
 	--pattern-x: 0;
-	--axis-value-gap: 4px;
+	--axis-value-gap: 0.25em;
 	--axis-value-min-w: 4ch;
 	--axis-value-min-h: 2.5em;
-	--axis-label-gap: 8px;
-	--notch-size: 6px;
-	--arrow-length: 10px;
-	--arrow-rad: 4px;
-	--axis-width: 2px;
-	--axis-overshoot: 6px;
-	--arrow-space: 16px;
+	--axis-label-gap: 0.5em;
+	--notch-size: 0.375em;
+	--arrow-length: 0.625em;
+	--arrow-rad: 0.25em;
+	--axis-width: 0.125em;
+	--axis-overshoot: 0.375em;
+	--arrow-space: 1em;
 	display: flex;
 	flex-flow: column;
 	box-sizing: border-box;
 	max-width: 100%;
 	width: 600px;
-	font-size: 1rem;
+	font-size: var(--base-font-size);
 	line-height: 1;
 	text-align: left;
 	overflow: hidden;
@@ -521,7 +523,7 @@ summary {
 					transparent 46%,
 					white 50%
 				)
-				calc(var(--pattern-x) * 10px) 0 / 10px 10px;
+				calc(var(--pattern-x) * 0.625em) 0 / 0.625em 0.625em;
 			transition: opacity 0.2s ease;
 		}
 
@@ -534,7 +536,7 @@ summary {
 			stroke-linecap: round;
 			path {
 				stroke: var(--col);
-				stroke-width: calc(2px + var(--highlight) * 2px);
+				stroke-width: calc(0.125em + var(--highlight) * 0.125em);
 				opacity: calc(1 + (var(--highlight) - var(--dim)) * 0.6);
 				transition:
 					stroke-width 0.2s ease,
@@ -542,13 +544,13 @@ summary {
 
 				&.exclusive,
 				&.dashed {
-					stroke-dasharray: 6px 10px;
+					stroke-dasharray: 0.375em 0.625em;
 				}
 			}
 
 			.ext {
 				stroke: transparent;
-				stroke-width: 12px;
+				stroke-width: 0.75em;
 			}
 		}
 	}
@@ -556,16 +558,16 @@ summary {
 	& .key {
 		display: flex;
 		flex-flow: row wrap;
-		gap: 4px 8px;
+		gap: 0.25em 0.5em;
 		list-style: none;
 		margin: 0;
-		padding: 8px;
+		padding: 0.5em;
 		background: var(--col-back);
 
 		li {
 			position: relative;
 			margin: 0;
-			padding: 4px 8px 2px calc(1em + 16px);
+			padding: 0.25em 0.5em 0.125em 2em;
 			min-width: 6ch;
 			border-radius: 100px;
 			cursor: default;
@@ -575,8 +577,8 @@ summary {
 			&::after {
 				content: '';
 				position: absolute;
-				top: 4px;
-				left: 8px;
+				top: 0.25em;
+				left: 0.5em;
 				width: 1em;
 				height: 0.4em;
 			}
@@ -591,11 +593,11 @@ summary {
 						transparent 44%,
 						var(--col) 50%
 					)
-					0 0 / 6px 6px;
+					0 0 / 0.375em 0.375em;
 			}
 
 			&.line::after {
-				border-bottom: 3px solid var(--col);
+				border-bottom: 0.1875em solid var(--col);
 			}
 		}
 	}
@@ -690,7 +692,7 @@ summary {
 		flex: 1;
 		display: flex;
 		flex-flow: column;
-		gap: 64px;
+		gap: 4em;
 		align-content: center;
 		justify-content: center;
 
@@ -705,7 +707,7 @@ summary {
 	&.h > div {
 		flex-flow: row;
 
-		@container chart-layout (width < 600px) {
+		@container chart-layout (width < 40em) {
 			flex-flow: column;
 		}
 	}
@@ -993,7 +995,7 @@ summary {
 				& .line {
 					left: calc(var(--arrow-length) + var(--axis-width) * 0.5);
 					right: calc(var(--arrow-length) + var(--axis-width) * 0.5);
-					bottom: -8px;
+					bottom: -0.5em;
 					height: var(--axis-width);
 
 					&::before {
@@ -1015,24 +1017,24 @@ summary {
 
 				&.t {
 					bottom: calc((1 - var(--y)) * 100%);
-					margin-bottom: 32px;
+					margin-bottom: 2em;
 
 					&::before,
 					&::after {
-						bottom: -32px;
+						bottom: -2em;
 						width: var(--axis-width);
-						height: 40px;
+						height: 2.5em;
 					}
 				}
 
 				&.b {
 					top: calc(var(--y) * 100%);
-					margin-top: 16px;
+					margin-top: 1em;
 
 					&::before,
 					&::after {
-						top: -16px;
-						bottom: -20px;
+						top: -1em;
+						bottom: -1.25em;
 						width: var(--axis-width);
 					}
 				}
@@ -1054,7 +1056,7 @@ summary {
 				& .line {
 					top: calc(var(--arrow-length) + var(--axis-width) * 0.5);
 					bottom: calc(var(--arrow-length) + var(--axis-width) * 0.5);
-					right: -8px;
+					right: -0.5em;
 					width: var(--axis-width);
 
 					&::before {
@@ -1074,25 +1076,25 @@ summary {
 
 				&.r {
 					left: calc(var(--x) * 100%);
-					margin-left: 16px;
+					margin-left: 1em;
 
 					&::before,
 					&::after {
-						left: -16px;
-						right: -20px;
+						left: -1em;
+						right: -1.25em;
 						height: var(--axis-width);
 					}
 				}
 
 				&.l {
 					right: calc((1 - var(--x)) * 100%);
-					margin-right: 32px;
+					margin-right: 2em;
 
 					&::before,
 					&::after {
-						right: -32px;
+						right: -2em;
 						height: var(--axis-width);
-						width: 40px;
+						width: 2.5em;
 					}
 				}
 			}
@@ -1109,8 +1111,8 @@ summary {
 	align-self: start;
 	justify-self: end;
 	position: absolute;
-	margin: 8px;
-	border-radius: 20px;
+	margin: 0.5em;
+	border-radius: 1.25em;
 }
 
 .plot .map {
@@ -1185,13 +1187,13 @@ summary {
 .msty.boxed {
 	display: inline-block;
 	border: 1px solid currentColor;
-	padding: 2px 3px;
-	border-radius: 2px;
+	padding: 0.1em 0.15em;
+	border-radius: 0.1em;
 }
 
 .msty.cancel {
 	display: inline-block;
-	padding: 2px 0;
+	padding: 0.1em 0;
 	background: linear-gradient(
 		to top left,
 		transparent calc(50% - 1px),
@@ -1216,7 +1218,7 @@ summary {
 .table-outline {
 	width: max-content;
 	margin: 0 auto;
-	padding: 8px;
+	padding: 0.4em;
 	border: 1px solid var(--col-outline);
 	border-radius: 4px;
 	background: var(--col-back);
@@ -1248,7 +1250,7 @@ code {
 
 pre {
 	margin: 16px 0;
-	padding: 16px 20px;
+	padding: 16px 1.1em;
 	background: var(--col-back);
 	overflow: auto;
 	tab-size: 4;
@@ -1273,12 +1275,12 @@ table {
 	th {
 		font-weight: normal;
 		text-align: center;
-		padding: 4px 16px;
+		padding: 0.2em 0.9em;
 	}
 
 	td {
 		text-align: start;
-		padding: 8px 16px;
+		padding: 0.4em 0.9em;
 	}
 
 	th,
@@ -1317,10 +1319,10 @@ blockquote {
 	border: 1px solid transparent; /* for high contrast mode */
 	border-left: 2px solid var(--col-border);
 	background: var(--col-quote-back);
-	padding: 15px 15px 15px 24px;
-	margin: 16px 0 16px 16px;
-	--indent: 42px;
-	--enddent: 15px;
+	padding: 15px calc(1em - 1px) 15px 1.5em;
+	margin: 16px 0 16px 1em;
+	--indent: calc(1.5em + 2px + 1em);
+	--enddent: calc(1em - 1px);
 
 	& > :first-child {
 		margin-top: 0;
@@ -1337,8 +1339,8 @@ blockquote {
 		border: none;
 
 		&:only-child {
-			margin: -15px -15px -15px -24px;
-			padding: 16px 16px 16px 24px;
+			margin: -15px calc(1px - 1em) -15px -1.5em;
+			padding: 16px 1em 16px 1.5em;
 		}
 	}
 
@@ -1355,8 +1357,8 @@ blockquote {
 ul,
 ol {
 	margin: 16px 0;
-	padding: 0 0 0 40px;
-	--indent: 40px;
+	padding: 0 0 0 2.5em;
+	--indent: 2.5em;
 
 	li {
 		margin: 8px 0;
@@ -1375,7 +1377,7 @@ ol {
 		content: attr(data-symbol);
 		position: absolute;
 		right: 100%;
-		margin-right: 12px;
+		margin-right: 0.75em;
 		font-size: 0.8em;
 		vertical-align: super;
 	}
@@ -1387,13 +1389,13 @@ ol {
 	padding: 0;
 
 	& > li {
-		margin: 32px 0;
+		margin: 1.75em 0;
 		padding: 0;
 
 		& > a {
 			display: block;
 			position: relative;
-			padding: 24px 16px;
+			padding: 1.25em 1em;
 			background: var(--col-back);
 			border: 1px solid var(--col-border);
 			border-radius: 4px;
@@ -1407,8 +1409,8 @@ ol {
 
 		time {
 			position: absolute;
-			top: 4px;
-			right: 6px;
+			top: 0.25em;
+			right: 0.5em;
 			font-size: 0.6em;
 		}
 
@@ -1420,7 +1422,7 @@ ol {
 		& .tags {
 			pointer-events: none;
 			position: relative;
-			margin: -12px 16px 0;
+			margin: -1em 1em 0;
 			font-size: 0.7em;
 			min-height: calc(1em * 1.8 + 2px);
 		}
@@ -1466,6 +1468,18 @@ ol {
 .highlight .attribute,
 .highlight .attr {
 	color: var(--col-h-property);
+}
+
+@media (max-width: 800px) {
+	html {
+		--base-font-size: min(2vw, 1rem);
+	}
+}
+
+@media (max-width: 400px) {
+	html {
+		--base-font-size: 8px;
+	}
 }
 
 @media print {

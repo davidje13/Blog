@@ -474,6 +474,8 @@ function htmlFrame({ title, html, headContent }) {
 		'<html lang="en">',
 		'<head prefix="og: https://ogp.me/ns#">',
 		'<meta charset="utf-8" />',
+		'<meta name="viewport" content="width=device-width, initial-scale=1" />',
+		'<meta name="format-detection" content="telephone=no" />',
 		`<title>${escapeHTML(title)}</title>`,
 		'<link rel="stylesheet" href="/style.css" />',
 		'<link rel="icon" href="/favicon.ico" sizes="64x64 32x32 16x16" type="image/x-icon" />',
