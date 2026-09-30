@@ -180,12 +180,12 @@ function renderLinkItem(post, { skipTag = null } = {}) {
 		' ',
 		`<span class="post-title">${post.metadata.title}</span>`,
 		'</a>',
-		'<div class="tags">',
+		'<ul class="tags">',
 		...tags.map(
 			(t) =>
-				`<a class="tag" href="${escapeHTML(`/tagged/${encodeURIComponent(t)}/`)}">${escapeHTML(t)}</a>`,
+				`<li><a class="tag" href="${escapeHTML(`/tagged/${encodeURIComponent(t)}/`)}">${escapeHTML(t)}</a></li>`,
 		),
-		'</div>',
+		'</ul>',
 		'</li>',
 	].join('');
 }
@@ -215,14 +215,14 @@ async function renderRoot(env, allPaths) {
 
 function renderTagList(_env, allPaths) {
 	let html =
-		'<header><h1>Tags</h1></header><section><div class="tags"><a class="tag" href="/">all posts</a>';
+		'<header><h1>Tags</h1></header><section><ul class="tags"><li><a class="tag" href="/">all posts</a></li>';
 	for (const page of allPaths) {
 		if (page.type !== 'tag') {
 			continue;
 		}
-		html += `<a class="tag" href="${escapeHTML(toPath(page.path))}">${escapeHTML(page.path[1])}</a>`;
+		html += `<li><a class="tag" href="${escapeHTML(toPath(page.path))}">${escapeHTML(page.path[1])}</a></li>`;
 	}
-	html += '</div></section>';
+	html += '</ul></section>';
 	return { title: `Tags \u2014 ${metadata.title}`, html, headContent: [] };
 }
 
@@ -314,13 +314,13 @@ async function renderPost(
 			`<img src="${escapeHTML(`data:image/svg+xml;base64,${btoa(qrLink)}`)}" alt="QR Code linking to this page" />`,
 			'</a>',
 			`<p>${headerData}</p>`,
-			'<nav class="tags">',
+			'<nav><ul class="tags">',
 			...tags.map(
 				(t) =>
-					`<a class="tag" href="${escapeHTML(`/tagged/${encodeURIComponent(t)}/`)}">${escapeHTML(t)}</a>`,
+					`<li><a class="tag" href="${escapeHTML(`/tagged/${encodeURIComponent(t)}/`)}">${escapeHTML(t)}</a></li>`,
 			),
-			'<a class="tag" href="/">all posts</a>',
-			'</nav>',
+			'<li><a class="tag" href="/">all posts</a></li>',
+			'</ul></nav>',
 			'</header>',
 		].join('');
 	}

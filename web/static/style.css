@@ -230,7 +230,7 @@ header {
 		text-align: left;
 	}
 
-	& .tags {
+	nav {
 		grid-column: 1 / 2;
 		margin: 4px 0 0;
 		font-size: 0.7em;
@@ -352,7 +352,15 @@ code a:hover {
 .tags {
 	display: flex;
 	flex-flow: row wrap;
-	gap: 4px;
+	gap: 8px 4px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	li {
+		margin: 0;
+		padding: 0;
+	}
 }
 
 a.tag {
@@ -1378,7 +1386,7 @@ ol {
 	margin: 0;
 	padding: 0;
 
-	li {
+	& > li {
 		margin: 32px 0;
 		padding: 0;
 

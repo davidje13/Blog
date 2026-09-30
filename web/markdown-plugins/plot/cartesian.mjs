@@ -194,14 +194,14 @@ export function renderCartesian(
 		xAxis.line !== false ? '<div class="line"></div>' : '',
 		xAxis.label ? `<div class="label">${printText(xAxis.label)}</div>` : '',
 		xLabels.length || xAxis.labels?.length
-			? `<div class="values${xAxis.notches === false ? '' : ' notch'}" style="${(xAxis.grid ?? []).map((v, i) => `--n${i}:${(framebounds.x1 - framebounds.x0) / v}`).join(';')}">${xLabels.map((l) => l.html).join('')}${axisLabels(xAxis.labels, framebounds.x0, framebounds.x1)}</div>`
+			? `<div class="values${xAxis.notches === false ? '' : ' notch'}" hidden style="${(xAxis.grid ?? []).map((v, i) => `--n${i}:${(framebounds.x1 - framebounds.x0) / v}`).join(';')}">${xLabels.map((l) => l.html).join('')}${axisLabels(xAxis.labels, framebounds.x0, framebounds.x1)}</div>`
 			: '',
 		'</div>',
 		`<div class="axis y">`,
 		yAxis.line !== false ? '<div class="line"></div>' : '',
 		yAxis.label ? `<div class="label">${printText(yAxis.label)}</div>` : '',
 		yLabels.length || yAxis.labels?.length
-			? `<div class="values${yAxis.notches === false ? '' : ' notch'}" style="${(yAxis.grid ?? []).map((v, i) => `--n${i}:${(framebounds.y1 - framebounds.y0) / v}`).join(';')}">${yLabels.map((l) => l.html).join('')}${axisLabels(yAxis.labels, framebounds.y0, framebounds.y1)}</div>`
+			? `<div class="values${yAxis.notches === false ? '' : ' notch'}" hidden style="${(yAxis.grid ?? []).map((v, i) => `--n${i}:${(framebounds.y1 - framebounds.y0) / v}`).join(';')}">${yLabels.map((l) => l.html).join('')}${axisLabels(yAxis.labels, framebounds.y0, framebounds.y1)}</div>`
 			: '',
 		'</div>',
 		labelledKeyItems.length > 0
