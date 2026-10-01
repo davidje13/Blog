@@ -1,12 +1,20 @@
+import { ptMid } from 'curve-ops';
 import { escapeHTML } from '../../common.mjs';
-import { printText } from '../text.mjs';
+import { ptSVGFloating } from '../svg.mjs';
+import { printText, printTSpan } from '../text.mjs';
 
 export function addMeasurement(
 	target,
 	framebounds,
 	{
 		text,
-		position: { p1, p2, direction = 'x', position = 'above', separation = 0 },
+		position: {
+			p1,
+			p2,
+			direction = 'direct',
+			position = 'above',
+			separation = 0,
+		},
 	},
 ) {
 	const mx = 1 / (framebounds.x1 - framebounds.x0);
@@ -14,7 +22,38 @@ export function addMeasurement(
 	let dir;
 	let vars;
 
-	if (direction === 'y') {
+	if (direction === 'direct') {
+		const markerID = target.context.nextID();
+		const pathID = target.context.nextID();
+		const pp1 = {
+			x: (p1[0] - framebounds.x0) * target.scaleX,
+			y: target.baseHeight + (p1[1] - framebounds.y0) * target.scaleY,
+		};
+		const pp2 = {
+			x: (p2[0] - framebounds.x0) * target.scaleX,
+			y: target.baseHeight + (p2[1] - framebounds.y0) * target.scaleY,
+		};
+		const ppM = ptMid(pp1, pp2);
+		target.layers.push({
+			html: [
+				`<svg ${target.svgCommon} class="measurement">`,
+				'<defs>',
+				`<marker id="${escapeHTML(markerID)}" viewBox="0 -2 5 4" refX="5.5" markerWidth="5" markerHeight="4" orient="auto-start-reverse" vector-effect="non-scaling-size">`,
+				'<path d="M0 2V-2L5 0Z" fill="currentColor" />',
+				'</marker>',
+				`<path id="${escapeHTML(pathID)}" d="M${ptSVGFloating(pp1)}L${ptSVGFloating(pp2)}" />`,
+				'</defs>',
+				'<g stroke-linecap="round" stroke-dashoffset="-4" stroke-dasharray="99999 5">',
+				`<path class="line" d="M${ptSVGFloating(pp1)}L${ptSVGFloating(ppM)}" marker-start="url(#${escapeHTML(markerID)})" />`,
+				`<path class="line" d="M${ptSVGFloating(pp2)}L${ptSVGFloating(ppM)}" marker-start="url(#${escapeHTML(markerID)})" />`,
+				'</g>',
+				`<text><textPath href="#${escapeHTML(pathID)}" startOffset="50%" text-anchor="middle"><tspan dy="-2">${printTSpan(target.context, text)}</tspan></textPath></text>`,
+				'</svg>',
+			].join(''),
+			order: Number.POSITIVE_INFINITY,
+		});
+		return;
+	} else if (direction === 'y') {
 		let x;
 		if (position === 'right') {
 			dir = 'y r';
@@ -48,7 +87,7 @@ export function addMeasurement(
 				order: 3,
 			});
 		}
-	} else {
+	} else if (direction === 'x') {
 		let y;
 		if (position === 'below') {
 			dir = 'x b';
@@ -82,6 +121,8 @@ export function addMeasurement(
 				order: 3,
 			});
 		}
+	} else {
+		throw new Error('unknown measurement direction');
 	}
 	target.layers.push({
 		html: `<div class="measurement ${dir}" ${cssVars(vars)}><div class="line"></div>${printText(target.context, text)}</div>`,

@@ -48,6 +48,39 @@ export function printText(context, content) {
 	return r;
 }
 
+export function printTSpan(context, content) {
+	if (!content?.length) {
+		return '';
+	}
+	if (typeof content === 'string') {
+		return escapeHTML(content);
+	}
+	if (!Array.isArray(content)) {
+		throw new Error('unexpected text content');
+	}
+	let r = '';
+	for (const part of content) {
+		if (typeof part === 'string') {
+			r += escapeHTML(part);
+		} else {
+			switch (part.type) {
+				case 'strong':
+					r += `<tspan class="strong">${printTSpan(context, part.content)}</tspan>`;
+					break;
+				case 'em':
+					r += `<tspan class="em">${printTSpan(context, part.content)}</tspan>`;
+					break;
+				case 'del':
+					r += `<tspan class="del">${printTSpan(context, part.content)}</tspan>`;
+					break;
+				case 'image':
+					throw new Error('cannot use images here');
+			}
+		}
+	}
+	return r;
+}
+
 export function plainText(content) {
 	if (!content?.length) {
 		return '';

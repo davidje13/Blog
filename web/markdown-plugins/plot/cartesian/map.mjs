@@ -107,18 +107,26 @@ export function addMap(
 		throw new Error('unknown position for heat map');
 	}
 
-	if (mode === 'and') {
-		svgContent = `<g class="and"><rect width="${target.baseWidth}" height="${target.baseHeight}" fill="#000000" />${svgContent}</g>`;
-	}
-
-	let maps = target.custom.get('map');
-	if (!maps) {
-		maps = [];
+	let shared = target.custom.get('map');
+	if (!shared) {
+		shared = { layers: [], hasBack: false };
 		target.layers.push({
-			html: () => `<svg ${target.svgCommon} class="map">${maps.join('')}</svg>`,
+			html: () =>
+				`<svg ${target.svgCommon} class="map">${shared.layers.join('')}</svg>`,
 			order: 1,
 		});
-		target.custom.set('map', maps);
+		target.custom.set('map', shared);
 	}
-	maps.push(svgContent);
+
+	if (mode === 'and') {
+		if (shared.layers.length && !shared.hasBack) {
+			shared.layers.unshift(
+				`<rect width="${target.baseWidth}" height="${target.baseHeight}" fill="#000000" />`,
+			);
+		}
+		svgContent = `<g class="and"><rect width="${target.baseWidth}" height="${target.baseHeight}" fill="#000000" />${svgContent}</g>`;
+		shared.hasBack = true;
+	}
+
+	shared.layers.push(svgContent);
 }

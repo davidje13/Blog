@@ -297,6 +297,11 @@ Some more complicated graphs:
           "type": "equation",
           "equation": "y>=abs(sin(x*pi*0.5))",
           "resolution": [300, 10]
+        },
+        {
+          "type": "measurement",
+          "text": "down",
+          "position": { "p1": [3, 1], "p2": [4, 0] }
         }
       ]
     }

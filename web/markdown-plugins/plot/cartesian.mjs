@@ -4,6 +4,7 @@ import { addLabel } from './cartesian/label.mjs';
 import { addLine } from './cartesian/line.mjs';
 import { addMap } from './cartesian/map.mjs';
 import { addMeasurement } from './cartesian/measurement.mjs';
+import { ptSVGFloating, toLimited } from './svg.mjs';
 import { plainText, printText } from './text.mjs';
 
 export function renderCartesian(
@@ -247,15 +248,6 @@ function axisLabels(context, labels, v0, v1) {
 }
 
 const posmod = (a, b) => ((a % b) + b) % b;
-
-const toLimited = (v, sf) =>
-	v
-		.toPrecision(sf)
-		.replace(/\.0+(?=$|e)|(?<=\.\d+?)0+(?=$|e)/, '')
-		.replace(/e\+/, 'e');
-
-const ptSVGFloating = (pt, precision) =>
-	`${toLimited(pt.x, precision)} ${toLimited(pt.y, precision)}`;
 
 const countDP = (v) =>
 	v.toFixed(10).split('.')[1]?.replace(/0*$/, '').length ?? 0;

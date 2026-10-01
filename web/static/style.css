@@ -505,7 +505,8 @@ summary {
 
 		& > .area,
 		& > .map,
-		& > .lines {
+		& > .lines,
+		& > svg.measurement {
 			position: absolute;
 			top: 0;
 			left: 0;
@@ -603,6 +604,18 @@ summary {
 				border-bottom: 0.1875em solid var(--col);
 			}
 		}
+	}
+
+	tspan.strong {
+		font-weight: bolder;
+	}
+
+	tspan.em {
+		font-style: italic;
+	}
+
+	tspan.del {
+		text-decoration: line-through;
 	}
 }
 
@@ -746,6 +759,7 @@ summary {
 
 		& .label {
 			text-align: center;
+			line-height: 1.4;
 		}
 
 		& .values {
@@ -956,7 +970,22 @@ summary {
 			}
 		}
 
-		& .measurement {
+		& svg.measurement {
+			pointer-events: none;
+
+			& .line {
+				stroke: var(--col-text);
+				stroke-width: var(--axis-width);
+				vector-effect: non-scaling-stroke;
+			}
+
+			& text {
+				font-size: 0.4em; /* fallback for old Safari, Firefox */
+				font-size: calc(1.2em * (200px / 100cqw));
+			}
+		}
+
+		& div.measurement {
 			position: absolute;
 			text-align: center;
 			background: var(--col-back);
