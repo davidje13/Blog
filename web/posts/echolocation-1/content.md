@@ -659,7 +659,7 @@ with our simulated environment from above:
   "aspect": 4,
   "elements": [
     {
-      "type": "line",
+      "type": "points",
       "samples": [
         { "range": [0, 5] },
         {
@@ -723,7 +723,7 @@ instead of a chirp:
   "aspect": 4,
   "elements": [
     {
-      "type": "line",
+      "type": "points",
       "samples": [
         { "range": [0, 5] },
         {
@@ -853,7 +853,7 @@ deconvolution), we get spikes which are of a consistent size:
   "aspect": 4,
   "elements": [
     {
-      "type": "line",
+      "type": "points",
       "samples": [
         { "range": [0, 5] },
         {

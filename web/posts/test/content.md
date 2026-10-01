@@ -304,6 +304,127 @@ Some more complicated graphs:
           "position": { "p1": [3, 1], "p2": [4, 0] }
         }
       ]
+    },
+    {
+      "title": "Symbols",
+      "type": "cartesian",
+      "axes": [{ "range": [0, 10] }, { "range": [0.5, 3.5] }],
+      "elements": [
+        {
+          "type": "points",
+          "samples": [{ "values": [1, 1, 1] }, { "values": [1, 2, 3] }],
+          "line": false,
+          "symbol": "cross"
+        },
+        {
+          "type": "points",
+          "samples": [{ "values": [2] }, { "values": [3] }],
+          "line": false,
+          "symbol": "plus"
+        },
+        {
+          "type": "points",
+          "samples": [{ "values": [3] }, { "values": [3] }],
+          "line": false,
+          "symbol": "circle"
+        },
+        {
+          "type": "points",
+          "samples": [{ "values": [3] }, { "values": [2] }],
+          "line": false,
+          "symbol": { "type": "circle", "solid": true }
+        },
+        {
+          "type": "points",
+          "samples": [{ "values": [4] }, { "values": [3] }],
+          "line": false,
+          "symbol": "square"
+        },
+        {
+          "type": "points",
+          "samples": [{ "values": [4] }, { "values": [2] }],
+          "line": false,
+          "symbol": { "type": "square", "solid": true }
+        },
+        {
+          "type": "points",
+          "samples": [{ "values": [5] }, { "values": [3] }],
+          "line": false,
+          "symbol": "triangle"
+        },
+        {
+          "type": "points",
+          "samples": [{ "values": [5] }, { "values": [2] }],
+          "line": false,
+          "symbol": { "type": "triangle", "solid": true }
+        },
+        {
+          "type": "points",
+          "samples": [{ "values": [5] }, { "values": [1] }],
+          "line": false,
+          "symbol": { "type": "triangle", "solid": true, "orientation": 90 }
+        },
+        {
+          "type": "points",
+          "samples": [{ "values": [6] }, { "values": [3] }],
+          "line": false,
+          "symbol": "diamond"
+        },
+        {
+          "type": "points",
+          "samples": [{ "values": [6] }, { "values": [2] }],
+          "line": false,
+          "symbol": { "type": "diamond", "solid": true }
+        },
+        {
+          "type": "points",
+          "samples": [{ "values": [7] }, { "values": [3] }],
+          "line": false,
+          "symbol": "rhombus"
+        },
+        {
+          "type": "points",
+          "samples": [{ "values": [7] }, { "values": [2] }],
+          "line": false,
+          "symbol": { "type": "rhombus", "solid": true }
+        },
+        {
+          "type": "points",
+          "samples": [{ "values": [8] }, { "values": [3] }],
+          "line": false,
+          "symbol": "star"
+        },
+        {
+          "type": "points",
+          "samples": [{ "values": [8] }, { "values": [2] }],
+          "line": false,
+          "symbol": { "type": "star", "solid": true }
+        },
+        {
+          "type": "points",
+          "samples": [{ "values": [8] }, { "values": [1] }],
+          "line": false,
+          "symbol": { "type": "star", "solid": true, "scale": 2 }
+        },
+        {
+          "type": "points",
+          "samples": [{ "values": [9] }, { "values": [3] }],
+          "line": false,
+          "symbol": "dot"
+        },
+        {
+          "type": "points",
+          "samples": [{ "values": [9] }, { "values": [2] }],
+          "line": false,
+          "symbol": "target"
+        },
+        {
+          "type": "points",
+          "samples": [{ "values": [9] }, { "values": [1] }],
+          "line": false,
+          "symbol": "locator"
+        }
+      ]
     }
   ]
 }

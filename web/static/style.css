@@ -538,7 +538,10 @@ summary {
 		& > .lines {
 			stroke-linejoin: round;
 			stroke-linecap: round;
-			path {
+
+			path,
+			use,
+			marker > * {
 				stroke: var(--col);
 				stroke-width: calc(0.125em + var(--highlight) * 0.125em);
 				opacity: calc(1 + (var(--highlight) - var(--dim)) * 0.6);
@@ -552,9 +555,23 @@ summary {
 				}
 			}
 
-			.ext {
+			marker.solid > *,
+			marker .solid {
+				fill: var(--col);
+			}
+
+			marker > * {
+				stroke-width: 0.0625em;
+			}
+
+			& .noline {
+				stroke: none;
+			}
+
+			& .ext {
 				stroke: transparent;
 				stroke-width: 0.75em;
+				stroke-dasharray: none;
 			}
 		}
 	}

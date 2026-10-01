@@ -1,7 +1,7 @@
 import { escapeHTML } from '../common.mjs';
 import { addEquation } from './cartesian/equation.mjs';
 import { addLabel } from './cartesian/label.mjs';
-import { addLine } from './cartesian/line.mjs';
+import { addPoints } from './cartesian/points.mjs';
 import { addMap } from './cartesian/map.mjs';
 import { addMeasurement } from './cartesian/measurement.mjs';
 import { ptSVGFloating, toLimited } from './svg.mjs';
@@ -83,6 +83,7 @@ export function renderCartesian(
 		transformCommon,
 
 		lines: '',
+		lineDefs: '',
 		lineHoverRegions: '',
 		custom: new Map(),
 		layers: [],
@@ -177,7 +178,7 @@ export function renderCartesian(
 	});
 	if (target.lineHoverRegions || target.lines) {
 		target.layers.push({
-			html: `<svg ${svgCommon} fill="none" class="lines"><g transform="${escapeHTML(transformCommon)}">${target.lineHoverRegions}${target.lines}</g></svg>`,
+			html: `<svg ${svgCommon} fill="none" class="lines"><defs>${target.lineDefs}</defs><g transform="${escapeHTML(transformCommon)}">${target.lineHoverRegions}${target.lines}</g></svg>`,
 			order: 100,
 		});
 	}
@@ -218,7 +219,7 @@ export function renderCartesian(
 
 const ELEMENT_TYPES = new Map([
 	['equation', addEquation],
-	['line', addLine],
+	['points', addPoints],
 	['map', addMap],
 	['label', addLabel],
 	['measurement', addMeasurement],
