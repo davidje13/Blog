@@ -5,6 +5,7 @@ description: 'An explanation of the various cross-origin headers.'
 created: 2026-09-03
 modified: 2026-09-03
 tags:
+  - history
   - security
   - web
 ---

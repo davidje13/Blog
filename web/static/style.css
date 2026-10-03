@@ -264,18 +264,8 @@ p {
 
 sup,
 sub {
-	/* use custom vertical alignment to avoid changing the line height */
-	vertical-align: baseline;
-	position: relative;
+	line-height: 1; /* avoid extending overall line height */
 	font-size: calc(1em * var(--supsub-sz));
-}
-
-sup {
-	top: calc(-0.5em / var(--supsub-sz));
-}
-
-sub {
-	top: calc(0.4em / var(--supsub-sz));
 }
 
 .supsub {
