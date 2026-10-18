@@ -89,13 +89,15 @@ offset or blur, or your input shape is small[^svg-filter-margin].
 
 ## Inner Shadow
 
-SVG also doesn't have a built-in effect for inner shadows, either with or
-without knockout, but it is just a small variation on the above.
+An inner shadow gives the impression of a hole punched into the page. It looks
+like this:
 
 ![A blue shadow inside a star shape.](./inner-shadow.svg) A star with a blue
 inner shadow applied.
 
-It is implemented like this:
+SVG also doesn't have a built-in effect for inner shadows, either with or
+without knockout, but it can be implemented with a small variation on
+[drop shadows](#drop-shadow-with-knockout):
 
 ```xml
 <filter id="my-inner-shadow-filter">
@@ -125,8 +127,8 @@ still need our filter boundary to be larger. This avoids clipping in the
 [`feOffset`] stage. However we do _not_ need to avoid clipping in the
 [`feGaussianBlur`] stage, so our bounds only depend on the offset (if you want
 to get really complicated about it, they only need to be as large as the
-_minimum_ of the offset or the blur, since anything further away won't end up
-affecting the shadow anyway).
+_minimum_ of the offset or the total blur radius, since anything further away
+won't end up affecting the shadow anyway).
 
 We can even reduce the bounds to a single quadrant (based on the offset we
 pick). For example, if our offset is positive in x and y:
@@ -159,18 +161,16 @@ original shape, rather than applying it on top of the original image.
 ## Solid Shadow / Extrude
 
 Solid shadows are used to "extrude" an object, making it look somewhat
-three-dimensional. SVG has no native support for them, and they're usually best
-achieved by adding new vector shapes to the image, but it is possible to
-approximate them as a filter if desired (e.g. to apply to text or dynamic
-content).
-
-First, a classic extrude which preserves the edge colours:
+three-dimensional. First, a classic extrude which preserves the edge colours:
 
 ![A multicoloured star with a solid shadow. The edges continue the colour from the front of the star.](./solid-shadow.svg)
 A star with a solid shadow applied.
 
-These are easier to implement programmatically since they need some repetition,
-but they are not too hard to write by hand:
+SVG has no native support for them, and they're usually best achieved by adding
+new vector shapes to the image, but it is possible to approximate them as a
+filter if desired (e.g. to apply to text or dynamic content). These are easier
+to implement programmatically since they need some repetition, but they are not
+too hard to write by hand:
 
 ```xml
 <filter id="my-solid-shadow-filter">
@@ -236,8 +236,9 @@ omitted)
 
 ## Solid Colour Solid Shadow
 
-With a small modification to the [solid shadow](#solid-shadow-extrude), we can
-make a solid colour solid shadow (or apply some blending to the shadow colour):
+To get a bit more definition, we can change the colour of a
+[solid shadow](#solid-shadow-extrude)'s "edge", either by setting it to a fixed
+colour, or by tinting it:
 
 ![A multicoloured star with a mostly-solid blue shadow.](./solid-shadow-colour.svg)
 A star with a 90% solid blue shadow applied.
@@ -277,13 +278,14 @@ the original image back on top.
 
 ## Motion Blur
 
-The same technique from [solid shadows](#solid-shadow-extrude) can be used to
-implement a motion blur:
+A motion blur blurs the image in a specific direction, giving the impression of
+movement or vibration which is too fast for a camera's shutter speed.
 
 ![An orange star shape with a yellow dot in the center with a motion blur towards the top-right.](./motion-blur.svg)
 A linear motion blur.
 
-The implementation just uses a different compositing operation:
+The same technique from [solid shadows](#solid-shadow-extrude) can be used to
+implement a motion blur; it just uses a different compositing operation:
 
 ```xml
 <filter id="my-motion-blur-filter">
@@ -327,15 +329,17 @@ $\frac{8}{2 + 8} = 0.8$.
 
 ## Radial / Zoom Blur
 
-For non-linear motion blurs, SVG's filters are too limited. There's no
+A radial blur blurs an image rotationally, making it look like it is spinning:
+
+![A star shape filled with a pattern of red dots, with a small radial motion blur.](./radial-blur.svg)
+A radial motion blur.
+
+For any non-linear motion blur, SVG's filters are too limited. There's no
 matrix-based transformation; all we get is [`feOffset`]. It _might_ be possible
 to use [`feDisplacementMap`] with a carefully curated map, but that currently
 has problems due to
 [colour space bugs in Chrome](https://issues.chromium.org/issues/373410239#comment11),
 and would be very complicated to implement anyway.
-
-![A star shape filled with a pattern of red dots, with a small radial motion blur.](./radial-blur.svg)
-A radial motion blur.
 
 Instead of using filters, we can duplicate our element many times using
 [`<use>`](https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/use):
@@ -397,12 +401,16 @@ A radial motion blur with different colours and opacities along the path.
 
 ## Add Noise
 
+At low intensities, adding random noise to an image can make solid fills and
+gradients look more like physical materials. At higher intensities it can
+provide a grainy low-light effect or a sand-like texture:
+
 ![A star shape which is yellow with colourful speckles.](./add-noise.svg) A star
 with 150% colour noise added.
 
-The basics of this effect are easy to achieve in SVG using [`feTurbulence`];
-SVG's noise generating function. But we also need to perform some extra steps so
-that we can apply the noise in "non-premultiplied" colour space.
+The core of this effect is easy to achieve in SVG using [`feTurbulence`]; SVG's
+noise generating function. But we also need to perform some extra steps so that
+we can apply the noise in "non-premultiplied" colour space.
 
 ### Premultiplied colour space
 
@@ -504,7 +512,7 @@ the image) independently to each of the red, green, and blue channels:
 
 ## Feather Fill
 
-Feather fills make the edges of a shape softer without blurring the contents.
+Feather fills make the edges of a shape softer without blurring the contents:
 
 ![A star shape with a pattern fill and feathered edges.](./feather-fill.svg) A
 star with a pattern fill and feathered edge.
@@ -549,7 +557,7 @@ black border, rather than being properly feathered.
 ## Conic Gradient
 
 Conic gradients (also known as Angle gradients) sweep a gradient clockwise or
-counterclockwise around a focal point.
+counterclockwise around a focal point:
 
 ![A star shape with a conic gradient going through the colour spectrum, with red at the top, going through yellow and green on the right, cyan at the bottom, and blue and purple going up the left.](./conic-gradient.svg)
 A star with a conic gradient.
@@ -600,7 +608,7 @@ one example where there is currently no alternative.
 
 ## Offset Glow / Halo
 
-An offset glow adds a halo around a shape starting at a chosen distance.
+An offset glow adds a halo around a shape starting at a chosen distance:
 
 ![A star with an orange glow a short distance from it. The glow is the same shape as the star but rounded, and is slowly animating closer and further away.](./offset-glow.svg)
 A star with an offset glow. The distance is slowly animating between two values.
@@ -926,13 +934,16 @@ the difference is negligible)
 
 ## Bevel / Emboss
 
-If you've ever wondered why SVG has so many lighting-related elements, the
-answer is bevel / emboss effects (which were presumably more common when the
-spec was written, and maybe will come back into fashion some day).
+A bevel or emboss effect gives a shape a 3D look, adding the impression of
+raised or lowered edges via lighting effects:
 
 ![A star which appears raised up with chamfered edges and a light source orbiting it.](./bevel.svg)
 A star with a linear inner bevel effect applied. The light is slowly rotating
 around the shape.
+
+If you've ever wondered why SVG has so many lighting-related elements, the
+answer is bevel / emboss effects (which were presumably more common when the
+spec was written, and maybe will come back into fashion some day).
 
 ```xml
 <filter id="my-bevel-filter" x="0%" y="0%" width="100%" height="100%">
@@ -1134,6 +1145,8 @@ if you find something big which it fails to handle, please let me know!
   https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feDiffuseLighting
 [`feDisplacementMap`]:
   https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feDisplacementMap
+[`feDistantLight`]:
+  https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feDistantLight
 [`feDropShadow`]:
   https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feDropShadow
 [`feFlood`]:

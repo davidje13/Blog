@@ -492,32 +492,65 @@ export const MARKED_HIGHLIGHT = (baseURL) => ({
 		}
 
 		// linkify any definitions which are enclosed in backticks
+
+		// marked stores the link names lowercased, but we want to be case sensitive
+		// here, so we must find the original definitons to check the case:
+		const lowercaseLinks = new Map();
 		for (const [k, v] of Object.entries(
 			this.defaults.tokenizer.lexer.tokens.links,
 		)) {
 			if (k.length > 2 && k[0] === '`' && k.endsWith('`')) {
-				const search = new RegExp(
-					`((?:^|(?<!class="(?:string|comment|meta)")>)[^<]*?)\\b(${RegExp.escape(k.substring(1, k.length - 1))})\\b(?![\._])`,
-					'g',
-				);
-				let link = null;
-				formatted = formatted.replaceAll(search, (_, pre, label) => {
-					if (!link) {
-						const href = baseURL
-							? URL.parse(v.href, baseURL).toString()
-							: v.href;
-						link = ` href="${escapeHTML(href)}"`;
-						if (!href.startsWith('#')) {
-							link += ' target="_blank" rel="external noopener"';
-						}
-						if (v.title) {
-							link += ` title="${escapeHTML(v.title)}"`;
-						}
-					}
-					return `${pre}<a${link}>${label}</a>`;
-				});
+				lowercaseLinks.set(k, v);
 			}
 		}
+		const allLinks = new Map();
+		for (const t of this.defaults.tokenizer.lexer.tokens) {
+			if (
+				t.type === 'def' &&
+				t.href &&
+				t.tag?.length > 2 &&
+				t.tag[0] === '`' &&
+				t.tag.endsWith('`')
+			) {
+				const value = lowercaseLinks.get(t.tag);
+				const fullName = /^\s*\[(`[^`\]]+`)\]/.exec(t.raw);
+				if (value && fullName) {
+					allLinks.set(fullName[1], value);
+					lowercaseLinks.delete(t.tag);
+				}
+			}
+		}
+		for (const [k, v] of lowercaseLinks) {
+			allLinks.set(k, v);
+		}
+		const keywords = [];
+		for (const k of allLinks.keys()) {
+			keywords.push(RegExp.escape(k.substring(1, k.length - 1)));
+		}
+		const search = new RegExp(
+			`(?<=(?:^|(?<!class="(?:string|comment|meta)")>)[^<]*?)(?<!&lt;\/<span class="name">)\\b(${keywords.join('|')})\\b(?![\._])`,
+			'g',
+		);
+		formatted = formatted.replaceAll(search, (_, label) => {
+			const match = allLinks.get(`\`${label}\``);
+			if (!match) {
+				return label;
+			}
+			if (!match.codeLinkCache) {
+				const href = baseURL
+					? URL.parse(v.href, baseURL).toString()
+					: match.href;
+				let link = ` href="${escapeHTML(href)}"`;
+				if (!href.startsWith('#')) {
+					link += ' target="_blank" rel="external noopener"';
+				}
+				if (match.title) {
+					link += ` title="${escapeHTML(match.title)}"`;
+				}
+				match.codeLinkCache = link;
+			}
+			return `<a${match.codeLinkCache}>${label}</a>`;
+		});
 
 		token.formatted = formatted;
 	},
