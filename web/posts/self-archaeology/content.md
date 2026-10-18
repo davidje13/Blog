@@ -697,8 +697,8 @@ would have to re-write the entire site first. Not a simple lift-and-shift.
 
 At this point I hadn't used PHP for a long time and I wasn't particularly
 interested in picking it back up, so I picked a language which I'd been more
-recently active in. The choices were Java, Kotlin, Golang, C++, or Javascript. I
-had been doing a bit of open-source stuff with server-side Javascript, and it
+recently active in. The choices were Java, Kotlin, Golang, C++, or JavaScript. I
+had been doing a bit of open-source stuff with server-side JavaScript, and it
 was [already used on my own server](https://retro.davidje13.com/), so by using
 that I could avoid having to maintain multiple tech stacks. It comes with a
 relatively high RAM requirement, but after some quick checks I reassured myself

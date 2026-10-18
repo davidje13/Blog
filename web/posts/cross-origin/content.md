@@ -113,7 +113,7 @@ and displayed, but will be "tainted". The page will not be able to access any
 information about it (such as response status, headers, or even pixel data of
 images). Errors from tainted scripts cannot be captured by `error` listeners.
 Tainted images and videos can still be copied to a canvas, but by doing so the
-canvas also becomes tainted, meaning Javascript can no longer read pixel data
+canvas also becomes tainted, meaning JavaScript can no longer read pixel data
 from it. In short: the resource can be _displayed to the user_, but cannot be
 _accessed programmatically_.
 
@@ -131,7 +131,7 @@ are marked as tainted. For example:
   `Access-Control-Allow-Origin` to allow the image to be used;
 - an image from a legacy CDN would be loaded without any `crossorigin`
   attribute, and the response does not need to set any header. The image can be
-  displayed but not inspected via Javascript.
+  displayed but not inspected via JavaScript.
 
 With non-CORS requests, most setups which had been broken by the previous fix
 started working again, and now it didn't come at the cost of leaking data
@@ -174,7 +174,7 @@ To avoid attacks, any page containing tainted cross-origin data would need to
 defend against Spectre in some other way. The obvious thing to do was look at
 the other requirement for successful Spectre attacks: high resolution timings.
 
-Some of the newer features of Javascript at the time were focused on high
+Some of the newer features of JavaScript at the time were focused on high
 performance, which made them ideal ways to measure very precise amounts of time.
 One example is `SharedArrayBuffer`, which allows `WebWorker` threads to share
 memory. An attacker can use one worker to do nothing except update a shared
