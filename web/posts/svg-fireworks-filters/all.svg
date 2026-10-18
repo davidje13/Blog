@@ -1,0 +1,319 @@
+<?xml version="1.0" standalone="yes"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 400" width="1000" height="800">
+<defs>
+<pattern id="back" viewBox="0 0 8 8" width="8" height="8" patternUnits="userSpaceOnUse" fill="#80808044"><rect width="8" height="8" fill="#ffffff33" /><rect width="4" height="4" /><rect x="4" y="4" width="8" height="8" /></pattern>
+<pattern id="fill" viewBox="0 0 10 10" width="10" height="10" patternUnits="userSpaceOnUse">
+<rect width="10" height="10" fill="#ffcc00" />
+<circle r="3.5" cx="5" cy="5" fill="#ff6600" />
+</pattern>
+<path id="shape" d="M0-41L12-17 40-13 20 6 25 33 0 21-25 33-20 6-40-13-12-17Z" fill="url(#fill)" />
+</defs>
+<rect x="0" y="0" width="100%" height="100%" fill="url(#back)" />
+
+<filter id="drop-shadow-knockout" x="-10%" y="-5%" width="120%" height="120%">
+<feOffset dx="2" dy="4" in="SourceAlpha" />
+<feGaussianBlur stdDeviation="3" />
+<feComposite operator="out" in2="SourceAlpha" result="b" />
+<feFlood flood-color="#0066CC" />
+<feComposite operator="in" in2="b" />
+</filter>
+<use href="#shape" transform="translate(50 50)" filter="url(#drop-shadow-knockout)" />
+
+<filter id="inner-shadow" x="0%" y="0%" width="110%" height="110%">
+<feOffset dx="2" dy="4" in="SourceAlpha" />
+<feGaussianBlur stdDeviation="3" result="b" />
+<feFlood flood-color="#0066CC" />
+<feComposite operator="out" in2="b" />
+<feComposite operator="atop" in2="SourceGraphic" />
+</filter>
+<use href="#shape" transform="translate(150 50)" filter="url(#inner-shadow)" />
+
+<filter id="inner-shadow-knockout" x="0%" y="0%" width="110%" height="110%">
+<feOffset dx="2" dy="4" in="SourceAlpha" />
+<feGaussianBlur stdDeviation="3" result="b" />
+<feFlood flood-color="#0066CC" />
+<feComposite operator="out" in2="b" />
+<feComposite operator="in" in2="SourceAlpha" />
+</filter>
+<use href="#shape" transform="translate(250 50)" filter="url(#inner-shadow-knockout)" />
+
+<filter id="solid-shadow" x="0" y="-20%" width="120%" height="120%">
+<feOffset dx="0.125" dy="-0.0625" />
+<feComposite operator="over" in="SourceGraphic" result="025" />
+<feOffset dx="0.25" dy="-0.125" />
+<feComposite operator="over" in="025" result="05" />
+<feOffset dx="0.5" dy="-0.25" />
+<feComposite operator="over" in="05" result="1" />
+<feOffset dx="1" dy="-0.5" />
+<feComposite operator="over" in="1" result="2" />
+<feOffset dx="2" dy="-1" />
+<feComposite operator="over" in="2" result="4" />
+<feOffset dx="4" dy="-2" />
+<feComposite operator="over" in="4" result="8" />
+</filter>
+<use href="#shape" transform="translate(350 50)" filter="url(#solid-shadow)" />
+
+<filter id="solid-shadow-colour" x="0" y="-20%" width="120%" height="120%">
+<feFlood flood-color="#0000CC" flood-opacity="0.9" />
+<feComposite operator="atop" in2="SourceGraphic" result="0" />
+<feOffset dx="0.125" dy="-0.0625" />
+<feComposite operator="over" in="0" result="025" />
+<feOffset dx="0.25" dy="-0.125" />
+<feComposite operator="over" in="025" result="05" />
+<feOffset dx="0.5" dy="-0.25" />
+<feComposite operator="over" in="05" result="1" />
+<feOffset dx="1" dy="-0.5" />
+<feComposite operator="over" in="1" result="2" />
+<feOffset dx="2" dy="-1" />
+<feComposite operator="over" in="2" result="4" />
+<feOffset dx="4" dy="-2" />
+<feComposite operator="over" in="4" result="8" />
+<feOffset dx="0.125" dy="-0.0625" />
+<feComposite operator="over" in="SourceGraphic" />
+</filter>
+<use href="#shape" transform="translate(450 50)" filter="url(#solid-shadow-colour)" />
+
+<filter id="motion-blur" x="0" y="-20%" width="120%" height="120%">
+<feOffset dx="0.125" dy="-0.0625" />
+<feComposite operator="arithmetic" k2="0.5" k3="0.5" in="SourceGraphic" result="025" />
+<feOffset dx="0.25" dy="-0.125" />
+<feComposite operator="arithmetic" k2="0.5" k3="0.5" in="025" result="05" />
+<feOffset dx="0.5" dy="-0.25" />
+<feComposite operator="arithmetic" k2="0.5" k3="0.5" in="05" result="1" />
+<feOffset dx="1" dy="-0.5" />
+<feComposite operator="arithmetic" k2="0.5" k3="0.5" in="1" result="2" />
+<feOffset dx="2" dy="-1" />
+<feComposite operator="arithmetic" k2="0.5" k3="0.5" in="2" result="4" />
+<feOffset dx="4" dy="-2" />
+<feComposite operator="arithmetic" k2="0.5" k3="0.5" in="4" result="8" />
+</filter>
+<use href="#shape" transform="translate(50 150)" filter="url(#motion-blur)" />
+
+<g style="isolation: isolate" transform="translate(150 150)">
+  <use href="#shape" id="radial-shape" opacity="0.11111" style="mix-blend-mode: plus-lighter" />
+  <use href="#radial-shape" transform="rotate(-10)" transform-origin="center" style="transform-box: fill-box; mix-blend-mode: plus-lighter" />
+  <use href="#radial-shape" transform="rotate(-7.5)" transform-origin="center" style="transform-box: fill-box; mix-blend-mode: plus-lighter" />
+  <use href="#radial-shape" transform="rotate(-5)" transform-origin="center" style="transform-box: fill-box; mix-blend-mode: plus-lighter" />
+  <use href="#radial-shape" transform="rotate(-2.5)" transform-origin="center" style="transform-box: fill-box; mix-blend-mode: plus-lighter" />
+  <use href="#radial-shape" transform="rotate(2.5)" transform-origin="center" style="transform-box: fill-box; mix-blend-mode: plus-lighter" />
+  <use href="#radial-shape" transform="rotate(5)" transform-origin="center" style="transform-box: fill-box; mix-blend-mode: plus-lighter" />
+  <use href="#radial-shape" transform="rotate(7.5)" transform-origin="center" style="transform-box: fill-box; mix-blend-mode: plus-lighter" />
+  <use href="#radial-shape" transform="rotate(10)" transform-origin="center" style="transform-box: fill-box; mix-blend-mode: plus-lighter" />
+</g>
+
+<g style="isolation: isolate" transform="translate(250 150)">
+  <defs>
+    <path d="M0-41L12-17 40-13 20 6 25 33 0 21-25 33-20 6-40-13-12-17Z" id="radial-rainbow-shape" fill="currentColor" style="mix-blend-mode: plus-lighter" />
+  </defs>
+  <use href="#radial-rainbow-shape" transform="rotate(-8)" transform-origin="center" style="transform-box: fill-box; mix-blend-mode: plus-lighter" color="#00ffbb" opacity="0.05" />
+  <use href="#radial-rainbow-shape" transform="rotate(-6)" transform-origin="center" style="transform-box: fill-box; mix-blend-mode: plus-lighter" color="#77ff00" opacity="0.1" />
+  <use href="#radial-rainbow-shape" transform="rotate(-4)" transform-origin="center" style="transform-box: fill-box; mix-blend-mode: plus-lighter" color="#ffff00" opacity="0.1" />
+  <use href="#radial-rainbow-shape" transform="rotate(-2)" transform-origin="center" style="transform-box: fill-box; mix-blend-mode: plus-lighter" color="#ffdd00" opacity="0.15" />
+  <use href="#radial-rainbow-shape" style="mix-blend-mode: plus-lighter" color="#ffcc00" opacity="0.2" />
+  <use href="#radial-rainbow-shape" transform="rotate(2)" transform-origin="center" style="transform-box: fill-box; mix-blend-mode: plus-lighter" color="#ffaa00" opacity="0.15" />
+  <use href="#radial-rainbow-shape" transform="rotate(4)" transform-origin="center" style="transform-box: fill-box; mix-blend-mode: plus-lighter" color="#ff6600" opacity="0.1" />
+  <use href="#radial-rainbow-shape" transform="rotate(6)" transform-origin="center" style="transform-box: fill-box; mix-blend-mode: plus-lighter" color="#ff0077" opacity="0.1" />
+  <use href="#radial-rainbow-shape" transform="rotate(8)" transform-origin="center" style="transform-box: fill-box; mix-blend-mode: plus-lighter" color="#ff00dd" opacity="0.05" />
+</g>
+
+<filter id="add-noise" x="0%" y="0%" width="100%" height="100%">
+<feComponentTransfer result="r">
+	<feFuncA type="linear" slope="0" intercept="1" />
+</feComponentTransfer>
+<feTurbulence
+	numOctaves="1"
+	baseFrequency="0.75"
+	seed="0"
+	type="fractalNoise"
+/>
+<feComponentTransfer>
+	<feFuncA type="linear" slope="0" intercept="1" />
+</feComponentTransfer>
+<feComposite operator="arithmetic" in2="r" k2="2" k3="1" k4="-1" />
+<feComposite operator="in" in2="SourceAlpha" />
+</filter>
+<use href="#shape" transform="translate(350 150)" filter="url(#add-noise)" />
+
+<filter id="feather"><feGaussianBlur stdDeviation="3" /></filter>
+<mask id="feather-mask" mask-type="alpha"><use href="#shape" filter="url(#feather)" /></mask>
+<rect transform="translate(450 150)" x="-50" y="-50" width="100" height="100" fill="url(#fill)" mask="url(#feather-mask)" />
+
+<mask id="conic-mask" mask-type="alpha"><use href="#shape" transform="translate(50 250)" /></mask>
+<foreignObject x="0" y="200" width="100" height="100" mask="url(#conic-mask)">
+<div xmlns="http://www.w3.org/1999/xhtml" style="width:100px;height:100px;background:conic-gradient(from 10deg at 50px 50px,#FF0000 0%,#FFFF00 16.6%,#00FF00 33.3%,#00FFFF 50%,#0000FF 66.7%,#FF00FF 83.3%,#FF0000 100%)"></div>
+</foreignObject>
+
+<filter id="offset-glow" x="-20%" y="-20%" width="140%" height="140%">
+<feComponentTransfer in="SourceAlpha">
+<feFuncA type="linear" slope="101" intercept="-50" />
+</feComponentTransfer>
+<feGaussianBlur stdDeviation="5" />
+<feComponentTransfer>
+<feFuncA type="table" tableValues="-0.068 0.089 0.180 0.241 0.290 0.331 0.369 0.404 0.437 0.469 0.500 0.531 0.563 0.596 0.631 0.669 0.710 0.759 0.820 0.911 1.068" />
+</feComponentTransfer>
+<feComponentTransfer>
+<feFuncA type="linear" slope="3" intercept="0" />
+</feComponentTransfer>
+<feComponentTransfer color-interpolation-filters="sRGB">
+<feFuncR type="linear" intercept="1" slope="0" />
+<feFuncG type="linear" intercept="0.8" slope="0" />
+<feFuncB type="linear" intercept="0.6" slope="0" />
+<feFuncA type="table" tableValues="0 1 0" />
+</feComponentTransfer>
+<feComposite operator="over" in2="SourceGraphic" />
+</filter>
+<use href="#shape" transform="translate(150 250)" filter="url(#offset-glow)" />
+
+<filter id="rainbow-glow" x="-20%" y="-20%" width="140%" height="140%">
+<feComponentTransfer in="SourceAlpha">
+<feFuncA type="linear" slope="101" intercept="-50" />
+</feComponentTransfer>
+<feGaussianBlur stdDeviation="5" />
+<feComponentTransfer>
+<feFuncA type="table" tableValues="-0.068 0.089 0.180 0.241 0.290 0.331 0.369 0.404 0.437 0.469 0.500 0.531 0.563 0.596 0.631 0.669 0.710 0.759 0.820 0.911 1.068" />
+</feComponentTransfer>
+<feColorMatrix type="matrix" values="
+	0 0 0 2 0
+	0 0 0 2 0
+	0 0 0 2 0
+	0 0 0 2 0
+" />
+<feComponentTransfer>
+<feFuncR type="table" tableValues="0 0 0 0 1 1 1" />
+<feFuncG type="table" tableValues="0 0 1 1 1 0 0" />
+<feFuncB type="table" tableValues="1 1 1 0 0 0 0" />
+<feFuncA type="table" tableValues="0 1 1 1 1 1 0" />
+</feComponentTransfer>
+<feComposite operator="over" in2="SourceGraphic" />
+</filter>
+<use href="#shape" transform="translate(250 250)" filter="url(#rainbow-glow)" />
+
+<filter id="shadow-expand" x="-10%" y="-5%" width="120%" height="120%">
+<feOffset dx="2" dy="3" in="SourceAlpha" />
+<feGaussianBlur stdDeviation="3" />
+<feComponentTransfer>
+<feFuncA type="table" tableValues="-0.068 0.089 0.180 0.241 0.290 0.331 0.369 0.404 0.437 0.469 0.500 0.531 0.563 0.596 0.631 0.669 0.710 0.759 0.820 0.911 1.068" />
+</feComponentTransfer>
+<feComponentTransfer>
+<feFuncA type="linear" slope="2" intercept="0" />
+</feComponentTransfer>
+<feComponentTransfer result="b">
+<feFuncA type="table" tableValues="0 0.003 0.008 0.018 0.036 0.067 0.115 0.184 0.274 0.382 0.500 0.618 0.726 0.816 0.885 0.933 0.964 0.982 0.992 0.997 1" />
+</feComponentTransfer>
+<feFlood flood-color="#0066CC" />
+<feComposite operator="atop" in2="b" />
+<feComposite operator="over" in="SourceGraphic" />
+</filter>
+<use href="#shape" transform="translate(350 250)" filter="url(#shadow-expand)" />
+
+<filter id="shadow-reduce" x="-10%" y="-5%" width="120%" height="120%">
+<feOffset dx="6" dy="10" in="SourceAlpha" />
+<feGaussianBlur stdDeviation="3" />
+<feComponentTransfer>
+<feFuncA type="table" tableValues="-0.068 0.089 0.180 0.241 0.290 0.331 0.369 0.404 0.437 0.469 0.500 0.531 0.563 0.596 0.631 0.669 0.710 0.759 0.820 0.911 1.068" />
+</feComponentTransfer>
+<feComponentTransfer>
+<feFuncA type="linear" slope="2" intercept="-1" />
+</feComponentTransfer>
+<feComponentTransfer result="b">
+<feFuncA type="table" tableValues="0 0.003 0.008 0.018 0.036 0.067 0.115 0.184 0.274 0.382 0.500 0.618 0.726 0.816 0.885 0.933 0.964 0.982 0.992 0.997 1" />
+</feComponentTransfer>
+<feFlood flood-color="#0066CC" />
+<feComposite operator="atop" in2="b" />
+<feComposite operator="over" in="SourceGraphic" />
+</filter>
+<use href="#shape" transform="translate(450 250)" filter="url(#shadow-reduce)" />
+
+<filter id="bevel" x="0%" y="0%" width="100%" height="100%">
+<feComponentTransfer in="SourceAlpha">
+<feFuncA type="linear" slope="101" intercept="-50" />
+</feComponentTransfer>
+<feGaussianBlur stdDeviation="3" />
+<feComponentTransfer result="h">
+<feFuncA type="table" tableValues="-0.068 0.089 0.180 0.241 0.290 0.331 0.369 0.404 0.437 0.469 0.500 0.531 0.563 0.596 0.631 0.669 0.710 0.759 0.820 0.911 1.068" />
+</feComponentTransfer>
+<feSpecularLighting surfaceScale="20" kernelUnitLength=".5 .5" specularConstant="0.1" specularExponent="10" result="s">
+<feDistantLight azimuth="-130" elevation="60" />
+</feSpecularLighting>
+<feDiffuseLighting surfaceScale="20" kernelUnitLength=".5 .5" diffuseConstant="1" in="h">
+<feDistantLight azimuth="-130" elevation="60" />
+</feDiffuseLighting>
+<feComposite operator="arithmetic" in="SourceGraphic" k1="1" />
+<feComposite operator="atop" in="s" />
+</filter>
+<use href="#shape" transform="translate(50 350)" filter="url(#bevel)" />
+
+<filter id="bevel-zigzag" x="0%" y="0%" width="100%" height="100%">
+<feGaussianBlur in="SourceAlpha" stdDeviation="5" result="b" />
+<feComponentTransfer result="c">
+<feFuncA type="linear" slope="100" intercept="-49" />
+</feComponentTransfer>
+<feComponentTransfer in="b">
+<feFuncA type="table" tableValues="-0.068 0.089 0.180 0.241 0.290 0.331 0.369 0.404 0.437 0.469 0.500 0.531 0.563 0.596 0.631 0.669 0.710 0.759 0.820 0.911 1.068" />
+</feComponentTransfer>
+<feComponentTransfer>
+<feFuncA type="table" tableValues="0 0 0 0 1 0 1" />
+</feComponentTransfer>
+<feDiffuseLighting surfaceScale="5" kernelUnitLength=".5 .5">
+<feDistantLight azimuth="-120" elevation="50" />
+</feDiffuseLighting>
+<feComposite operator="arithmetic" in="SourceGraphic" k1="1" />
+<feComposite operator="in" in2="c" />
+</filter>
+<use href="#shape" transform="translate(150 350)" filter="url(#bevel-zigzag)" />
+
+<filter id="bevel-smooth" x="0%" y="0%" width="100%" height="100%">
+<feGaussianBlur in="SourceAlpha" stdDeviation="4" />
+<feDiffuseLighting surfaceScale="15" kernelUnitLength=".5 .5">
+<feDistantLight azimuth="-120" elevation="50" />
+</feDiffuseLighting>
+<feComposite operator="arithmetic" in="SourceGraphic" k1="1" />
+</filter>
+<use href="#shape" transform="translate(250 350)" filter="url(#bevel-smooth)" />
+
+<filter id="bevel-frame">
+<feGaussianBlur in="SourceAlpha" stdDeviation="3" result="b" />
+<feComponentTransfer result="c">
+<feFuncA type="linear" slope="101" intercept="-3" />
+</feComponentTransfer>
+<feComponentTransfer in="b" result="c2">
+<feFuncA type="linear" slope="101" intercept="-98.5" />
+</feComponentTransfer>
+<feComponentTransfer in="b">
+<feFuncA type="table" tableValues="-0.068 0.089 0.180 0.241 0.290 0.331 0.369 0.404 0.437 0.469 0.500 0.531 0.563 0.596 0.631 0.669 0.710 0.759 0.820 0.911 1.068" />
+</feComponentTransfer>
+<feComponentTransfer>
+<feFuncA type="table" tableValues="0 0.5 0.8 0.95 1 0.95 0.8 0.5 0" />
+</feComponentTransfer>
+<feDiffuseLighting surfaceScale="3" kernelUnitLength=".5 .5" result="s">
+<feDistantLight azimuth="-120" elevation="40" />
+</feDiffuseLighting>
+<feFlood flood-color="#3399FF" />
+<feComposite operator="arithmetic" k1="1" in2="s" />
+<feComposite operator="out" in2="c2" />
+<feComposite operator="over" in2="SourceGraphic" />
+<feComposite operator="in" in2="c" />
+</filter>
+<use href="#shape" transform="translate(350 350)" filter="url(#bevel-frame)" />
+
+<filter id="outer-bevel">
+<feGaussianBlur in="SourceAlpha" stdDeviation="2" result="b" />
+<feComponentTransfer result="c">
+<feFuncA type="linear" slope="101" intercept="-2" />
+</feComponentTransfer>
+<feComponentTransfer in="b">
+<feFuncA type="table" tableValues="-0.068 0.089 0.180 0.241 0.290 0.331 0.369 0.404 0.437 0.469 0.500 0.531 0.563 0.596 0.631 0.669 0.710 0.759 0.820 0.911 1.068" />
+</feComponentTransfer>
+<feComponentTransfer>
+<feFuncA type="table" tableValues="0 0.5 0.8 0.95 1 1 1 1 1" />
+</feComponentTransfer>
+<feDiffuseLighting surfaceScale="3" kernelUnitLength=".5 .5" result="s">
+<feDistantLight azimuth="-120" elevation="40" />
+</feDiffuseLighting>
+<feFlood flood-color="#CCDDFF" />
+<feComposite operator="arithmetic" k1="1" in2="s" />
+<feComposite operator="in" in2="c" />
+<feComposite operator="over" in="SourceGraphic" />
+</filter>
+<use href="#shape" transform="translate(450 350)" filter="url(#outer-bevel)" />
+
+</svg>

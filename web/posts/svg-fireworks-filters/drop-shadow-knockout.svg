@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="yes"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-50 -50 100 100" width="300" height="300">
+<defs>
+<pattern id="back" viewBox="0 0 8 8" width="8" height="8" patternUnits="userSpaceOnUse" fill="#80808044"><rect width="8" height="8" fill="#ffffff33" /><rect width="4" height="4" /><rect x="4" y="4" width="8" height="8" /></pattern>
+<filter id="filter" x="-10%" y="-5%" width="120%" height="120%">
+<feOffset dx="2" dy="4" in="SourceAlpha" />
+<feGaussianBlur stdDeviation="3" />
+<feComposite operator="out" in2="SourceAlpha" result="b" />
+<feFlood flood-color="#0066CC" />
+<feComposite operator="in" in2="b" />
+</filter>
+</defs>
+<rect x="-50" y="-50" width="100%" height="100%" fill="url(#back)" />
+<path d="M0-41L12-17 40-13 20 6 25 33 0 21-25 33-20 6-40-13-12-17Z" fill="#FFCC00" filter="url(#filter)" />
+</svg>

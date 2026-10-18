@@ -1,0 +1,55 @@
+<?xml version="1.0" standalone="yes"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 -50 600 100" width="1200" height="200" fill="none" font-family="sans-serif" font-size="16" stroke-linejoin="round" paint-order="stroke">
+<defs>
+<pattern id="back" viewBox="0 0 8 8" width="8" height="8" patternUnits="userSpaceOnUse" fill="#80808044"><rect width="8" height="8" fill="#ffffff33" /><rect width="4" height="4" /><rect x="4" y="4" width="8" height="8" /></pattern>
+<path id="shape" d="M0-41L12-17 40-13 20 6 25 33 0 21-25 33-20 6-40-13-12-17Z" />
+</defs>
+<rect x="0" y="-50" width="100%" height="100%" fill="url(#back)" />
+
+<filter id="f1" y="-5%">
+<feComposite in="SourceAlpha" />
+</filter>
+<use href="#shape" transform="translate(50 0)" fill="#FFCC00" filter="url(#f1)" />
+
+<filter id="f2" y="-5%">
+<feOffset dx="2" dy="4" in="SourceAlpha" />
+</filter>
+<use href="#shape" transform="translate(150 0)" fill="#FFCC00" filter="url(#f2)" />
+<use href="#shape" transform="translate(150 0)" stroke-dasharray="4 6" stroke="#FFCC00" />
+
+<filter id="f3" y="-5%">
+<feOffset dx="2" dy="4" in="SourceAlpha" />
+<feGaussianBlur stdDeviation="3" result="b" />
+</filter>
+<use href="#shape" transform="translate(250 0)" fill="#FFCC00" filter="url(#f3)" />
+<use href="#shape" transform="translate(250 0)" stroke-dasharray="4 6" stroke="#FFCC00" />
+<text x="220" y="-26" fill="black" stroke="white" stroke-width="3">1</text>
+
+<filter id="f4" y="-5%">
+<feOffset dx="2" dy="4" in="SourceAlpha" />
+<feGaussianBlur stdDeviation="3" result="b" />
+<feFlood flood-color="#0066CC" />
+</filter>
+<use href="#shape" transform="translate(350 0)" fill="#FFCC00" filter="url(#f4)" />
+<use href="#shape" transform="translate(350 0)" stroke-dasharray="4 6" stroke="#FFCC00" />
+
+<filter id="f5" y="-5%">
+<feOffset dx="2" dy="4" in="SourceAlpha" />
+<feGaussianBlur stdDeviation="3" result="b" />
+<feFlood flood-color="#0066CC" />
+<feComposite operator="out" in2="b" />
+</filter>
+<use href="#shape" transform="translate(450 0)" fill="#FFCC00" filter="url(#f5)" />
+<use href="#shape" transform="translate(450 0)" stroke-dasharray="4 6" stroke="#FFCC00" />
+<text x="420" y="-26" fill="white">2</text>
+
+<filter id="f6" y="-5%">
+<feOffset dx="2" dy="4" in="SourceAlpha" />
+<feGaussianBlur stdDeviation="3" result="b" />
+<feFlood flood-color="#0066CC" />
+<feComposite operator="out" in2="b" />
+<feComposite operator="atop" in2="SourceGraphic" />
+</filter>
+<use href="#shape" transform="translate(550 0)" fill="#FFCC00" filter="url(#f6)" />
+<text x="520" y="-26" fill="black" stroke="white" stroke-width="3">3</text>
+
+</svg>

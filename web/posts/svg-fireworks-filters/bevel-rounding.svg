@@ -1,0 +1,57 @@
+<?xml version="1.0" standalone="yes"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-150 -50 300 100" width="900" height="300" font-family="sans-serif" font-size="10" text-anchor="middle" stroke-linejoin="round" stroke-width="3" paint-order="stroke">
+<defs>
+<pattern id="back" viewBox="0 0 8 8" width="8" height="8" patternUnits="userSpaceOnUse" fill="#80808044"><rect width="8" height="8" fill="#ffffff33" /><rect width="4" height="4" /><rect x="4" y="4" width="8" height="8" /></pattern>
+<path id="shape" d="M0-41L12-17 40-13 20 6 25 33 0 21-25 33-20 6-40-13-12-17Z" fill="#FFCC00" />
+</defs>
+<rect x="-150" y="-50" width="100%" height="100%" fill="url(#back)" />
+
+<filter id="flat" x="0%" y="0%" width="100%" height="100%">
+<feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+<feComponentTransfer>
+<feFuncA type="table" tableValues="-0.068 0.089 0.180 0.241 0.290 0.331 0.369 0.404 0.437 0.469 0.500 0.531 0.563 0.596 0.631 0.669 0.710 0.759 0.820 0.911 1.068" />
+</feComponentTransfer>
+<feComponentTransfer>
+<feFuncA type="linear" slope="2" intercept="-1" />
+</feComponentTransfer>
+<feDiffuseLighting surfaceScale="5" kernelUnitLength=".5 .5">
+<feDistantLight azimuth="-100" elevation="20" />
+</feDiffuseLighting>
+<feComposite operator="arithmetic" in="SourceGraphic" k1="1" />
+</filter>
+<use href="#shape" transform="translate(-100 0)" filter="url(#flat)" />
+<text x="-100" y="45" fill="black" stroke="white">flat outside</text>
+
+<filter id="clip" x="0%" y="0%" width="100%" height="100%">
+<feGaussianBlur in="SourceAlpha" stdDeviation="3" result="b" />
+<feComponentTransfer result="c">
+<feFuncA type="linear" slope="101" intercept="-50" />
+</feComponentTransfer>
+<feComponentTransfer in="b">
+<feFuncA type="table" tableValues="-0.068 0.089 0.180 0.241 0.290 0.331 0.369 0.404 0.437 0.469 0.500 0.531 0.563 0.596 0.631 0.669 0.710 0.759 0.820 0.911 1.068" />
+</feComponentTransfer>
+<feComponentTransfer>
+<feFuncA type="linear" slope="2" intercept="-1" />
+</feComponentTransfer>
+<feDiffuseLighting surfaceScale="5" kernelUnitLength=".5 .5">
+<feDistantLight azimuth="-100" elevation="20" />
+</feDiffuseLighting>
+<feComposite operator="arithmetic" in="SourceGraphic" k1="1" />
+<feComposite operator="in" in2="c" />
+</filter>
+<use href="#shape" filter="url(#clip)" />
+<text x="0" y="45" fill="black" stroke="white">clipped</text>
+
+<filter id="ext" x="0%" y="0%" width="100%" height="100%">
+<feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+<feComponentTransfer>
+<feFuncA type="table" tableValues="-0.068 0.089 0.180 0.241 0.290 0.331 0.369 0.404 0.437 0.469 0.500 0.531 0.563 0.596 0.631 0.669 0.710 0.759 0.820 0.911 1.068" />
+</feComponentTransfer>
+<feDiffuseLighting surfaceScale="10" kernelUnitLength=".5 .5">
+<feDistantLight azimuth="-100" elevation="20" />
+</feDiffuseLighting>
+<feComposite operator="arithmetic" in="SourceGraphic" k1="1" />
+</filter>
+<use href="#shape" transform="translate(100 0)" filter="url(#ext)" />
+<text x="100" y="45" fill="black" stroke="white">extended</text>
+
+</svg>

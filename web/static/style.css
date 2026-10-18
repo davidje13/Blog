@@ -1409,6 +1409,14 @@ ol {
 	}
 }
 
+ol ol {
+	list-style-type: lower-latin;
+}
+
+ol ol ol {
+	list-style-type: lower-roman;
+}
+
 .footnote-list li {
 	list-style: none;
 	position: relative;

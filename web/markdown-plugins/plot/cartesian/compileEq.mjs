@@ -1,4 +1,22 @@
+import { erf, erfc } from 'curve-ops';
 import { Random } from './random.mjs';
+
+const IERFA2 = 2 * ((3 * Math.PI * (4 - Math.PI)) / (8 * (Math.PI - 3)));
+const IERFA2PI = IERFA2 / Math.PI;
+
+function ierf(x) {
+	// thanks, https://en.wikipedia.org/wiki/Error_function#Approximation_with_elementary_functions
+
+	if (x <= -1) {
+		return Number.NEGATIVE_INFINITY;
+	}
+	if (x >= 1) {
+		return Number.POSITIVE_INFINITY;
+	}
+	const l = Math.log(1 - x * x) * 0.5;
+	const ld = IERFA2PI + l;
+	return Math.sign(x) * Math.sqrt(Math.sqrt(ld * ld - l * IERFA2) - ld);
+}
 
 const OPERATORS = new Map([
 	[
@@ -60,6 +78,9 @@ const FUNCTIONS = new Map([
 	['ln', Math.log],
 	['log2', Math.log2],
 	['log10', Math.log10],
+	['erf', erf],
+	['erfc', erfc],
+	['ierf', ierf],
 	['sqrt', Math.sqrt],
 	['cbrt', Math.cbrt],
 	['min', Math.min],

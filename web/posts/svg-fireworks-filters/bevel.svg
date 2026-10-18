@@ -1,0 +1,28 @@
+<?xml version="1.0" standalone="yes"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-50 -50 100 100" width="300" height="300">
+<defs>
+<pattern id="back" viewBox="0 0 8 8" width="8" height="8" patternUnits="userSpaceOnUse" fill="#80808044"><rect width="8" height="8" fill="#ffffff33" /><rect width="4" height="4" /><rect x="4" y="4" width="8" height="8" /></pattern>
+<filter id="filter" x="0%" y="0%" width="100%" height="100%">
+<feComponentTransfer in="SourceAlpha">
+<feFuncA type="linear" slope="101" intercept="-50" />
+</feComponentTransfer>
+<feGaussianBlur stdDeviation="2" />
+<feComponentTransfer result="h">
+<feFuncA type="table" tableValues="-0.068 0.089 0.180 0.241 0.290 0.331 0.369 0.404 0.437 0.469 0.500 0.531 0.563 0.596 0.631 0.669 0.710 0.759 0.820 0.911 1.068" />
+</feComponentTransfer>
+<feSpecularLighting surfaceScale="10" kernelUnitLength=".5 .5" specularConstant="0.1" specularExponent="10" result="s">
+<feDistantLight azimuth="-100" elevation="20">
+<animate attributeName="azimuth" values="-100;260" dur="30s" repeatCount="indefinite" />
+</feDistantLight>
+</feSpecularLighting>
+<feDiffuseLighting surfaceScale="10" kernelUnitLength=".5 .5" diffuseConstant="1" in="h">
+<feDistantLight azimuth="-100" elevation="20">
+<animate attributeName="azimuth" values="-100;260" dur="30s" repeatCount="indefinite" />
+</feDistantLight>
+</feDiffuseLighting>
+<feComposite operator="arithmetic" in="SourceGraphic" k1="1" />
+<feComposite operator="atop" in="s" />
+</filter>
+</defs>
+<rect x="-50" y="-50" width="100%" height="100%" fill="url(#back)" />
+<path d="M0-41L12-17 40-13 20 6 25 33 0 21-25 33-20 6-40-13-12-17Z" fill="#FFCC00" filter="url(#filter)" />
+</svg>

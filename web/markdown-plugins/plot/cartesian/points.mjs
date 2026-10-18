@@ -108,9 +108,10 @@ const MARKERS = new Map([
 function readSamples(samples) {
 	if (samples.range) {
 		const [l, h] = samples.range;
+		const n = samples.exclusive ? 0 : 1;
 		return {
 			count: 2,
-			get: (i, count) => (i / count) * (h - l) + l,
+			get: (i, count) => (i / (count - n)) * (h - l) + l,
 			min: Math.min(l, h),
 			max: Math.max(l, h),
 		};
