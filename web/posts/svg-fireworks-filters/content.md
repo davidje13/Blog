@@ -5,6 +5,7 @@ description:
   "A how-to guide for creating a variety of effects using SVG filters, inspired
   by Fireworks' built-in filters"
 created: 2026-10-18
+modified: 2026-10-19
 tags:
   - web
 ---
@@ -821,6 +822,20 @@ want the glow to be and apply the mapping:
   <feComposite operator="over" in2="SourceGraphic" />
 </filter>
 ```
+
+To achieve a glow with distance $d$, and width $w$, the properties should be set
+to:
+
+- `stdDeviation` ($r$) $\ge \frac{1}{2} \left( |d| + w \right)$
+- `slope` $= \frac{2r}{w}$
+- `intercept` $= \frac{1}{2} - \frac{2r-d}{2w}$
+
+If the `stdDeviation` ($r$) is set exactly as above, the `slope` and `intercept`
+equations simplify:
+
+- `slope` $= \frac{|d|}{w} + 1$
+- `intercept` = 0 for outer glow ($d \ge 0$), and = `1 - slope` for inner glow
+  ($d < 0$)
 
 To save some steps at the cost of losing some code clarity, we could combine the
 [`feFlood`] step into the [`feComponentTransfer`] above it:
