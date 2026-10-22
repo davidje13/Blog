@@ -186,7 +186,7 @@ const renderEntry = ({ content, refs }, parser, includeReturns) => {
 			title += ` #${i + 1}`;
 		}
 		const link = `#${encodeURIComponent(refs[i].id)}`;
-		returnLinks += ` <a href="${escapeHTML(link)}" title="${escapeHTML(title)}" aria-label="${escapeHTML(title)}">${text}</a>`;
+		returnLinks += ` <a class="footnote-return" href="${escapeHTML(link)}" title="${escapeHTML(title)}" aria-label="${escapeHTML(title)}">${text}</a>`;
 	}
 
 	return parsedContent.replace(/(?=(?:<\/p>)?$)/i, () => returnLinks);

@@ -1420,6 +1420,7 @@ ol ol ol {
 .footnote-list li {
 	list-style: none;
 	position: relative;
+	break-inside: avoid;
 
 	&:before {
 		content: attr(data-symbol);
@@ -1560,5 +1561,9 @@ ol ol ol {
 		border: none;
 		padding: 0 8px 0 0;
 		background: var(--col-back);
+	}
+
+	.footnote-return {
+		display: none;
 	}
 }
