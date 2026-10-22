@@ -17,13 +17,13 @@ was a fantastic drawing tool. I used it extensively: for websites, game
 graphics, UI mockups, icons, and more. Sadly, as is the case for all good
 things, it was killed by a large corporation.
 
-To access my old files, I've been
-[building a tool](https://github.com/davidje13/png-analyser) which can convert
-Fireworks images into SVG, both for loading in modern editors, and for using
-as-is. As part of this project, I needed to implement a wide variety of fill
-effects and filters. I've tried to make these somewhat faithful to Fireworks'
-behaviour, while also supporting high-resolution rendering and correct alpha
-channel handling (something which the original filters often got wrong).
+To access my old files, I've been [building a tool](https://png.davidje13.com/)
+which can convert Fireworks images into SVG, both for loading in modern editors,
+and for using as-is. As part of this project, I needed to implement a wide
+variety of fill effects and filters. I've tried to make these somewhat faithful
+to Fireworks' behaviour, while also supporting high-resolution rendering and
+correct alpha channel handling (something which the original filters often got
+wrong).
 
 ![A collection of filters which will be explained in this article](./all.svg)
 
@@ -1137,9 +1137,10 @@ is a great reference (though sometimes lacking references to useful filter
 attributes).
 
 If you ever used Fireworks and have some old PNGs you'd like to recover, give my
-[PNG reader](https://github.com/davidje13/png-analyser) a try. It runs in the
-browser and everything stays fully local. It still has a lot of limitations, but
-if you find something big which it fails to handle, please let me know!
+[PNG reader](https://png.davidje13.com/) a try. It runs in the browser and
+everything stays fully local. It still has a lot of limitations, but if you find
+something big which it fails to handle, please
+[let me know](https://github.com/davidje13/png-analyser/issues)!
 
 [^svg-filter-margin]:
     Eventually it should be possible to use the
