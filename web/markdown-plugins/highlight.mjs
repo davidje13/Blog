@@ -538,7 +538,7 @@ export const MARKED_HIGHLIGHT = (baseURL) => ({
 			}
 			if (!match.codeLinkCache) {
 				const href = baseURL
-					? URL.parse(v.href, baseURL).toString()
+					? URL.parse(match.href, baseURL).toString()
 					: match.href;
 				let link = ` href="${escapeHTML(href)}"`;
 				if (!href.startsWith('#')) {
