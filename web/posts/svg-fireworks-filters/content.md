@@ -7,6 +7,7 @@ description:
 created: 2026-10-18
 modified: 2026-10-19
 tags:
+  - graphics
   - web
 ---
 
