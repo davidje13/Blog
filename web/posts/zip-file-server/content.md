@@ -144,7 +144,7 @@ Approximate `.zip` structure:
 Approximate `.tar.gz` structure:
 
 ```text
-+--------------------------------+
++---------------------------------+
 |         global metadata         |
 +---------------------------------+
 | deflate(file 1 + file 2 + etc.) |
@@ -277,9 +277,9 @@ For example:
 ```text
 my-site.zip
  |- config.json
- |- server
+ |- server/
  |   '- math.mjs
- '- static
+ '- static/
      |- index.html
      '- style.css
 ```
@@ -331,6 +331,8 @@ my-site.zip
 The `negotiation` in this configuration allows these implicit files to be used).
 
 ### server/math.mjs
+
+Here is a silly example API which adds two `POST`ed numbers together:
 
 ```js
 import { getFormData, requestHandler } from 'web-listener';
