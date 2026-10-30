@@ -1,0 +1,33 @@
+<?xml version="1.0" standalone="yes"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-5 -5 610 305" width="610" height="305" font-family="monospace" font-size="14" stroke-width="1.5" fill="none">
+<rect rx="1" x="0" y="0" width="600" height="175" fill="#FFFFFFF8" />
+<rect rx="1" x="0" y="175" width="600" height="90" fill="#FFFFEEF8" />
+<rect rx="1" x="0" y="265" width="600" height="30" fill="#FFEEEEF8" />
+<rect rx="2" x="0" y="0" width="600" height="295" stroke="#000000" />
+<text x="10" y="20" fill="#000000">File 1</text>
+<rect rx="2" x="15" y="35" width="570" height="80" fill="#EEFFEE" stroke="#000000" />
+<text x="25" y="55" fill="#000000">Local File Header</text>
+<rect rx="2" x="30" y="70" width="540" height="30" stroke="#000000" />
+<text x="75" y="90" fill="#0000BB" text-anchor="middle">504B0304</text>
+<line x1="120" y1="70" x2="120" y2="100" stroke="#000000" />
+<text x="137.5" y="90" fill="#00000080" text-anchor="middle">&#8230;</text>
+<line x1="155" y1="70" x2="155" y2="100" stroke="#000000" />
+<text x="190" y="90" fill="#000000" text-anchor="middle">CRC-32</text>
+<line x1="225" y1="70" x2="225" y2="100" stroke="#000000" />
+<text x="297.5" y="90" fill="#000000" text-anchor="middle">Compressed Size</text>
+<line x1="370" y1="70" x2="370" y2="100" stroke="#000000" />
+<text x="452.5" y="90" fill="#000000" text-anchor="middle">Uncompressed Size</text>
+<line x1="535" y1="70" x2="535" y2="100" stroke="#000000" />
+<text x="552.5" y="90" fill="#00000080" text-anchor="middle">&#8230;</text>
+<text x="15" y="150" fill="#000000" textLength="68">deflate(</text>
+<rect rx="2" x="90" y="130" width="480" height="30" fill="#EEF8FF" stroke="#000000" />
+<text x="100" y="150" fill="#000000">File Content</text>
+<text x="585" y="150" fill="#000000" text-anchor="end">)</text>
+<line x1="0" y1="175" x2="600" y2="175" stroke="#000000" />
+<text x="10" y="195" fill="#000000">File 2 (&#8230;)</text>
+<line x1="0" y1="205" x2="600" y2="205" stroke="#000000" />
+<text x="10" y="225" fill="#000000">File 3 (&#8230;)</text>
+<line x1="0" y1="235" x2="600" y2="235" stroke="#000000" />
+<text x="10" y="255" fill="#00000080">etc.</text>
+<line x1="0" y1="265" x2="600" y2="265" stroke="#000000" />
+<text x="10" y="285" fill="#000000">Central Directory (index)</text>
+</svg>

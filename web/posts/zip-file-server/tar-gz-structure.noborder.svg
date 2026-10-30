@@ -1,0 +1,39 @@
+<?xml version="1.0" standalone="yes"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-5 -5 495 290" width="495" height="290" font-family="monospace" font-size="14" stroke-width="1.5" fill="none">
+<rect rx="1" x="0" y="0" width="485" height="80" fill="#EEFFEEF8" />
+<rect rx="1" x="0" y="80" width="485" height="120" fill="#FFFFFFF8" />
+<rect rx="1" x="0" y="200" width="485" height="80" fill="#FFEEEEF8" />
+<rect rx="2" x="0" y="0" width="485" height="280" stroke="#000000" />
+<text x="10" y="20" fill="#000000">Global Header</text>
+<rect rx="2" x="15" y="35" width="455" height="30" stroke="#000000" />
+<text x="40" y="55" fill="#0000BB" text-anchor="middle">1F8B</text>
+<line x1="65" y1="35" x2="65" y2="65" stroke="#000000" />
+<text x="80" y="55" fill="#0000BB" text-anchor="middle">08</text>
+<line x1="95" y1="35" x2="95" y2="65" stroke="#000000" />
+<text x="125" y="55" fill="#000000" text-anchor="middle">Flags</text>
+<line x1="155" y1="35" x2="155" y2="65" stroke="#000000" />
+<text x="220" y="55" fill="#000000" text-anchor="middle">Modified Time</text>
+<line x1="285" y1="35" x2="285" y2="65" stroke="#000000" />
+<text x="340" y="55" fill="#000000" text-anchor="middle">Extra Flags</text>
+<line x1="395" y1="35" x2="395" y2="65" stroke="#000000" />
+<text x="415" y="55" fill="#000000" text-anchor="middle">OS</text>
+<line x1="435" y1="35" x2="435" y2="65" stroke="#000000" />
+<text x="452.5" y="55" fill="#00000080" text-anchor="middle">&#8230;</text>
+<line x1="0" y1="80" x2="485" y2="80" stroke="#000000" />
+<text x="15" y="145" fill="#000000" textLength="68">deflate(</text>
+<rect rx="2" x="90" y="95" width="365" height="90" fill="#EEF8FF" stroke="#000000" />
+<line x1="272.5" y1="95" x2="272.5" y2="155" stroke="#000000" />
+<text x="181.25" y="115" fill="#000000" text-anchor="middle">File 1 Metadata</text>
+<text x="366.25" y="115" fill="#000000" text-anchor="middle">File 1 Content</text>
+<line x1="90" y1="125" x2="455" y2="125" stroke="#000000" />
+<text x="181.25" y="145" fill="#000000" text-anchor="middle">File 2 Metadata</text>
+<text x="366.25" y="145" fill="#000000" text-anchor="middle">File 2 Content</text>
+<line x1="90" y1="155" x2="455" y2="155" stroke="#000000" />
+<text x="272.5" y="175" fill="#00000080" text-anchor="middle">etc.</text>
+<text x="470" y="145" fill="#000000" text-anchor="end">)</text>
+<line x1="0" y1="200" x2="485" y2="200" stroke="#000000" />
+<text x="10" y="220" fill="#000000">Global Trailer</text>
+<rect rx="2" x="15" y="235" width="455" height="30" stroke="#000000" />
+<text x="128.75" y="255" fill="#000000" text-anchor="middle">CRC-32</text>
+<line x1="227.5" y1="235" x2="227.5" y2="265" stroke="#000000" />
+<text x="341.25" y="255" fill="#000000" text-anchor="middle">Uncompressed Size</text>
+</svg>

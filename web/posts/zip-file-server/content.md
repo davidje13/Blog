@@ -2,6 +2,7 @@
 title: 'Serving Compressed Files From ZIPs'
 author: David Evans
 created: 2026-10-29
+modified: 2026-10-30
 tags:
   - web
 ---
@@ -11,7 +12,7 @@ tags:
 One of the cooler (in my very un-cool opinion) features of
 [web-listener](https://www.npmjs.com/package/web-listener) is the ability to
 serve [gzip](https://en.wikipedia.org/wiki/Gzip)-encoded data directly from
-regular [`.zip` archives](<https://en.wikipedia.org/wiki/ZIP_(file_format)>)
+regular [`.zip` archives](<https://en.wikipedia.org/wiki/ZIP_(file_format)>),
 without needing to use lots of memory or create temporary files. This article
 will explain what this means and why this is possible.
 
@@ -116,42 +117,26 @@ being good enough for the majority of use cases.
 
 The ZIP archive format compresses each input file individually using
 `deflate`[^zip-compression], then bundles them along with their metadata
-(filename, size, permissions, etc.) into a single file. This is very different
-to the behaviour of [tar](<https://en.wikipedia.org/wiki/Tar_(computing)>)-based
-formats such as `.tar.gz`, which bundle the files and metadata together _first_
-then compress everything at once. This means that ZIP archives can easily be
-extended with new files (or have existing files deleted) without needing to
-recompress all the other files. It also means individual files can be located
-and extracted without needing to decompress everything else. The downside is
-that it cannot take advantage of duplication across files to achieve better
-compression: if two files in a ZIP archive have identical contents, they will
-not be deduplicated, and will occupy twice the space of a single copy.
+(filename, size, permissions, etc.) into a single archive:
 
-Approximate `.zip` structure:
+![ZIP archives contain a series of files. Each file has a "local file header" containing the "magic number" 0x504B0304 and some metadata (including the CRC-32, compressed size, and uncompressed size of the file), and the deflated content of the file. At the end of the archive is the Central Directory, which is used to index the files.](./zip-structure.noborder.svg)
+Approximate `.zip` structure.
 
-```text
-+-----------------+-------------------------+-----------------+
-| file 1 metadata | deflate(file 1 content) | file 1 checksum |
-+-----------------+-------------------------+-----------------+
-| file 2 metadata | deflate(file 2 content) | file 2 checksum |
-+-----------------+-------------------------+-----------------+
-|                            (etc)                            |
-+-------------------------------------------------------------+
-|                          directory                          |
-+-------------------------------------------------------------+
-```
+This is very different to the behaviour of
+[tar](<https://en.wikipedia.org/wiki/Tar_(computing)>)-based formats such as
+`.tar.gz`, which bundle the files and metadata together _first_ (the `tar`
+stage) then compress everything at once (the `gzip` stage):
 
-Approximate `.tar.gz` structure:
+![Gzipped tar archives contain a global header, a deflated bundle of all file metadata and content combined, and a trailer with the CRC-32 and total length of the bundled data.](./tar-gz-structure.noborder.svg)
+Approximate `.tar.gz` structure.
 
-```text
-+---------------------------------+
-|         global metadata         |
-+---------------------------------+
-| deflate(file 1 + file 2 + etc.) |
-+---------------------------------+
-| total content length & checksum |
-+---------------------------------+
-```
+This means that ZIP archives can easily be extended with new files (or have
+existing files deleted) without needing to recompress all the other files. It
+also means individual files can be located and extracted without needing to
+decompress everything else. The downside is that it cannot take advantage of
+duplication across files to achieve better compression: if two files in a ZIP
+archive have identical contents, they will not be deduplicated, and will occupy
+twice the space of a single copy.
 
 ### The problem with `Content-Encoding: deflate`
 
@@ -168,7 +153,10 @@ Exactly the same thing which gets stored in a ZIP archive. But the proposal (and
 other browsers at the time) interpreted it as a _`zlib`-wrapped_ `deflate`d
 stream of data (which later became
 [RFC-1950](https://datatracker.ietf.org/doc/html/rfc1950)). The difference is
-that `zlib` added a 2-byte header and a 4-byte trailer.
+that `zlib` adds a 2-byte header and a 4-byte Adler-32 checksum:
+
+![Zlib-wrapped deflate streams contain a small header, the deflated content, and an Adler-32 checksum.](./zlib-structure.noborder.svg)
+zlib structure.
 
 A mess ensued. The standards decided that the `zlib`-wrapped version was
 "correct", but many existing websites conformed to Internet Explorer's raw
@@ -190,7 +178,7 @@ Since the actual compression is the same in both formats, to get from a ZIP to
 ### Translating ZIP to gzip
 
 The gzip header is largely static, and the dynamic fields can be set to static
-values without issue since they are not used by clients:
+values without issue since they are not used by HTTP clients:
 
 | Magic number | Compression Method | Flags | Modified Time | Extra Flags | Filesystem |
 | ------------ | ------------------ | ----- | ------------- | ----------- | ---------- |

@@ -1,0 +1,20 @@
+<?xml version="1.0" standalone="yes"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-5 -5 450 180" width="450" height="180" font-family="monospace" font-size="14" stroke-width="1.5" fill="none">
+<rect rx="1" x="0" y="0" width="440" height="80" fill="#EEFFEEF8" />
+<rect rx="1" x="0" y="80" width="440" height="60" fill="#FFFFFFF8" />
+<rect rx="1" x="0" y="140" width="440" height="30" fill="#FFEEEEF8" />
+<rect rx="2" x="0" y="0" width="440" height="170" stroke="#000000" />
+<text x="10" y="20" fill="#000000">Header</text>
+<rect rx="2" x="15" y="35" width="410" height="30" stroke="#000000" />
+<text x="130" y="55" fill="#000000" text-anchor="middle">Compression Method &amp; Info</text>
+<line x1="245" y1="35" x2="245" y2="65" stroke="#000000" />
+<text x="275" y="55" fill="#000000" text-anchor="middle">Flags</text>
+<line x1="305" y1="35" x2="305" y2="65" stroke="#000000" />
+<text x="365" y="55" fill="#000000" text-anchor="middle">[Dictionary]</text>
+<line x1="0" y1="80" x2="440" y2="80" stroke="#000000" />
+<text x="15" y="115" fill="#000000" textLength="68">deflate(</text>
+<rect rx="2" x="90" y="95" width="320" height="30" fill="#EEF8FF" stroke="#000000" />
+<text x="100" y="115" fill="#000000">Content</text>
+<text x="425" y="115" fill="#000000" text-anchor="end">)</text>
+<line x1="0" y1="140" x2="440" y2="140" stroke="#000000" />
+<text x="10" y="160" fill="#000000">Adler-32</text>
+</svg>
