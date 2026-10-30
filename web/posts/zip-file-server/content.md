@@ -43,7 +43,7 @@ files. As an example: in NGINX this can be achieved using
 which will look for sibling `.gz` (gzip) files when serving content from the
 filesystem:
 
-```text
+```filetree
 /var/www/http/
  |- index.html
  |- index.html.gz
@@ -74,7 +74,7 @@ the same as NGINX, but also supports serving these files directly from a ZIP
 archive, removing the need to duplicate the files as a compressed and
 non-compressed copy:
 
-```text
+```filetree
 /var/www/http/content.zip
  |- index.html
  '- style.css
@@ -262,7 +262,7 @@ run sources directly from the ZIP archive, without extracting temporary files.
 
 For example:
 
-```text
+```filetree
 my-site.zip
  |- config.json
  |- server/

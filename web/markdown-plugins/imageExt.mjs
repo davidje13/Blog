@@ -23,16 +23,19 @@ export const MARKED_IMAGE_EXT = (fileRelativePath) => ({
 			if (node.className) {
 				attrs += ` class="${escapeHTML(node.className)}"`;
 			}
-			try {
-				const imageResource = loadResourceSync(
-					node.rawHref ?? node.href,
-					fileRelativePath,
-				);
-				const imageSize = readImageSizeSync(imageResource);
-				if (imageSize) {
-					attrs += ` loading="lazy" width="${imageSize.width}" height="${imageSize.height}"`;
-				}
-			} catch {}
+			let imageSize = node.size;
+			if (!imageSize) {
+				try {
+					const imageResource = loadResourceSync(
+						node.rawHref ?? node.href,
+						fileRelativePath,
+					);
+					imageSize = readImageSizeSync(imageResource);
+				} catch {}
+			}
+			if (imageSize) {
+				attrs += ` loading="lazy" width="${imageSize.width}" height="${imageSize.height}"`;
+			}
 			img = img.replace(/^<img/, () => '<img ' + attrs);
 			return img;
 		},

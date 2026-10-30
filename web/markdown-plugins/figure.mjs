@@ -3,7 +3,7 @@ import { marked } from 'marked';
 export const MARKED_FIGURE = {
 	renderer: {
 		paragraph(node) {
-			if (['image', 'plot'].includes(node.tokens[0]?.type)) {
+			if (!node.inline && ['image', 'plot'].includes(node.tokens[0]?.type)) {
 				const [image, ...caption] = node.tokens;
 				if (!caption.length && image.title) {
 					caption.push({ type: 'text', text: image.title });

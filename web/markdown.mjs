@@ -16,6 +16,7 @@ import { MARKED_FANCY } from './markdown-plugins/fancy.mjs';
 import { MARKED_FIGURE } from './markdown-plugins/figure.mjs';
 import { MARKED_MACRO } from './markdown-plugins/macro.mjs';
 import { MARKED_PLOT } from './markdown-plugins/plot.mjs';
+import { MARKED_FILE_TREE } from './markdown-plugins/fileTree.mjs';
 
 export const makeMarkdownRenderer = ({
 	fileRelativePath = '.',
@@ -27,6 +28,7 @@ export const makeMarkdownRenderer = ({
 		inlineAssetStorage ? MARKED_INLINE_ASSET_STORAGE(inlineAssetStorage) : {},
 		MARKED_HIGHLIGHT(absolutePathsBase),
 		MARKED_SEQUENCE_DIAGRAM,
+		MARKED_FILE_TREE,
 		MARKED_PLOT(fileRelativePath, absolutePathsBase),
 		MARKED_EXTERNAL_LINK,
 		MARKED_MATH,
