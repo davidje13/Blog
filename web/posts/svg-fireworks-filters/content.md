@@ -74,7 +74,7 @@ It is implemented like this:
 Don't forget to expand / shift the filter bounding box if you have a large
 offset or blur, or your input shape is small[^svg-filter-margin].
 
-### Walkthrough
+### Walk-through
 
 ![The intermediary stages of the drop shadow](./drop-shadow-knockout-stages.svg)
 
@@ -111,7 +111,7 @@ without knockout, but it can be implemented with a small variation on
 </filter>
 ```
 
-### Walkthrough
+### Walk-through
 
 ![The intermediary stages of the inner shadow](./inner-shadow-stages.svg)
 
@@ -202,7 +202,7 @@ A super-close-up of the top of the star. Artifacts are visible at the corner.
 The sub-pixel steps at the start can be increased to reduce this effect, at the
 cost of slightly lower performance / larger images.
 
-### Walkthrough
+### Walk-through
 
 ![The intermediary stages of the solid shadow](./solid-shadow-stages.svg)
 
@@ -272,7 +272,7 @@ stages:
 </filter>
 ```
 
-### Walkthrough
+### Walk-through
 
 The initial stages modify the colour of the image before the solid shadow is
 generated. The final stages then push the shadow one final step away, and apply
@@ -283,7 +283,7 @@ the original image back on top.
 A motion blur blurs the image in a specific direction, giving the impression of
 movement or vibration which is too fast for a camera's shutter speed.
 
-![An orange star shape with a yellow dot in the center with a motion blur towards the top-right.](./motion-blur.svg)
+![An orange star shape with a yellow dot in the centre with a motion blur towards the top-right.](./motion-blur.svg)
 A linear motion blur.
 
 The same technique from [solid shadows](#solid-shadow-extrude) can be used to
@@ -367,7 +367,7 @@ Instead of using filters, we can duplicate our element many times using
 </g>
 ```
 
-### Walkthrough
+### Walk-through
 
 In this example there are 9 copies of the object, so each has an opacity of
 $\frac{1}{9} = 0.11111$. Normally combining opacities like this wouldn't work,
@@ -485,7 +485,7 @@ the image) independently to each of the red, green, and blue channels:
 </filter>
 ```
 
-### Walkthrough
+### Walk-through
 
 ![The intermediary stages of adding noise](./add-noise-stages.svg)
 
@@ -908,7 +908,7 @@ equations simplify:
 - `intercept` = 0 for expanded ($s \ge 0$), and = `1 - slope` for reduced
   ($s < 0$)
 
-### Walkthrough
+### Walk-through
 
 This begins with the same distance map calculation as a glow, then applies a
 different mapping at the end. This time we want to return to a Gaussian blur, so
@@ -994,7 +994,7 @@ spec was written, and maybe will come back into fashion some day).
 </filter>
 ```
 
-### Walkthrough
+### Walk-through
 
 SVG provides [`feDiffuseLighting`] and [`feSpecularLighting`] for 3D effects.
 Both operate on a height map provided in the alpha channel.
@@ -1178,3 +1178,5 @@ something big which it fails to handle, please
   https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feSpecularLighting
 [`feTurbulence`]:
   https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feTurbulence
+
++[de-multiplying;de-multiplied;de-multiplication]

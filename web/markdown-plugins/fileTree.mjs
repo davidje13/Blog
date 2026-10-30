@@ -42,7 +42,7 @@ export const MARKED_FILE_TREE = {
 					FILE_IMAGES.get(p === -1 ? name : name.substring(p)) ??
 					(suf ? DIR : FILE);
 				cur.items.push({
-					type: 'listitem',
+					type: 'list_item',
 					tokens: [
 						{
 							type: 'paragraph',

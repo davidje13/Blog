@@ -1,3 +1,4 @@
+import { join } from 'node:path';
 import { Marked } from 'marked';
 import { MARKED_HIGHLIGHT } from './markdown-plugins/highlight.mjs';
 import { MARKED_EXTERNAL_LINK } from './markdown-plugins/externalLink.mjs';
@@ -17,13 +18,16 @@ import { MARKED_FIGURE } from './markdown-plugins/figure.mjs';
 import { MARKED_MACRO } from './markdown-plugins/macro.mjs';
 import { MARKED_PLOT } from './markdown-plugins/plot.mjs';
 import { MARKED_FILE_TREE } from './markdown-plugins/fileTree.mjs';
+import { MARKED_SPELLING } from './markdown-plugins/spelling.mjs';
 
 export const makeMarkdownRenderer = ({
 	fileRelativePath = '.',
 	absolutePathsBase = null,
 	inlineAssetStorage = null,
+	checkSpelling = false,
 } = {}) =>
 	new Marked(
+		checkSpelling ? MARKED_SPELLING(join(fileRelativePath, 'content.md')) : {},
 		absolutePathsBase ? MARKED_ABSOLUTE_PATHS(absolutePathsBase) : {},
 		inlineAssetStorage ? MARKED_INLINE_ASSET_STORAGE(inlineAssetStorage) : {},
 		MARKED_HIGHLIGHT(absolutePathsBase),

@@ -54,11 +54,11 @@ HTML file, such as `https://example.com/index.html`) which may embed
 **resource**s (such as images, scripts, videos, etc.) from its own origin or
 other origins.
 
-![A request from foo.example.com to bar.example.com is cross-origin but same-site. A request from foo.example.com to www.othersite.text is cross-origin and cross-site](./taxonomy.svg)
+![A request from "foo.example.com" to "bar.example.com" is cross-origin but same-site. A request from "foo.example.com" to "www.othersite.text" is cross-origin and cross-site](./taxonomy.svg)
 In this illustration, **site**s are shown in blue, **origin**s are shown in
-orange, and **resource**s are shown in red. A request from foo.example.com to
-bar.example.com is cross-origin but same-site. A request from foo.example.com to
-www.othersite.text is cross-origin and cross-site.
+orange, and **resource**s are shown in red. A request from `foo.example.com` to
+`bar.example.com` is cross-origin but same-site. A request from
+`foo.example.com` to `www.othersite.text` is cross-origin and cross-site.
 
 ## Showing resources from other origins
 
@@ -73,8 +73,8 @@ Originally this was considered harmless and was allowed with wild abandon, until
 an attack opportunity was noticed: if a malicious page loaded content from a
 different origin which the current visitor was logged in to, then it could see
 content from that origin which was only intended for the visitor. In this way,
-cookie-based authentication, IP allowlists, and local network resources could be
-breached just by visiting a malicious page.
+cookie-based authentication, IP allow-lists, and local network resources could
+be breached just by visiting a malicious page.
 
 For security, these cross-origin requests would need to be blocked. But blocking
 all cross-origin requests would break a large number of sites (and worse: break
@@ -239,10 +239,10 @@ check CORP.
 
 If CORP is set to `cross-origin`, it means the resource is considered
 non-sensitive: any page can load it via a non-CORS request _and_ have dangerous
-JS features enabled. If it is set to `same-site` or `same-origin`, the resource
-will be considered sensitive and cannot be loaded using non-CORS requests on any
-page which does not meet the criteria (even if the page has not itself set a
-COEP header).
+JavaScript features enabled. If it is set to `same-site` or `same-origin`, the
+resource will be considered sensitive and cannot be loaded using non-CORS
+requests on any page which does not meet the criteria (even if the page has not
+itself set a COEP header).
 
 With these headers set up, we get strong guarantees about whether our data is
 allowed to share a process with third party origins, meaning (as long as it's
@@ -439,3 +439,5 @@ with a variety of request / response combinations.
 [`crossorigin`]:
   https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/crossorigin
 [Spectre]: https://en.wikipedia.org/wiki/Spectre_(security_vulnerability)
+
++[www.othersite.text]

@@ -59,7 +59,7 @@ export const MARKED_ABBR = () => {
 					return {
 						type: 'abbr-term',
 						raw,
-						tokens: [{ type: 'text', raw, text: raw }],
+						tokens: [{ type: 'text', raw, text: raw, abbr: true }],
 						definition,
 					};
 				},

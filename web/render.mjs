@@ -49,6 +49,7 @@ export async function renderPage(env, path, allPaths = null) {
 		const page = await renderPost(env, path[0], allPaths, {
 			header: true,
 			footer: true,
+			checkSpelling: true,
 		});
 		if (page) {
 			return htmlFrame(page);
@@ -238,6 +239,7 @@ async function renderTag(env, name, allPaths) {
 	let html = `<header><h1>${escapeHTML(`Tagged: ${name}`)}</h1></header>`;
 	html += await makeMarkdownRenderer({
 		fileRelativePath: dirname(tag.metadata.fsPath),
+		checkSpelling: true,
 	}).parse((await getMarkdownContent(tag.metadata.fsPath)).md, { async: true });
 	html += '<section><ul class="posts">';
 	for (const p of taggedPosts) {
@@ -263,7 +265,12 @@ async function renderPost(
 	env,
 	name,
 	allPaths = null,
-	{ absolutePaths = false, header = false, footer = false } = {},
+	{
+		absolutePaths = false,
+		header = false,
+		footer = false,
+		checkSpelling = false,
+	} = {},
 ) {
 	const post = allPaths?.find(
 		(p) => p.type === 'post' && p.path[0] === name,
@@ -281,6 +288,7 @@ async function renderPost(
 		fileRelativePath: dirname(post.metadata.fsPath),
 		absolutePathsBase: absolutePaths ? pageURL : null,
 		inlineAssetStorage: env.inlineAssetStorage,
+		checkSpelling,
 	});
 
 	let html = await renderer.parse(

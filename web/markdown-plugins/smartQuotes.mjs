@@ -37,6 +37,7 @@ export const MARKED_SMART_QUOTES = () => {
 				case 'html':
 				case 'def':
 				case 'table':
+				case 'list_item':
 					previous = '';
 					break;
 				case 'image':

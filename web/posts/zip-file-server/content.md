@@ -9,7 +9,7 @@ tags:
 
 # Serving Compressed Files From ZIPs
 
-One of the cooler (in my very un-cool opinion) features of
+One of the cooler (in my very uncool opinion) features of
 [web-listener](https://www.npmjs.com/package/web-listener) is the ability to
 serve [gzip](https://en.wikipedia.org/wiki/Gzip)-encoded data directly from
 regular [`.zip` archives](<https://en.wikipedia.org/wiki/ZIP_(file_format)>),
@@ -39,7 +39,7 @@ encodings, and send a response with the
 header showing the chosen compression type. This can be done using "online"
 compression, but for static content it is more efficient to store pre-compressed
 files. As an example: in NGINX this can be achieved using
-[ngx_http_gzip_static_module](https://nginx.org/en/docs/http/ngx_http_gzip_static_module.html),
+[`ngx_http_gzip_static_module`](https://nginx.org/en/docs/http/ngx_http_gzip_static_module.html),
 which will look for sibling `.gz` (gzip) files when serving content from the
 filesystem:
 
@@ -351,3 +351,7 @@ npx web-listener -c my-site.zip/config.json
     Since "gzip" is 3 characters shorter than "deflate" in the
     `Content-Encoding` header, the data sent is technically only 9 bytes larger
     in total.
+
+*[CRC]: Cyclic Redundancy Check
+
++[CRC;www;http;math]

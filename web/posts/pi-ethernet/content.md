@@ -222,8 +222,8 @@ for the main solution in this article.
 - [Network Manager connection settings](https://networkmanager.dev/docs/api/latest/settings-connection.html)
 
 [^rapid-wifi]:
-    The situation is not so bad when using rapid pings over the same total
-    timespan:
+    The situation is not so bad when using rapid pings over the same total time
+    span:
 
     > ```
     > $ ping -i 0.1 -c 1000 mypi.local
@@ -256,3 +256,5 @@ for the main solution in this article.
 [`ping`]: https://manpages.debian.org/trixie/inetutils-ping/ping.1.en.html
 [`nmcli`]: https://networkmanager.dev/docs/api/latest/nmcli.html
 [`systemctl`]: https://manpages.debian.org/trixie/systemd/systemctl.1.en.html
+
++[autoconnect]

@@ -37,7 +37,7 @@ export const MARKED_MATH = {
 				return {
 					type: 'math-block',
 					isBlock: true,
-					raw: raw,
+					raw,
 					text: content.trim(),
 				};
 			},
@@ -54,7 +54,7 @@ export const MARKED_MATH = {
 					return undefined;
 				}
 				const [raw, content] = match;
-				return { type: 'math-inline', raw: raw, text: content.trim() };
+				return { type: 'math-inline', raw, text: content.trim() };
 			},
 			renderer: (token) => wrappedMath(token.text, false),
 		},

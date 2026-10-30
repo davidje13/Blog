@@ -508,7 +508,7 @@ The language defined in `lang.h` works like so:
   process is described below).
 - `if (condition) ( code ) elif (condition) ( code ) else ( code )` behaves like
   a standard if/else-if/else chain. The `else` is optional and there can be any
-  number of `elif` branches. Internally this uses the short-circuting behaviour
+  number of `elif` branches. Internally this uses the short-circuiting behaviour
   of `&&` and `||`, and exploits the fact that `&&` has higher precedence than
   `||`; with `&&` used for conditional execution and `||` used for "else". `if`
   statements can be nested.
@@ -566,3 +566,5 @@ applications. Every language has gotchas, and giving ourselves a bit of time to
 play with them can give us insights which make us better at debugging, better at
 comprehending unfamiliar and unusual code, and all-round better software
 engineers.
+
++[IOCCC]

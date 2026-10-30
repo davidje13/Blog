@@ -120,7 +120,7 @@ distributions too, but some paths and default values may be different.
    (`/nonexistent` is a special name recognised by the tooling to silence
    warnings about the home directory not existing)
 
-5. Optionally delete sub-uids and sub-gids for the user, to match the default
+5. Optionally delete sub-UIDs and sub-GIDs for the user, to match the default
    for system users:
 
    ```sh
@@ -183,7 +183,7 @@ distributions too, but some paths and default values may be different.
    usermod --home /home/<user-name> <user-name>
    ```
 
-5. Optionally create sub-uids and sub-gids for the user:
+5. Optionally create sub-UIDs and sub-GIDs for the user:
    - check `/etc/subuid` and `/etc/subgid` to see which IDs are available (if
      there are no entries in these, check `/etc/login.defs` to see the
      `SUB_UID_MIN` and `SUB_GID_MIN` values. You may also want to check
@@ -271,3 +271,5 @@ it will fail.
 [`journalctl`]:
   https://manpages.debian.org/trixie/systemd/journalctl.1.en.html
   'Debian manpage'
+
++[aging;choosen;SYS;UID;GID;UIDs;GIDs]

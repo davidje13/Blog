@@ -462,11 +462,11 @@ I found the following sources useful while figuring this stuff out:
 
 - [Cloudflare explainer on TLS Session Resumption](https://blog.cloudflare.com/tls-session-resumption-full-speed-and-secure/)
 - [Certbot explanation of HTTP-01 Challenge](https://letsencrypt.org/docs/challenge-types/#http-01-challenge)
-- [NGINX SSL module documentaion](https://nginx.org/en/docs/http/ngx_http_ssl_module.html)
+- [NGINX SSL module documentation](https://nginx.org/en/docs/http/ngx_http_ssl_module.html)
 - [OneUptime guide on setting up and monitoring Session Resumption](https://oneuptime.com/blog/post/2026-03-20-tls-session-resumption-faster-https/view)
 - [Compass Security explanation of interaction between TLS Session Resumption and Perfect Forward Secrecy](https://blog.compass-security.com/2017/06/about-tls-perfect-forward-secrecy-and-session-resumption/)
   (note: the advice at the end of this article is out-of-date)
-- [certbot documentation][`certbot`]
+- [Certbot documentation][`certbot`]
 - [`openssl dhparam` manpage][`dhparam`]
 - [`openssl rand` manpage][`rand`]
 
@@ -544,3 +544,9 @@ I found the following sources useful while figuring this stuff out:
 [^default-site]:
     Decided by the presence of `default_server`, or first site defined if none
     have this.
+
+*[TLS]: Transport Layer Security (i.e. HTTPS)
+
+*[HSTS]: HTTP Strict Transport Security
+
++[Configurator;SSLLabs;Certbot]

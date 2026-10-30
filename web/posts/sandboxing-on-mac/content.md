@@ -2,7 +2,7 @@
 title: 'Sandboxing Node.js on Mac'
 author: David Evans
 description:
-  'A guide on using MacOS’ sandbox-exec command to limit the potential damage
+  'A guide on using macOS’ sandbox-exec command to limit the potential damage
   from NPM supply chain attacks.'
 created: 2026-08-25
 modified: 2026-08-27
@@ -264,7 +264,7 @@ something like this:
 > 2000-01-01 00:00:00.000 E  kernel[0:3502d] (Sandbox) Sandbox: curl(3473) deny(1) mach-lookup com.apple.diagnosticd
 > ```
 
-Stripping out the irrelevent information and duplicates, we see that the
+Stripping out the irrelevant information and duplicates, we see that the
 following actions were denied:
 
 ```text
@@ -627,9 +627,11 @@ balance will depend on your situation).
 
 ## More information / further reading
 
-- [Sandboxing code on MacOS by Lucas Wiman](https://lucaswiman.github.io/blog/2023-06-04--macos-sandbox/)
+- [Sandboxing code on macOS by Lucas Wiman](https://lucaswiman.github.io/blog/2023-06-04--macos-sandbox/)
   is a good introduction to the `sandbox-exec` command and lists some of the
   common predicates.
 - ["Apple's Sandbox Guide" by fG!](https://reverse.put.as/wp-content/uploads/2011/09/Apple-Sandbox-Guide-v0.2.pdf),
   reverse-engineers a lot of the available features of `sandbox-exec` and is a
   good reference for available actions.
+
++[Shai-Hulud;Wiman]

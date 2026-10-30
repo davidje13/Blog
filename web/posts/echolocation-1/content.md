@@ -146,9 +146,9 @@ speaker and microphone are relatively close together).
 ![A sound wave travelling from a speaker, bouncing off a wall, and being reflected back to a microphone](./geometry.svg)
 
 The speed of sound in air can be approximated as 343m/s ±5%[^speed-of-sound], so
-if our microphone picks up the sound 5ms after the speaker made it, the
-soundwave must have travelled about 1.72 metres in total (round-trip), meaning
-the object is 86cm away (±4cm)[^uncertainty].
+if our microphone picks up the sound 5ms after the speaker made it, the sound
+wave must have travelled about 1.72 metres in total (round-trip), meaning the
+object is 86cm away (±4cm)[^uncertainty].
 
 This equation can also tell us how granular our answer will be: if we can
 determine the time to within a millisecond, then we can calculate the distance
@@ -185,7 +185,7 @@ Dedicated components have the advantage of directional speakers / microphones,
 and very high sample rates, but they have minuscule processing power and only
 report a _single_ reading: the time to first echo. Echoes contain much more
 information: they can reflect back from different directions, and at each
-boundary some of the soundwave's energy will continue into the object rather
+boundary some of the sound wave's energy will continue into the object rather
 than reflecting back. Objects will also absorb and reflect different frequencies
 in different proportions due to
 [resonance](https://en.wikipedia.org/wiki/Resonance). These behaviours mean we
@@ -457,7 +457,7 @@ shape of our signal. There are well known and efficient ways to find a known
 shape in an image (e.g.
 [Haar cascade classifiers](https://docs.opencv.org/3.4.20/db/d28/tutorial_cascade_classifier.html)),
 and once we find it we can easily analyse the image to see which frequencies
-have been absorbed (allowing us to do some rudamentary object classification).
+have been absorbed (allowing us to do some rudimentary object classification).
 We can also subtract each signal after we find it and search again to find the
 next echo, even if they were overlapping. However, there is also a big
 disadvantage to this approach: performing frequency analysis involves a
@@ -497,7 +497,7 @@ $$
 $$
 
 Where $ℱ$ is the
-[fourier transform](https://en.wikipedia.org/wiki/Fourier_transform) and
+[Fourier transform](https://en.wikipedia.org/wiki/Fourier_transform) and
 $\otimes$ denotes
 [element-wise multiplication](<https://en.wikipedia.org/wiki/Hadamard_product_(matrices)>)[^log].
 This identity lets us implement a convolution as:
@@ -543,9 +543,9 @@ we can use this to find the clean timeline of echoes which we are looking for
 ($A$).
 
 Since we need to perform this operation a lot, and the chirp ($B$) does not
-change, we can also pre-compute $B_{\text{inv}} = 1 \oslash ℱ(B)}$ which lets us
+change, we can also precompute $B_{\text{inv}} = 1 \oslash ℱ(B)}$ which lets us
 use multiplication rather than division in our loop for a small speed boost. The
-result of the fourier transform is actually an array of
+result of the Fourier transform is actually an array of
 [complex numbers](https://en.wikipedia.org/wiki/Complex_number), so calculating
 this inverse for each element is not quite as trivial as it could be, but it is
 still very easy:
@@ -593,8 +593,8 @@ In the optimal case, $c$ is a function of frequency:
 $c(f) = \frac{1}{\text{SNR}(f)}$, where $\text{SNR}(f)$ is the signal-to-noise
 ratio calculated for a given frequency. To calculate these values we can look at
 the audio received by the microphone when there is no echo expected (e.g. just
-before we send out our signal), fourier transform it, and compare each frequency
-bucket with the fourier transform of our signal (both squared because we want to
+before we send out our signal), Fourier transform it, and compare each frequency
+bucket with the Fourier transform of our signal (both squared because we want to
 know the ratio of _energy_ rather than _amplitude_):
 
 $$
@@ -909,7 +909,7 @@ The WebAudio API does include some latency reporting: if the browser supports
 the feature, it can tell us the predicted output and input latencies of a
 device. This may include software latencies (due to signal processing and
 queues) as well as hardware / firmware latencies (such as the time taken to send
-a signal to a bluetooth speaker). But these values are not guaranteed to account
+a signal to a Bluetooth speaker). But these values are not guaranteed to account
 for everything, and they may not be available at all (especially if the user has
 external speakers with unknown characteristics). These are a good starting point
 when they are available, but they are not enough to solve the problem.
@@ -1099,7 +1099,7 @@ techniques into a browser-based application.
     information of the frequencies.
 
 [^log]:
-    Conceptually, this transformation of convolution into elementwise
+    Conceptually, this transformation of convolution into element-wise
     multiplication is similar to the way that taking the logarithm turns
     multiplication into addition, i.e. $\ln(A \times B) = \ln(A) + \ln(B)$.
 
@@ -1156,3 +1156,7 @@ techniques into a browser-based application.
 *[SONAR]: SOund Navigation And Ranging
 
 *[SNR]: Signal-to-Noise Ratio
+
+*[DSP]: Digital Signal Processing
+
++[HC-SR04;sonified]

@@ -428,7 +428,7 @@ easy to configure:
 - type: `CAA`
 - name: `example.com` _(note: this automatically applies to all subdomains)_
 - value: `0 issue "letsencrypt.org"`
-- ttl: _(any appropriate time-to-live value)_
+- time-to-live: _(any appropriate time-to-live value)_
 
 It is also possible to list multiple certificate authorities, and to restrict
 the type of challenges which the authority may use. See
@@ -449,3 +449,5 @@ details.
 *[ACME]: Automated Certificate Management Environment
 
 *[IAM]: AWS Identity and Access Management
+
++[Certbot]

@@ -115,10 +115,10 @@ misunderstandings of how things work and various crimes against HTML.
 
 ### Features of the times
 
-The Intenet of the early millennium was a weird and wild place. One of the
+The Internet of the early millennium was a weird and wild place. One of the
 stranger practices was for some search engines and site directories to link not
 directly to sites, but to a frameset which _embedded_ the site, alongside a
-bunch of adverts. The defense: add some JavaScript to detect if the page was
+bunch of adverts. The defence: add some JavaScript to detect if the page was
 loaded in a frame, and break out:
 
 <!-- prettier-ignore -->
@@ -182,9 +182,9 @@ were needed (e.g. to add a new class or mark an existing class as full), I had
 to edit the HTML, connect to the SFTP server, and upload the new file. By
 February 2005, I'd spent a lot of time updating content like this, and that
 wasn't how I wanted to spend my teenage years. I knew I had to give my mum a way
-to edit the content herself. She was computer savy, but didn't know HTML and was
-unlikely to handle the complexities of an SFTP client. It had to be a site which
-my mum could edit _from her browser_.
+to edit the content herself. She was computer savvy, but didn't know HTML and
+was unlikely to handle the complexities of an SFTP client. It had to be a site
+which my mum could edit _from her browser_.
 
 Things had moved on a little in the meantime: Internet Explorer's success was
 beginning to wane (in particular Internet Explorer 5 was much less used than 2
@@ -255,7 +255,7 @@ is no-longer static HTML. The new tech stack is:
 
 - PHP (version 4 because that's what the 1&1 hosting supported) generating HTML
 - A bit more JavaScript than before
-- A lot more CSS than before (including a dedicated print stylesheet!)
+- A lot more CSS than before (including a dedicated print style sheet!)
 - No database
 - Still hosted on 1&1 (using their shared Apache server, with Basic Auth
   configured by a `.htaccess` file)
@@ -327,7 +327,7 @@ Once we get to `s_gen.php` though, things get ugly fast. It's essentially a
 handful of helper functions. It's responsible for rendering the page in regular,
 edit, and preview modes, as well as saving changes to pages. It manages those
 states and permissions using session variables. The square-bracket-based
-formatting is convered to HTML via a rather messy (and enormous) loop which
+formatting is converted to HTML via a rather messy (and enormous) loop which
 today I'd refer to as a crude tokeniser with a state stack.
 
 I'd consider this a prime example of what code looks like when written by an
@@ -628,7 +628,7 @@ wants to write! We're even seeing banner headlines appear again.
 
 The iPhone 4 was released in 2010 with the first "Retina" display, and in 2015
 this made its way on to laptops in the MacBook Pro. By 2018, these were becoming
-more common and now-29-year-old-me was decidely unimpressed by the fuzziness of
+more common and now-29-year-old-me was decidedly unimpressed by the fuzziness of
 the images on my mum's site when seen on these screens. I loaded up the original
 files and re-exported them at 2&times; resolution.
 
@@ -646,13 +646,13 @@ contacted by a design company (who were presumably contacting the owners of any
 websites still served over HTTP), was warned about the change, and (rather than
 accept the company's offer to take over the site) asked me to fix it.
 
-![https padlock in the URL bar](https.png)
+![HTTPS padlock in the URL bar](https.png)
 
 Fortunately another thing which had changed was the rise of
 [Let's Encrypt](https://letsencrypt.org/), with their automated and free
 certificate provisioning.
 
-By installing [certbot](https://certbot.eff.org/) and making some config changes
+By installing [Certbot](https://certbot.eff.org/) and making some config changes
 to the Apache server, I got her site on to HTTPS without any upfront or ongoing
 cost. That seems like nothing special now, but it would have been impossible
 even 3 years earlier: Let's Encrypt wasn't out of beta until April 2016.
@@ -773,7 +773,7 @@ mess around with square brackets all the time.
     their contents!
 
 [^notepad]:
-    Everything was written in Nodepad: no assistive IDE autocomplete for my
+    Everything was written in Notepad: no assistive IDE autocomplete for my
     younger self!
 
 [^gif-png]:
@@ -813,3 +813,5 @@ mess around with square brackets all the time.
 *[CSRF]: Cross-Site Request Forgery
 
 *[RCE]: Remote Code Execution
+
++[Archæological;Picasa;Unisys;MX;Certbot;JSMin;Uglify;IE5]
