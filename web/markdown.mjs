@@ -27,7 +27,7 @@ export const makeMarkdownRenderer = ({
 	checkSpelling = false,
 } = {}) =>
 	new Marked(
-		checkSpelling ? MARKED_SPELLING(join(fileRelativePath, 'content.md')) : {},
+		MARKED_SPELLING(join(fileRelativePath, 'content.md'), checkSpelling),
 		absolutePathsBase ? MARKED_ABSOLUTE_PATHS(absolutePathsBase) : {},
 		inlineAssetStorage ? MARKED_INLINE_ASSET_STORAGE(inlineAssetStorage) : {},
 		MARKED_HIGHLIGHT(absolutePathsBase),

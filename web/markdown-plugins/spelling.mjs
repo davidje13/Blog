@@ -198,7 +198,7 @@ usage
 WiFi
 `.trim();
 
-export const MARKED_SPELLING = (fileRelativePath) => {
+export const MARKED_SPELLING = (fileRelativePath, performCheck) => {
 	const checker = nspell(dict)
 		.personal(names)
 		.personal(brands)
@@ -274,9 +274,10 @@ export const MARKED_SPELLING = (fileRelativePath) => {
 					}
 
 					const [raw, words] = match;
-
-					for (const word of words.split(';')) {
-						checker.personal(word.trim());
+					if (performCheck) {
+						for (const word of words.split(';')) {
+							checker.personal(word.trim());
+						}
 					}
 					return { type: 'personal-dictionary', raw };
 				},
@@ -284,6 +285,9 @@ export const MARKED_SPELLING = (fileRelativePath) => {
 			},
 		],
 		walkTokens(token) {
+			if (!performCheck) {
+				return;
+			}
 			switch (token.type) {
 				case 'text':
 					if (!token.tokens && !token.abbr) {
